@@ -56,8 +56,43 @@ export const SignupPage = () => {
         // Registration successful - redirect to home or dashboard
         navigate('/');
       } else {
-        // Show error message
-        setErrors({ general: result.error.message });
+        // Show error message - use i18n for specific error types
+        let errorMessage = result.error.message;
+
+        switch (result.error.code) {
+          case 'PASSWORD_TOO_WEAK':
+            errorMessage = t('signup.errors.passwordTooWeak');
+            break;
+          case 'PASSWORD_TOO_COMMON':
+            errorMessage = t('signup.errors.passwordTooCommon');
+            break;
+          case 'PASSWORD_CONTAINS_USER_INFO':
+            errorMessage = t('signup.errors.passwordContainsUserInfo');
+            break;
+          case 'USER_ALREADY_EXISTS':
+            errorMessage = t('signup.errors.userAlreadyExists');
+            break;
+          case 'SIGNUP_NOT_ALLOWED':
+            errorMessage = t('signup.errors.signupNotAllowed');
+            break;
+          case 'INVALID_EMAIL':
+            errorMessage = t('signup.errors.invalidEmail');
+            break;
+          case 'CONNECTION_DISABLED':
+            errorMessage = t('signup.errors.connectionDisabled');
+            break;
+          case 'SERVER_ERROR':
+            errorMessage = t('signup.errors.serverError');
+            break;
+          case 'EMAIL_EXISTS':
+            errorMessage = t('signup.errors.userAlreadyExists');
+            break;
+          default:
+            // Keep the original error message for unknown errors
+            break;
+        }
+
+        setErrors({ general: errorMessage });
       }
     } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
@@ -176,7 +211,7 @@ export const SignupPage = () => {
               disabled={isLoading}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
             >
-              {isLoading ? 'Registrando...' : t('signup.submit')}
+              {isLoading ? t('loading') : t('signup.submit')}
             </button>
           </form>
 

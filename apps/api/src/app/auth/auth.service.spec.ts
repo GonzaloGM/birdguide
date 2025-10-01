@@ -8,11 +8,18 @@ import { UserRepository } from '../repositories/user.repository';
 // Mock ManagementClient
 jest.mock('auth0', () => ({
   ManagementClient: jest.fn().mockImplementation(() => ({
-    getUser: jest.fn().mockResolvedValue({
-      user_id: 'auth0|mock-user-id',
-      email: 'test@example.com',
-      name: 'Test User',
-    }),
+    users: {
+      get: jest.fn().mockResolvedValue({
+        user_id: 'auth0|mock-user-id',
+        email: 'test@example.com',
+        name: 'Test User',
+      }),
+      create: jest.fn().mockResolvedValue({
+        user_id: 'auth0|created-user-123',
+        email: 'created@example.com',
+        name: 'created',
+      }),
+    },
   })),
 }));
 
@@ -34,6 +41,17 @@ describe('AuthService', () => {
   };
 
   beforeEach(async () => {
+    // Set up required Auth0 environment variables for tests
+    process.env.AUTH0_DOMAIN = 'test.auth0.com';
+    process.env.AUTH0_CLIENT_ID = 'test-client-id';
+    process.env.AUTH0_CLIENT_SECRET = 'test-client-secret';
+    process.env.AUTH0_AUDIENCE = 'test-audience';
+    process.env.AUTH0_MANAGEMENT_API_AUDIENCE =
+      'https://test.auth0.com/api/v2/';
+    process.env.AUTH0_MANAGEMENT_API_CLIENT_ID = 'test-management-client-id';
+    process.env.AUTH0_MANAGEMENT_API_CLIENT_SECRET =
+      'test-management-client-secret';
+
     module = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -259,7 +277,7 @@ describe('AuthService', () => {
       const result = await service.register(registerRequest);
 
       expect(createOrUpdateUserSpy).toHaveBeenCalledWith(
-        expect.stringMatching(/^auth0\|mock-\d+$/),
+        'auth0|created-user-123', // Mock Auth0 user ID from the mock
         {
           email: 'testuser@example.com',
           displayName: 'testuser',
@@ -287,9 +305,61 @@ describe('AuthService', () => {
       expect(signSpy).toHaveBeenCalledWith({
         sub: expect.any(String),
         email: 'jwtuser@example.com',
-        auth0Id: expect.stringMatching(/^auth0\|mock-\d+$/),
+        auth0Id: 'auth0|created-user-123', // Mock Auth0 user ID from the mock
       });
       expect(result.token).toBe('mock-jwt-token');
+    });
+
+    it('should create user in Auth0 when registering', async () => {
+      const registerRequest = {
+        email: 'auth0user@example.com',
+        password: 'password123',
+      };
+
+      const mockCreateUser = jest.fn().mockResolvedValue({
+        user_id: 'auth0|real-user-123',
+        email: 'auth0user@example.com',
+        name: 'auth0user',
+      });
+
+      const getManagementClientSpy = jest
+        .spyOn(service as any, 'getManagementClient')
+        .mockReturnValue({
+          users: {
+            create: mockCreateUser,
+          },
+        });
+
+      const result = await service.register(registerRequest);
+
+      expect(mockCreateUser).toHaveBeenCalledWith({
+        email: 'auth0user@example.com',
+        password: 'password123',
+        connection: 'Username-Password-Authentication',
+        email_verified: false,
+      });
+      expect(result.user.email).toBe('auth0user@example.com');
+    });
+
+    it('should throw error when Auth0 user creation fails', async () => {
+      const registerRequest = {
+        email: 'failing@example.com',
+        password: 'password123',
+      };
+
+      const mockCreateUser = jest
+        .fn()
+        .mockRejectedValue(new Error('Auth0 user creation failed'));
+
+      jest.spyOn(service as any, 'getManagementClient').mockReturnValue({
+        users: {
+          create: mockCreateUser,
+        },
+      });
+
+      await expect(service.register(registerRequest)).rejects.toThrow(
+        'Auth0 user creation failed: Auth0 user creation failed'
+      );
     });
   });
 

@@ -77,14 +77,62 @@ export const registrationService = {
 
       // Handle API response format: { success: boolean, data?: T, error?: string, message?: string }
       if (data.success === false) {
+        // Check for specific error types
+        let errorCode = 'REGISTRATION_FAILED';
+        let errorMessage = data.error || data.message || 'Registration failed';
+
+        // Handle specific Auth0 error patterns
+        if (data.error === 'User with this email already exists') {
+          errorCode = 'EMAIL_EXISTS';
+        } else if (
+          data.error &&
+          data.error.includes('PasswordStrengthError: Password is too weak')
+        ) {
+          errorCode = 'PASSWORD_TOO_WEAK';
+          errorMessage =
+            'Password is too weak. Must be at least 8 characters with uppercase, lowercase and numbers';
+        } else if (
+          data.error &&
+          data.error.includes('password_dictionary_error')
+        ) {
+          errorCode = 'PASSWORD_TOO_COMMON';
+          errorMessage =
+            'Password is too common. Choose a more unique password';
+        } else if (
+          data.error &&
+          data.error.includes('password_no_user_info_error')
+        ) {
+          errorCode = 'PASSWORD_CONTAINS_USER_INFO';
+          errorMessage =
+            'Password cannot contain personal information like your name or email';
+        } else if (data.error && data.error.includes('user_exists')) {
+          errorCode = 'USER_ALREADY_EXISTS';
+          errorMessage =
+            'An account with this email already exists. Try signing in instead';
+        } else if (data.error && data.error.includes('unauthorized')) {
+          errorCode = 'SIGNUP_NOT_ALLOWED';
+          errorMessage =
+            'Signup is not available at this time. Contact support if the problem persists';
+        } else if (data.error && data.error.includes('invalid_email')) {
+          errorCode = 'INVALID_EMAIL';
+          errorMessage = 'The email format is not valid';
+        } else if (
+          data.error &&
+          data.error.includes('connection is disabled')
+        ) {
+          errorCode = 'CONNECTION_DISABLED';
+          errorMessage =
+            'Signup is not available. Contact support for assistance';
+        } else if (data.error && data.error.includes('Internal server error')) {
+          errorCode = 'SERVER_ERROR';
+          errorMessage = 'A server error occurred. Please try again later';
+        }
+
         return {
           success: false,
           error: {
-            message: data.error || data.message || 'Registration failed',
-            code:
-              data.error === 'User with this email already exists'
-                ? 'EMAIL_EXISTS'
-                : 'REGISTRATION_FAILED',
+            message: errorMessage,
+            code: errorCode,
           },
         };
       }

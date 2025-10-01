@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
-import { auth0Config } from './auth/auth0.config';
+import { getAuth0Config } from './auth/auth0.config';
 import { getDatabaseConfig } from './config/database.config';
 import { getJwtConfig } from './config/jwt.config';
 import { UserEntity } from './entities/user.entity';
@@ -24,7 +24,7 @@ import { UserRepository } from './repositories/user.repository';
       ...getJwtConfig(),
       signOptions: {
         expiresIn: '1h',
-        issuer: auth0Config.audience,
+        issuer: getAuth0Config().audience,
       },
     }),
   ],

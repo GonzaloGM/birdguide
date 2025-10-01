@@ -1,14 +1,19 @@
-export const auth0Config = {
-  domain: process.env.AUTH0_DOMAIN || 'your-domain.auth0.com',
-  clientId: process.env.AUTH0_CLIENT_ID || 'your-client-id',
-  clientSecret: process.env.AUTH0_CLIENT_SECRET || 'your-client-secret',
-  audience: process.env.AUTH0_AUDIENCE || 'your-api-identifier',
-  managementApiAudience:
-    process.env.AUTH0_MANAGEMENT_API_AUDIENCE ||
-    `https://${process.env.AUTH0_DOMAIN || 'your-domain.auth0.com'}/api/v2/`,
-  managementApiClientId:
-    process.env.AUTH0_MANAGEMENT_API_CLIENT_ID || 'your-management-client-id',
-  managementApiClientSecret:
-    process.env.AUTH0_MANAGEMENT_API_CLIENT_SECRET ||
-    'your-management-client-secret',
+const getRequiredEnvVar = (name: string): string => {
+  const value = process.env[name];
+  if (value === undefined) {
+    throw new Error(`Required environment variable ${name} is not set`);
+  }
+  return value;
 };
+
+export const getAuth0Config = () => ({
+  domain: getRequiredEnvVar('AUTH0_DOMAIN'),
+  clientId: getRequiredEnvVar('AUTH0_CLIENT_ID'),
+  clientSecret: getRequiredEnvVar('AUTH0_CLIENT_SECRET'),
+  audience: getRequiredEnvVar('AUTH0_AUDIENCE'),
+  managementApiAudience: getRequiredEnvVar('AUTH0_MANAGEMENT_API_AUDIENCE'),
+  managementApiClientId: getRequiredEnvVar('AUTH0_MANAGEMENT_API_CLIENT_ID'),
+  managementApiClientSecret: getRequiredEnvVar(
+    'AUTH0_MANAGEMENT_API_CLIENT_SECRET'
+  ),
+});

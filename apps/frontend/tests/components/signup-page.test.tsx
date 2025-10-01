@@ -5,6 +5,7 @@ import { vi } from 'vitest';
 import { SignupPage } from '../../app/components/signup-page';
 import { renderWithI18n } from '../../app/test-utils';
 import { useAuth0 } from '@auth0/auth0-react';
+import i18n from '../../app/i18n';
 
 // Mock Auth0
 const mockLoginWithPopup = vi.fn();
@@ -41,26 +42,36 @@ describe('SignupPage', () => {
   it('should render signup form with all required fields', () => {
     renderWithI18n(<SignupPage />);
 
-    expect(screen.getByText('Registrarme')).toBeInTheDocument();
-    expect(screen.getByLabelText('Email')).toBeInTheDocument();
-    expect(screen.getByLabelText('Contraseña')).toBeInTheDocument();
-    expect(screen.getByLabelText('Confirmar contraseña')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Enviar' })).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('signup.title'))).toBeInTheDocument();
+    expect(screen.getByLabelText(i18n.t('signup.email'))).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18n.t('signup.password'))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18n.t('signup.confirmPassword'))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: i18n.t('signup.submit') })
+    ).toBeInTheDocument();
   });
 
   it('should show validation errors for empty required fields', async () => {
     renderWithI18n(<SignupPage />);
 
-    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('El email es requerido')).toBeInTheDocument();
       expect(
-        screen.getByText('La contraseña es requerida')
+        screen.getByText(i18n.t('signup.errors.emailRequired'))
       ).toBeInTheDocument();
       expect(
-        screen.getByText('La confirmación de contraseña es requerida')
+        screen.getByText(i18n.t('signup.errors.passwordRequired'))
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t('signup.errors.confirmPasswordRequired'))
       ).toBeInTheDocument();
     });
   });
@@ -68,24 +79,32 @@ describe('SignupPage', () => {
   it('should show error for invalid email format', async () => {
     renderWithI18n(<SignupPage />);
 
-    const emailInput = screen.getByLabelText('Email');
-    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
 
     await user.type(emailInput, 'invalid-email');
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Email inválido')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t('signup.errors.emailInvalid'))
+      ).toBeInTheDocument();
     });
   });
 
   it('should show error when passwords do not match', async () => {
     renderWithI18n(<SignupPage />);
 
-    const emailInput = screen.getByLabelText('Email');
-    const passwordInput = screen.getByLabelText('Contraseña');
-    const confirmPasswordInput = screen.getByLabelText('Confirmar contraseña');
-    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
 
     await user.type(emailInput, 'test@example.com');
     await user.type(passwordInput, 'password123');
@@ -94,7 +113,7 @@ describe('SignupPage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Las contraseñas no coinciden')
+        screen.getByText(i18n.t('signup.errors.passwordMismatch'))
       ).toBeInTheDocument();
     });
   });
@@ -102,19 +121,23 @@ describe('SignupPage', () => {
   it('should clear validation errors when user starts typing', async () => {
     renderWithI18n(<SignupPage />);
 
-    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('El email es requerido')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t('signup.errors.emailRequired'))
+      ).toBeInTheDocument();
     });
 
-    const emailInput = screen.getByLabelText('Email');
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
     await user.type(emailInput, 'test@example.com');
 
     await waitFor(() => {
       expect(
-        screen.queryByText('El email es requerido')
+        screen.queryByText(i18n.t('signup.errors.emailRequired'))
       ).not.toBeInTheDocument();
     });
   });
@@ -123,7 +146,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const googleButton = screen.getByRole('button', {
-      name: 'Registrarse con Google',
+      name: i18n.t('signup.google'),
     });
     await user.click(googleButton);
 
@@ -139,7 +162,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const appleButton = screen.getByRole('button', {
-      name: 'Registrarse con Apple',
+      name: i18n.t('signup.apple'),
     });
     await user.click(appleButton);
 
@@ -155,8 +178,10 @@ describe('SignupPage', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     renderWithI18n(<SignupPage />);
 
-    const emailInput = screen.getByLabelText('Email');
-    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
 
     await user.type(emailInput, 'invalid-email');
     await user.click(submitButton);
@@ -195,10 +220,14 @@ describe('SignupPage', () => {
 
     renderWithI18n(<SignupPage />);
 
-    const emailInput = screen.getByLabelText('Email');
-    const passwordInput = screen.getByLabelText('Contraseña');
-    const confirmPasswordInput = screen.getByLabelText('Confirmar contraseña');
-    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
 
     await user.type(emailInput, 'test@example.com');
     await user.type(passwordInput, 'password123');
@@ -226,10 +255,14 @@ describe('SignupPage', () => {
 
     renderWithI18n(<SignupPage />);
 
-    const emailInput = screen.getByLabelText('Email');
-    const passwordInput = screen.getByLabelText('Contraseña');
-    const confirmPasswordInput = screen.getByLabelText('Confirmar contraseña');
-    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
 
     await user.type(emailInput, 'existing@example.com');
     await user.type(passwordInput, 'password123');
@@ -237,7 +270,9 @@ describe('SignupPage', () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Email already exists')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t('signup.errors.userAlreadyExists'))
+      ).toBeInTheDocument();
     });
   });
 
@@ -256,10 +291,14 @@ describe('SignupPage', () => {
 
     renderWithI18n(<SignupPage />);
 
-    const emailInput = screen.getByLabelText('Email');
-    const passwordInput = screen.getByLabelText('Contraseña');
-    const confirmPasswordInput = screen.getByLabelText('Confirmar contraseña');
-    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
 
     await user.type(emailInput, 'duplicate@example.com');
     await user.type(passwordInput, 'password123');
@@ -268,7 +307,154 @@ describe('SignupPage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('User with this email already exists')
+        screen.getByText(i18n.t('signup.errors.userAlreadyExists'))
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('should show password strength error message from i18n', async () => {
+    const { registrationService } = await import(
+      '../../app/services/registration.service'
+    );
+    const mockRegister = vi.mocked(registrationService.register);
+    mockRegister.mockResolvedValue({
+      success: false,
+      error: {
+        message:
+          'Password is too weak. Must be at least 8 characters with uppercase, lowercase and numbers',
+        code: 'PASSWORD_TOO_WEAK',
+      },
+    });
+
+    renderWithI18n(<SignupPage />);
+
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
+
+    await user.type(emailInput, 'weakpass@example.com');
+    await user.type(passwordInput, '123');
+    await user.type(confirmPasswordInput, '123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(i18n.t('signup.errors.passwordTooWeak'))
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('should show password too common error message from i18n', async () => {
+    const { registrationService } = await import(
+      '../../app/services/registration.service'
+    );
+    const mockRegister = vi.mocked(registrationService.register);
+    mockRegister.mockResolvedValue({
+      success: false,
+      error: {
+        message: 'Password is too common. Choose a more unique password',
+        code: 'PASSWORD_TOO_COMMON',
+      },
+    });
+
+    renderWithI18n(<SignupPage />);
+
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
+
+    await user.type(emailInput, 'commonpass@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.type(confirmPasswordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(i18n.t('signup.errors.passwordTooCommon'))
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('should show user already exists error message from i18n', async () => {
+    const { registrationService } = await import(
+      '../../app/services/registration.service'
+    );
+    const mockRegister = vi.mocked(registrationService.register);
+    mockRegister.mockResolvedValue({
+      success: false,
+      error: {
+        message:
+          'An account with this email already exists. Try signing in instead',
+        code: 'USER_ALREADY_EXISTS',
+      },
+    });
+
+    renderWithI18n(<SignupPage />);
+
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
+
+    await user.type(emailInput, 'existing@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.type(confirmPasswordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(i18n.t('signup.errors.userAlreadyExists'))
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('should show signup not allowed error message from i18n', async () => {
+    const { registrationService } = await import(
+      '../../app/services/registration.service'
+    );
+    const mockRegister = vi.mocked(registrationService.register);
+    mockRegister.mockResolvedValue({
+      success: false,
+      error: {
+        message:
+          'Signup is not available at this time. Contact support if the problem persists',
+        code: 'SIGNUP_NOT_ALLOWED',
+      },
+    });
+
+    renderWithI18n(<SignupPage />);
+
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
+
+    await user.type(emailInput, 'blocked@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.type(confirmPasswordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(i18n.t('signup.errors.signupNotAllowed'))
       ).toBeInTheDocument();
     });
   });
@@ -288,10 +474,14 @@ describe('SignupPage', () => {
 
     renderWithI18n(<SignupPage />);
 
-    const emailInput = screen.getByLabelText('Email');
-    const passwordInput = screen.getByLabelText('Contraseña');
-    const confirmPasswordInput = screen.getByLabelText('Confirmar contraseña');
-    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
 
     await user.type(emailInput, 'test@example.com');
     await user.type(passwordInput, 'password123');
@@ -300,7 +490,7 @@ describe('SignupPage', () => {
 
     // Check that loading state is shown
     await waitFor(() => {
-      expect(screen.getByText('Registrando...')).toBeInTheDocument();
+      expect(screen.getByText(i18n.t('loading'))).toBeInTheDocument();
     });
 
     // Resolve the registration
@@ -325,7 +515,7 @@ describe('SignupPage', () => {
     });
 
     await waitFor(() => {
-      expect(screen.queryByText('Registrando...')).not.toBeInTheDocument();
+      expect(screen.queryByText(i18n.t('loading'))).not.toBeInTheDocument();
     });
   });
 });

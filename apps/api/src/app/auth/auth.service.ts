@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ManagementClient } from 'auth0';
 import { User, AuthResponse } from '@birdguide/shared-types';
-import { auth0Config } from './auth0.config';
+import { getAuth0Config } from './auth0.config';
 import { UserRepository } from '../repositories/user.repository';
 
 type Auth0CallbackData = {
@@ -22,13 +22,19 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private userRepository: UserRepository
-  ) {
-    this.managementClient = new ManagementClient({
-      domain: auth0Config.domain,
-      clientId: auth0Config.managementApiClientId,
-      clientSecret: auth0Config.managementApiClientSecret,
-      audience: auth0Config.managementApiAudience,
-    });
+  ) {}
+
+  private getManagementClient(): ManagementClient {
+    if (!this.managementClient) {
+      const config = getAuth0Config();
+      this.managementClient = new ManagementClient({
+        domain: config.domain,
+        clientId: config.managementApiClientId,
+        clientSecret: config.managementApiClientSecret,
+        audience: config.managementApiAudience,
+      });
+    }
+    return this.managementClient;
   }
   async handleAuth0Callback(
     auth0CallbackData: Auth0CallbackData
@@ -40,7 +46,7 @@ export class AuthService {
       );
 
       // Get user info from Auth0 Management API
-      const auth0User = await this.managementClient.getUser({
+      const auth0User = await this.getManagementClient().users.get({
         id: tokenResponse.user_id,
       });
 
@@ -114,33 +120,45 @@ export class AuthService {
       throw new Error('User with this email already exists');
     }
 
-    // For now, create a mock user for testing
-    // TODO: Implement actual Auth0 user creation
-    const mockAuth0Id = `auth0|mock-${Date.now()}`;
+    try {
+      // Create user in Auth0
+      const auth0User = await this.getManagementClient().users.create({
+        email: registerRequest.email,
+        password: registerRequest.password,
+        connection: 'Username-Password-Authentication',
+        email_verified: false,
+      });
 
-    const user = await this.userRepository.createOrUpdateUser(mockAuth0Id, {
-      email: registerRequest.email,
-      displayName: registerRequest.email.split('@')[0],
-      preferredLocale: 'es-AR',
-      xp: 0,
-      currentStreak: 0,
-      longestStreak: 0,
-      isAdmin: false,
-      lastActiveAt: new Date(),
-    });
+      // Create user in our database
+      const user = await this.userRepository.createOrUpdateUser(
+        auth0User.user_id,
+        {
+          email: registerRequest.email,
+          displayName: registerRequest.email.split('@')[0],
+          preferredLocale: 'es-AR',
+          xp: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+          isAdmin: false,
+          lastActiveAt: new Date(),
+        }
+      );
 
-    // Generate JWT token
-    const jwtToken = this.jwtService.sign({
-      sub: user.id,
-      email: user.email,
-      auth0Id: mockAuth0Id,
-    });
+      // Generate JWT token
+      const jwtToken = this.jwtService.sign({
+        sub: user.id,
+        email: user.email,
+        auth0Id: auth0User.user_id,
+      });
 
-    return {
-      user,
-      token: jwtToken,
-      refreshToken: 'mock-refresh-token',
-    };
+      return {
+        user,
+        token: jwtToken,
+        refreshToken: 'mock-refresh-token',
+      };
+    } catch (error) {
+      throw new Error(`Auth0 user creation failed: ${error.message}`);
+    }
   }
 
   async logout(auth0Id: string): Promise<void> {

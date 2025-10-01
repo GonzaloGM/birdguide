@@ -4,6 +4,9 @@ import { initReactI18next } from 'react-i18next';
 const resources = {
   es: {
     translation: {
+      // Common
+      loading: 'Cargando...',
+
       // Landing page
       tagline: 'Descubrí cada ave',
       signupButton: 'Registrate',
@@ -42,12 +45,30 @@ const resources = {
           passwordRequired: 'La contraseña es requerida',
           confirmPasswordRequired: 'La confirmación de contraseña es requerida',
           passwordMismatch: 'Las contraseñas no coinciden',
+          passwordTooWeak:
+            'La contraseña es muy débil. Debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números',
+          passwordTooCommon:
+            'La contraseña es muy común. Elige una contraseña más única',
+          passwordContainsUserInfo:
+            'La contraseña no puede contener información personal como tu nombre o email',
+          userAlreadyExists:
+            'Ya existe una cuenta con este email. Intenta iniciar sesión en su lugar',
+          signupNotAllowed:
+            'El registro no está disponible en este momento. Contacta soporte si el problema persiste',
+          invalidEmail: 'El formato del email no es válido',
+          connectionDisabled:
+            'El registro no está disponible. Contacta soporte para obtener ayuda',
+          serverError:
+            'Ocurrió un error del servidor. Intenta nuevamente más tarde',
         },
       },
     },
   },
   en: {
     translation: {
+      // Common
+      loading: 'Loading...',
+
       // Landing page
       tagline: 'Discover every bird',
       signupButton: 'Sign Up',
@@ -86,6 +107,20 @@ const resources = {
           passwordRequired: 'Password is required',
           confirmPasswordRequired: 'Password confirmation is required',
           passwordMismatch: 'Passwords do not match',
+          passwordTooWeak:
+            'Password is too weak. Must be at least 8 characters with uppercase, lowercase and numbers',
+          passwordTooCommon:
+            'Password is too common. Choose a more unique password',
+          passwordContainsUserInfo:
+            'Password cannot contain personal information like your name or email',
+          userAlreadyExists:
+            'An account with this email already exists. Try signing in instead',
+          signupNotAllowed:
+            'Signup is not available at this time. Contact support if the problem persists',
+          invalidEmail: 'The email format is not valid',
+          connectionDisabled:
+            'Signup is not available. Contact support for assistance',
+          serverError: 'A server error occurred. Please try again later',
         },
       },
     },
