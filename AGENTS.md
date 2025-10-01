@@ -1356,3 +1356,5 @@ The key is to write clean, testable, functional code that evolves through small,
 - **Vite and Node 22.16+**: Vite 7+ requires Node.js 22.16+ due to `crypto.hash` usage
 - **NODE_OPTIONS**: Use `NODE_OPTIONS="--max-old-space-size=4096"` to ensure compatibility
 - **Environment Configuration**: Set proper Node version in `.nvmrc` and `package.json` engines field
+- **NX Daemon Issues**: When switching Node versions, always run `nx reset` to clear the daemon cache and restart with the correct Node version
+- **Dependency Conflicts**: NestJS 11 requires compatible versions of all @nestjs packages - update @nestjs/jwt, @nestjs/passport, and @nestjs/typeorm to version 11 when upgrading

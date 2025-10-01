@@ -90,8 +90,8 @@ export class AuthService {
   private async createOrUpdateUser(auth0User: any): Promise<User> {
     // Create or update user in database
     return this.userRepository.createOrUpdateUser(auth0User.user_id, {
-      email: auth0User.email || 'test@example.com',
-      displayName: auth0User.name || 'Test User',
+      email: auth0User.email,
+      displayName: auth0User.name || auth0User.email.split('@')[0],
       preferredLocale: 'es-AR',
       xp: 0,
       currentStreak: 0,
