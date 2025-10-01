@@ -7,12 +7,16 @@ import {
   type MetaFunction,
   type LinksFunction,
 } from 'react-router';
+import { Auth0Provider } from '@auth0/auth0-react';
+import { I18nextProvider } from 'react-i18next';
 
 import { AppNav } from './app-nav';
+import i18n from './i18n';
+import { auth0Config } from './auth0-config';
 
 export const meta: MetaFunction = () => [
   {
-    title: 'New Nx React Router App',
+    title: 'BirdGuide - Descubrí cada ave',
   },
 ];
 
@@ -39,10 +43,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <AppNav />
-        {children}
-        <ScrollRestoration />
-        <Scripts />
+        <Auth0Provider {...auth0Config}>
+          <I18nextProvider i18n={i18n}>
+            <AppNav />
+            {children}
+            <ScrollRestoration />
+            <Scripts />
+          </I18nextProvider>
+        </Auth0Provider>
       </body>
     </html>
   );

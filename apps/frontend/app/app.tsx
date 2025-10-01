@@ -1,11 +1,7 @@
-import NxWelcome from './nx-welcome';
+import { LandingPage } from './components/landing-page';
 
 export function App() {
-  return (
-    <div>
-      <NxWelcome title="@nx/frontend" />
-    </div>
-  );
+  return <LandingPage />;
 }
 
 export default App;
