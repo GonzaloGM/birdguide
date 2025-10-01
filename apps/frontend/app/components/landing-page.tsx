@@ -27,13 +27,13 @@ export const LandingPage = () => {
         <div className="flex flex-col gap-4 w-64">
           <button
             onClick={handleSignup}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
           >
             {t('signupButton')}
           </button>
           <button
             onClick={handleLogin}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+            className="bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200 hover:border-gray-600 font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
           >
             {t('loginButton')}
           </button>

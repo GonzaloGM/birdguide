@@ -11,12 +11,12 @@ const resources = {
       // Landing page
       tagline: 'Descubrí cada ave',
       signupButton: 'Registrate',
-      loginButton: 'Logueate',
+      loginButton: 'Ingresá',
 
       // Login page
       login: {
         title: 'Ingresar',
-        description: 'Ingresá a tu cuenta de BirdGuide',
+        description: 'Entrá a tu cuenta de BirdGuide',
         email: 'Email',
         password: 'Contraseña',
         submit: 'Enviar',
@@ -33,7 +33,7 @@ const resources = {
 
       // Signup page
       signup: {
-        title: 'Registrarme',
+        title: 'Registrate',
         description:
           'Creá tu cuenta de BirdGuide para comenzar a aprender sobre aves',
         email: 'Email',
