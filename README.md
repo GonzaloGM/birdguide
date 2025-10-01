@@ -25,10 +25,34 @@ VITE_AUTH0_REDIRECT_URI=http://localhost:4200
 
 ## Run tasks
 
-To run the dev server for your app, use:
+**Note:** This project requires Node.js 22.16+ due to Vite's use of `crypto.hash`. The package.json includes scripts with the necessary NODE_OPTIONS to ensure compatibility.
+
+### Testing
+```bash
+# Run all tests
+npm run test
+
+# Run API tests only
+npm run test:api
+
+# Run frontend tests only
+npm run test:frontend
+```
+
+### Development
+```bash
+# Start API server
+npm run serve:api
+
+# Start frontend server
+npm run serve:frontend
+```
+
+### Manual Commands
+To run the dev server for your app manually:
 
 ```sh
-npx nx serve frontend
+NODE_OPTIONS="--max-old-space-size=4096" npx nx serve frontend
 ```
 
 To create a production bundle:

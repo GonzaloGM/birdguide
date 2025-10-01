@@ -2,16 +2,30 @@
   "name": "@nx/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx test",
+    "test:api": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx test api",
+    "test:frontend": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx test frontend",
+    "serve:api": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx serve api",
+    "serve:frontend": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx serve frontend"
+  },
   "private": true,
+  "engines": {
+    "node": ">=22.16.0"
+  },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
+    "@nestjs/jwt": "^10.2.0",
+    "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^11.0.0",
     "@react-router/node": "^7.2.0",
     "@react-router/serve": "^7.2.0",
     "axios": "^1.6.0",
     "isbot": "^4.4.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "auth0": "^4.0.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-router": "^7.2.0",
