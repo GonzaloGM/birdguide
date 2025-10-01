@@ -1,5 +1,7 @@
+import React from 'react';
 import { createRoutesStub } from 'react-router';
 import { render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../app/i18n';
 import App from '../../app/app';
