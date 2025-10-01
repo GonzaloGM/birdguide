@@ -81,7 +81,7 @@ export const LoginPage = () => {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl">{t('login.title')}</CardTitle>
-            <CardDescription>Sign in to your BirdGuide account</CardDescription>
+            <CardDescription>{t('login.description')}</CardDescription>
           </CardHeader>
 
           <CardContent>

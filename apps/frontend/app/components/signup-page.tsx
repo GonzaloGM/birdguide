@@ -145,9 +145,7 @@ export const SignupPage = () => {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl">{t('signup.title')}</CardTitle>
-            <CardDescription>
-              Create your BirdGuide account to start learning about birds
-            </CardDescription>
+            <CardDescription>{t('signup.description')}</CardDescription>
           </CardHeader>
 
           <CardContent>

@@ -6,6 +6,7 @@ const resources = {
     translation: {
       // Common
       loading: 'Cargando...',
+      appName: 'BirdGuide',
 
       // Landing page
       tagline: 'Descubrí cada ave',
@@ -15,6 +16,7 @@ const resources = {
       // Login page
       login: {
         title: 'Ingresar',
+        description: 'Inicia sesión en tu cuenta de BirdGuide',
         email: 'Email',
         password: 'Contraseña',
         submit: 'Enviar',
@@ -32,6 +34,8 @@ const resources = {
       // Signup page
       signup: {
         title: 'Registrarme',
+        description:
+          'Crea tu cuenta de BirdGuide para comenzar a aprender sobre aves',
         email: 'Email',
         password: 'Contraseña',
         confirmPassword: 'Confirmar contraseña',
@@ -68,6 +72,7 @@ const resources = {
     translation: {
       // Common
       loading: 'Loading...',
+      appName: 'BirdGuide',
 
       // Landing page
       tagline: 'Discover every bird',
@@ -77,6 +82,7 @@ const resources = {
       // Login page
       login: {
         title: 'Log In',
+        description: 'Sign in to your BirdGuide account',
         email: 'Email',
         password: 'Password',
         submit: 'Submit',
@@ -94,6 +100,8 @@ const resources = {
       // Signup page
       signup: {
         title: 'Sign Up',
+        description:
+          'Create your BirdGuide account to start learning about birds',
         email: 'Email',
         password: 'Password',
         confirmPassword: 'Confirm password',
