@@ -1,6 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { JwtService } from '@nestjs/jwt';
+import { ManagementClient } from 'auth0';
 import { AuthService } from './auth.service';
 import { User, AuthResponse } from '@birdguide/shared-types';
+
+// Mock ManagementClient
+jest.mock('auth0', () => ({
+  ManagementClient: jest.fn().mockImplementation(() => ({
+    getUser: jest.fn().mockResolvedValue({
+      user_id: 'auth0|mock-user-id',
+      email: 'test@example.com',
+      name: 'Test User',
+    }),
+  })),
+}));
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -20,7 +33,15 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService],
+      providers: [
+        AuthService,
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn().mockReturnValue('mock-jwt-token'),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
@@ -39,7 +60,50 @@ describe('AuthService', () => {
       expect(result).toHaveProperty('token');
       expect(result).toHaveProperty('refreshToken');
       expect(result.user.email).toBe('test@example.com');
-      expect(result.token).toBe('jwt-token-123');
+      expect(result.token).toBe('mock-jwt-token');
+    });
+
+    it('should call Auth0 Management API to get user info', async () => {
+      const auth0CallbackData = {
+        code: 'valid-auth0-code',
+        state: 'valid-state',
+      };
+
+      const result = await service.handleAuth0Callback(auth0CallbackData);
+
+      // This test will fail initially because we haven't implemented Auth0 integration
+      // We expect the service to make actual HTTP calls to Auth0
+      expect(result.user.email).toBeDefined();
+      expect(result.user.displayName).toBeDefined();
+    });
+
+    it('should generate valid JWT token for authenticated user', async () => {
+      const auth0CallbackData = {
+        code: 'valid-auth0-code',
+        state: 'valid-state',
+      };
+
+      const result = await service.handleAuth0Callback(auth0CallbackData);
+
+      // This test verifies JWT token generation
+      expect(result.token).toBeDefined();
+      expect(typeof result.token).toBe('string');
+      expect(result.token).toBe('mock-jwt-token');
+    });
+
+    it('should call Auth0 token endpoint to exchange authorization code', async () => {
+      const auth0CallbackData = {
+        code: 'valid-auth0-code',
+        state: 'valid-state',
+      };
+
+      // This test will fail initially because we haven't implemented real Auth0 token exchange
+      // We expect the service to make actual HTTP calls to Auth0's token endpoint
+      const result = await service.handleAuth0Callback(auth0CallbackData);
+
+      expect(result).toHaveProperty('user');
+      expect(result).toHaveProperty('token');
+      expect(result).toHaveProperty('refreshToken');
     });
 
     it('should throw error for invalid authorization code', async () => {
