@@ -1331,3 +1331,28 @@ const processOrder = (order: Order) => {
 ## Summary
 
 The key is to write clean, testable, functional code that evolves through small, safe increments. Every change should be driven by a test that describes the desired behavior, and the implementation should be the simplest thing that makes that test pass. When in doubt, favor simplicity and readability over cleverness.
+
+## Recent Learnings
+
+### Auth0 Integration with NestJS
+- **Auth0 Management Client**: Use `auth0` package for Management API calls, mock in tests for reliability
+- **JWT Token Generation**: Use `@nestjs/jwt` with proper configuration for token signing
+- **Environment Variables**: Create separate config files for Auth0 settings with proper fallbacks
+- **Test Mocking**: Mock external dependencies (Auth0, JWT) in tests to ensure deterministic behavior
+
+### Database Integration with TypeORM
+- **Entity Design**: Create entities that match shared types but with database-specific decorators
+- **Repository Pattern**: Implement repositories to abstract database operations and provide clean API
+- **Type Mapping**: Use mapping functions to convert between database entities and shared types
+- **Test Strategy**: Mock repositories in tests rather than using real database connections
+
+### TDD with External Dependencies
+- **Mock External Services**: Always mock external APIs (Auth0, database) in tests
+- **Test Behavior, Not Implementation**: Focus on what the service does, not how it does it
+- **Incremental Implementation**: Start with mocks, then gradually implement real functionality
+- **Dependency Injection**: Use NestJS DI to make services easily testable
+
+### Node.js Version Compatibility
+- **Vite and Node 22.16+**: Vite 7+ requires Node.js 22.16+ due to `crypto.hash` usage
+- **NODE_OPTIONS**: Use `NODE_OPTIONS="--max-old-space-size=4096"` to ensure compatibility
+- **Environment Configuration**: Set proper Node version in `.nvmrc` and `package.json` engines field

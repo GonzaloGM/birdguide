@@ -16,7 +16,7 @@ export class AuthService {
 
   constructor(
     private jwtService: JwtService,
-    private userRepository: UserRepository,
+    private userRepository: UserRepository
   ) {
     this.managementClient = new ManagementClient({
       domain: auth0Config.domain,
@@ -30,14 +30,18 @@ export class AuthService {
   ): Promise<AuthResponse> {
     try {
       // Exchange authorization code for access token
-      const tokenResponse = await this.exchangeCodeForToken(auth0CallbackData.code);
-      
+      const tokenResponse = await this.exchangeCodeForToken(
+        auth0CallbackData.code
+      );
+
       // Get user info from Auth0 Management API
-      const auth0User = await this.managementClient.getUser({ id: tokenResponse.user_id });
-      
+      const auth0User = await this.managementClient.getUser({
+        id: tokenResponse.user_id,
+      });
+
       // Create or update user in our system
       const user = await this.createOrUpdateUser(auth0User);
-      
+
       // Generate JWT token
       const jwtToken = this.jwtService.sign({
         sub: user.id,
@@ -88,7 +92,7 @@ export class AuthService {
 
   async getCurrentUser(auth0Id: string): Promise<User> {
     const user = await this.userRepository.findUserByAuth0Id(auth0Id);
-    
+
     if (!user) {
       throw new Error('User not found');
     }

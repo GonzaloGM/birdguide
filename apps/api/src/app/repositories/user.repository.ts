@@ -8,7 +8,7 @@ import { User } from '@birdguide/shared-types';
 export class UserRepository {
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private userRepository: Repository<UserEntity>
   ) {}
 
   async findByAuth0Id(auth0Id: string): Promise<UserEntity | null> {
@@ -22,14 +22,20 @@ export class UserRepository {
     return this.userRepository.save(user);
   }
 
-  async update(auth0Id: string, userData: Partial<UserEntity>): Promise<UserEntity | null> {
+  async update(
+    auth0Id: string,
+    userData: Partial<UserEntity>
+  ): Promise<UserEntity | null> {
     await this.userRepository.update({ auth0Id }, userData);
     return this.findByAuth0Id(auth0Id);
   }
 
-  async createOrUpdate(auth0Id: string, userData: Partial<UserEntity>): Promise<UserEntity> {
+  async createOrUpdate(
+    auth0Id: string,
+    userData: Partial<UserEntity>
+  ): Promise<UserEntity> {
     const existingUser = await this.findByAuth0Id(auth0Id);
-    
+
     if (existingUser) {
       return this.update(auth0Id, userData) as Promise<UserEntity>;
     } else {
@@ -60,7 +66,10 @@ export class UserRepository {
     return entity ? this.mapEntityToUser(entity) : null;
   }
 
-  async createOrUpdateUser(auth0Id: string, userData: Partial<UserEntity>): Promise<User> {
+  async createOrUpdateUser(
+    auth0Id: string,
+    userData: Partial<UserEntity>
+  ): Promise<User> {
     const entity = await this.createOrUpdate(auth0Id, userData);
     return this.mapEntityToUser(entity);
   }

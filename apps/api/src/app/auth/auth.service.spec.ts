@@ -170,10 +170,12 @@ describe('AuthService', () => {
 
     it('should throw error when user not found', async () => {
       const auth0Id = 'auth0|nonexistent-user';
-      
+
       // Mock the repository to return null for this specific user
       const userRepository = module.get<UserRepository>(UserRepository);
-      jest.spyOn(userRepository, 'findUserByAuth0Id').mockResolvedValueOnce(null);
+      jest
+        .spyOn(userRepository, 'findUserByAuth0Id')
+        .mockResolvedValueOnce(null);
 
       await expect(service.getCurrentUser(auth0Id)).rejects.toThrow();
     });
