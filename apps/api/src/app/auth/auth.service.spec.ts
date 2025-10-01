@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ManagementClient } from 'auth0';
 import { AuthService } from './auth.service';
 import { User, AuthResponse } from '@birdguide/shared-types';
+import { UserRepository } from '../repositories/user.repository';
 
 // Mock ManagementClient
 jest.mock('auth0', () => ({
@@ -17,6 +18,7 @@ jest.mock('auth0', () => ({
 
 describe('AuthService', () => {
   let service: AuthService;
+  let module: TestingModule;
 
   const mockUser: User = {
     id: 'user-123',
@@ -32,13 +34,20 @@ describe('AuthService', () => {
   };
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [
         AuthService,
         {
           provide: JwtService,
           useValue: {
             sign: jest.fn().mockReturnValue('mock-jwt-token'),
+          },
+        },
+        {
+          provide: UserRepository,
+          useValue: {
+            createOrUpdateUser: jest.fn().mockResolvedValue(mockUser),
+            findUserByAuth0Id: jest.fn().mockResolvedValue(mockUser),
           },
         },
       ],
@@ -106,6 +115,35 @@ describe('AuthService', () => {
       expect(result).toHaveProperty('refreshToken');
     });
 
+    it('should create new user in database when user does not exist', async () => {
+      const auth0CallbackData = {
+        code: 'valid-auth0-code',
+        state: 'valid-state',
+      };
+
+      // This test will fail initially because we haven't implemented database operations
+      // We expect the service to create a new user in the database
+      const result = await service.handleAuth0Callback(auth0CallbackData);
+
+      expect(result.user).toBeDefined();
+      expect(result.user.id).toBeDefined();
+      expect(result.user.email).toBe('test@example.com');
+    });
+
+    it('should update existing user in database when user already exists', async () => {
+      const auth0CallbackData = {
+        code: 'valid-auth0-code',
+        state: 'valid-state',
+      };
+
+      // This test will fail initially because we haven't implemented database operations
+      // We expect the service to update an existing user in the database
+      const result = await service.handleAuth0Callback(auth0CallbackData);
+
+      expect(result.user).toBeDefined();
+      expect(result.user.updatedAt).toBeDefined();
+    });
+
     it('should throw error for invalid authorization code', async () => {
       const auth0CallbackData = {
         code: 'invalid-code',
@@ -132,6 +170,10 @@ describe('AuthService', () => {
 
     it('should throw error when user not found', async () => {
       const auth0Id = 'auth0|nonexistent-user';
+      
+      // Mock the repository to return null for this specific user
+      const userRepository = module.get<UserRepository>(UserRepository);
+      jest.spyOn(userRepository, 'findUserByAuth0Id').mockResolvedValueOnce(null);
 
       await expect(service.getCurrentUser(auth0Id)).rejects.toThrow();
     });

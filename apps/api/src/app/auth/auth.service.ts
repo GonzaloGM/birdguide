@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ManagementClient } from 'auth0';
 import { User, AuthResponse } from '@birdguide/shared-types';
 import { auth0Config } from './auth0.config';
+import { UserRepository } from '../repositories/user.repository';
 
 type Auth0CallbackData = {
   code: string;
@@ -13,7 +14,10 @@ type Auth0CallbackData = {
 export class AuthService {
   private managementClient: ManagementClient;
 
-  constructor(private jwtService: JwtService) {
+  constructor(
+    private jwtService: JwtService,
+    private userRepository: UserRepository,
+  ) {
     this.managementClient = new ManagementClient({
       domain: auth0Config.domain,
       clientId: auth0Config.managementApiClientId,
@@ -69,10 +73,8 @@ export class AuthService {
   }
 
   private async createOrUpdateUser(auth0User: any): Promise<User> {
-    // For now, return mock user to make tests pass
-    // TODO: Implement database operations
-    return {
-      id: 'user-123',
+    // Create or update user in database
+    return this.userRepository.createOrUpdateUser(auth0User.user_id, {
       email: auth0User.email || 'test@example.com',
       displayName: auth0User.name || 'Test User',
       preferredLocale: 'es-AR',
@@ -80,32 +82,18 @@ export class AuthService {
       currentStreak: 0,
       longestStreak: 0,
       isAdmin: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+      lastActiveAt: new Date(),
+    });
   }
 
   async getCurrentUser(auth0Id: string): Promise<User> {
-    // For now, return a mock user to make tests pass
-    // TODO: Implement actual user lookup
-    if (auth0Id === 'auth0|nonexistent-user') {
+    const user = await this.userRepository.findUserByAuth0Id(auth0Id);
+    
+    if (!user) {
       throw new Error('User not found');
     }
 
-    const mockUser: User = {
-      id: 'user-123',
-      email: 'test@example.com',
-      displayName: 'Test User',
-      preferredLocale: 'es-AR',
-      xp: 0,
-      currentStreak: 0,
-      longestStreak: 0,
-      isAdmin: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    return mockUser;
+    return user;
   }
 
   async logout(auth0Id: string): Promise<void> {
