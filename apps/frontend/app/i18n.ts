@@ -16,14 +16,14 @@ const resources = {
       // Login page
       login: {
         title: 'Ingresar',
-        description: 'Inicia sesión en tu cuenta de BirdGuide',
+        description: 'Ingresá a tu cuenta de BirdGuide',
         email: 'Email',
         password: 'Contraseña',
         submit: 'Enviar',
-        forgotPassword: '¿Olvidaste tu contraseña?',
-        orContinueWith: 'O continúa con',
-        google: 'Ingresar con Google',
-        apple: 'Ingresar con Apple',
+        forgotPassword: '¿Te olvidaste tu contraseña?',
+        orContinueWith: 'O ingresá con',
+        google: 'Ingresá con Google',
+        apple: 'Ingresá con Apple',
         errors: {
           emailRequired: 'El email es requerido',
           emailInvalid: 'Email inválido',
@@ -35,12 +35,12 @@ const resources = {
       signup: {
         title: 'Registrarme',
         description:
-          'Crea tu cuenta de BirdGuide para comenzar a aprender sobre aves',
+          'Creá tu cuenta de BirdGuide para comenzar a aprender sobre aves',
         email: 'Email',
         password: 'Contraseña',
         confirmPassword: 'Confirmar contraseña',
         submit: 'Enviar',
-        orContinueWith: 'O continúa con',
+        orContinueWith: 'O registrate con',
         google: 'Registrarse con Google',
         apple: 'Registrarse con Apple',
         errors: {
@@ -52,18 +52,18 @@ const resources = {
           passwordTooWeak:
             'La contraseña es muy débil. Debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números',
           passwordTooCommon:
-            'La contraseña es muy común. Elige una contraseña más única',
+            'La contraseña es muy común. Elegí una contraseña más única',
           passwordContainsUserInfo:
             'La contraseña no puede contener información personal como tu nombre o email',
           userAlreadyExists:
-            'Ya existe una cuenta con este email. Intenta iniciar sesión en su lugar',
+            'Ya existe una cuenta con este email. Intentá iniciar sesión',
           signupNotAllowed:
-            'El registro no está disponible en este momento. Contacta soporte si el problema persiste',
+            'El registro no está disponible en este momento. Contactanos si el problema persiste',
           invalidEmail: 'El formato del email no es válido',
           connectionDisabled:
-            'El registro no está disponible. Contacta soporte para obtener ayuda',
+            'El registro no está disponible, parece que estás desconectado',
           serverError:
-            'Ocurrió un error del servidor. Intenta nuevamente más tarde',
+            'Ocurrió un error en el servidor. Probá de nuevo más tarde',
         },
       },
     },
