@@ -18,7 +18,9 @@ describe('Configuration', () => {
     process.env.DB_PASSWORD = 'password';
     process.env.DB_DATABASE = 'birdguide';
 
-    expect(() => getDatabaseConfig()).toThrow('Required environment variable DB_HOST is not set');
+    expect(() => getDatabaseConfig()).toThrow(
+      'Required environment variable DB_HOST is not set'
+    );
   });
 
   it('should fail when DB_PORT is missing', () => {
@@ -27,7 +29,9 @@ describe('Configuration', () => {
     process.env.DB_PASSWORD = 'password';
     process.env.DB_DATABASE = 'birdguide';
 
-    expect(() => getDatabaseConfig()).toThrow('Required environment variable DB_PORT is not set');
+    expect(() => getDatabaseConfig()).toThrow(
+      'Required environment variable DB_PORT is not set'
+    );
   });
 
   it('should fail when DB_USERNAME is missing', () => {
@@ -36,7 +40,9 @@ describe('Configuration', () => {
     process.env.DB_PASSWORD = 'password';
     process.env.DB_DATABASE = 'birdguide';
 
-    expect(() => getDatabaseConfig()).toThrow('Required environment variable DB_USERNAME is not set');
+    expect(() => getDatabaseConfig()).toThrow(
+      'Required environment variable DB_USERNAME is not set'
+    );
   });
 
   it('should fail when DB_PASSWORD is missing', () => {
@@ -45,7 +51,9 @@ describe('Configuration', () => {
     process.env.DB_USERNAME = 'postgres';
     process.env.DB_DATABASE = 'birdguide';
 
-    expect(() => getDatabaseConfig()).toThrow('Required environment variable DB_PASSWORD is not set');
+    expect(() => getDatabaseConfig()).toThrow(
+      'Required environment variable DB_PASSWORD is not set'
+    );
   });
 
   it('should fail when DB_DATABASE is missing', () => {
@@ -54,11 +62,15 @@ describe('Configuration', () => {
     process.env.DB_USERNAME = 'postgres';
     process.env.DB_PASSWORD = 'password';
 
-    expect(() => getDatabaseConfig()).toThrow('Required environment variable DB_DATABASE is not set');
+    expect(() => getDatabaseConfig()).toThrow(
+      'Required environment variable DB_DATABASE is not set'
+    );
   });
 
   it('should fail when JWT_SECRET is missing', () => {
-    expect(() => getJwtConfig()).toThrow('Required environment variable JWT_SECRET is not set');
+    expect(() => getJwtConfig()).toThrow(
+      'Required environment variable JWT_SECRET is not set'
+    );
   });
 
   it('should succeed when all required environment variables are present', () => {
@@ -71,10 +83,10 @@ describe('Configuration', () => {
 
     expect(() => getDatabaseConfig()).not.toThrow();
     expect(() => getJwtConfig()).not.toThrow();
-    
+
     const dbConfig = getDatabaseConfig();
     const jwtConfig = getJwtConfig();
-    
+
     expect(dbConfig.host).toBe('localhost');
     expect(dbConfig.port).toBe(5432);
     expect(dbConfig.username).toBe('postgres');

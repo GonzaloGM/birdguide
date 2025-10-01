@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "test": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx test",
+    "test": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx run-many --target=test --all",
     "test:api": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx test api",
     "test:frontend": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx test frontend",
     "serve:api": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx serve api",

@@ -29,6 +29,6 @@ import { UserRepository } from './repositories/user.repository';
     }),
   ],
   controllers: [AppController, AuthController],
-  providers: [AuthService, UserRepository],
+  providers: [AppService, AuthService, UserRepository],
 })
 export class AppModule {}

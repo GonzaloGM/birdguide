@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Header } from './header';
+import { registrationService } from '../services/registration.service';
 
 export const SignupPage = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export const SignupPage = () => {
     confirmPassword: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -38,11 +40,29 @@ export const SignupPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      // TODO: Implement actual signup logic
-      console.log('Signup with:', formData);
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      const result = await registrationService.register(formData);
+
+      if (result.success) {
+        // Registration successful - redirect to home or dashboard
+        navigate('/');
+      } else {
+        // Show error message
+        setErrors({ general: result.error.message });
+      }
+    } catch (error) {
+      setErrors({ general: 'An unexpected error occurred' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -81,6 +101,12 @@ export const SignupPage = () => {
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
             {t('signup.title')}
           </h2>
+
+          {errors.general && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {errors.general}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -147,9 +173,10 @@ export const SignupPage = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
+              disabled={isLoading}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
             >
-              {t('signup.submit')}
+              {isLoading ? 'Registrando...' : t('signup.submit')}
             </button>
           </form>
 

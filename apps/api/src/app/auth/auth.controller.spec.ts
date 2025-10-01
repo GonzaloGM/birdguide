@@ -33,6 +33,7 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: {
+            register: jest.fn(),
             handleAuth0Callback: jest.fn(),
             getCurrentUser: jest.fn(),
             logout: jest.fn(),
@@ -45,6 +46,40 @@ describe('AuthController', () => {
     authService = module.get<AuthService>(AuthService);
   });
 
+  describe('POST /auth/register', () => {
+    it('should register user and return user with tokens', async () => {
+      const registerRequest = {
+        email: 'test@example.com',
+        password: 'password123',
+      };
+
+      jest.spyOn(authService, 'register').mockResolvedValue(mockAuthResponse);
+
+      const result = await controller.register(registerRequest);
+
+      expect(authService.register).toHaveBeenCalledWith(registerRequest);
+      expect(result).toEqual({
+        success: true,
+        data: mockAuthResponse,
+      });
+    });
+
+    it('should return error when registration fails', async () => {
+      const registerRequest = {
+        email: 'invalid-email',
+        password: 'password123',
+      };
+
+      jest
+        .spyOn(authService, 'register')
+        .mockRejectedValue(new Error('Invalid email format'));
+
+      await expect(controller.register(registerRequest)).rejects.toThrow(
+        'Invalid email format'
+      );
+    });
+  });
+
   describe('POST /auth/callback', () => {
     it('should handle Auth0 callback and return user with tokens', async () => {
       const auth0CallbackData = {
@@ -52,11 +87,15 @@ describe('AuthController', () => {
         state: 'auth0-state-123',
       };
 
-      jest.spyOn(authService, 'handleAuth0Callback').mockResolvedValue(mockAuthResponse);
+      jest
+        .spyOn(authService, 'handleAuth0Callback')
+        .mockResolvedValue(mockAuthResponse);
 
       const result = await controller.handleAuth0Callback(auth0CallbackData);
 
-      expect(authService.handleAuth0Callback).toHaveBeenCalledWith(auth0CallbackData);
+      expect(authService.handleAuth0Callback).toHaveBeenCalledWith(
+        auth0CallbackData
+      );
       expect(result).toEqual({
         success: true,
         data: mockAuthResponse,
@@ -69,13 +108,13 @@ describe('AuthController', () => {
         state: 'invalid-state',
       };
 
-      jest.spyOn(authService, 'handleAuth0Callback').mockRejectedValue(
-        new Error('Invalid authorization code')
-      );
+      jest
+        .spyOn(authService, 'handleAuth0Callback')
+        .mockRejectedValue(new Error('Invalid authorization code'));
 
-      await expect(controller.handleAuth0Callback(auth0CallbackData)).rejects.toThrow(
-        'Invalid authorization code'
-      );
+      await expect(
+        controller.handleAuth0Callback(auth0CallbackData)
+      ).rejects.toThrow('Invalid authorization code');
     });
   });
 
@@ -101,13 +140,13 @@ describe('AuthController', () => {
         user: { sub: 'auth0|nonexistent-user' },
       };
 
-      jest.spyOn(authService, 'getCurrentUser').mockRejectedValue(
-        new Error('User not found')
-      );
+      jest
+        .spyOn(authService, 'getCurrentUser')
+        .mockRejectedValue(new Error('User not found'));
 
-      await expect(controller.getCurrentUser(mockRequest as any)).rejects.toThrow(
-        'User not found'
-      );
+      await expect(
+        controller.getCurrentUser(mockRequest as any)
+      ).rejects.toThrow('User not found');
     });
   });
 

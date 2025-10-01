@@ -2,29 +2,24 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { vi } from 'vitest';
-import { SignupPage } from '../../app/components/signup-page';
-import { renderWithI18n } from '../../app/test-utils';
-import { useAuth0 } from '@auth0/auth0-react';
+import { SignupPage } from './signup-page';
+import { renderWithI18n } from '../test-utils';
 
 // Mock Auth0
-const mockLoginWithPopup = vi.fn();
 vi.mock('@auth0/auth0-react', () => ({
   useAuth0: () => ({
-    loginWithPopup: mockLoginWithPopup,
+    loginWithPopup: vi.fn(),
   }),
 }));
 
 // Mock react-router
-vi.mock('react-router', async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    useNavigate: () => vi.fn(),
-  };
-});
+vi.mock('react-router', () => ({
+  ...vi.importActual('react-router'),
+  useNavigate: () => vi.fn(),
+}));
 
 // Mock registration service
-vi.mock('../../app/services/registration.service', () => ({
+vi.mock('../services/registration.service', () => ({
   registrationService: {
     register: vi.fn(),
   },
@@ -35,7 +30,6 @@ describe('SignupPage', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockLoginWithPopup.mockClear();
   });
 
   it('should render signup form with all required fields', () => {
@@ -120,6 +114,13 @@ describe('SignupPage', () => {
   });
 
   it('should call Auth0 loginWithPopup for Google signup', async () => {
+    const mockLoginWithPopup = jest.fn();
+    jest.doMock('@auth0/auth0-react', () => ({
+      useAuth0: () => ({
+        loginWithPopup: mockLoginWithPopup,
+      }),
+    }));
+
     renderWithI18n(<SignupPage />);
 
     const googleButton = screen.getByRole('button', {
@@ -136,6 +137,13 @@ describe('SignupPage', () => {
   });
 
   it('should call Auth0 loginWithPopup for Apple signup', async () => {
+    const mockLoginWithPopup = jest.fn();
+    jest.doMock('@auth0/auth0-react', () => ({
+      useAuth0: () => ({
+        loginWithPopup: mockLoginWithPopup,
+      }),
+    }));
+
     renderWithI18n(<SignupPage />);
 
     const appleButton = screen.getByRole('button', {
@@ -151,8 +159,33 @@ describe('SignupPage', () => {
     });
   });
 
+  it('should submit form with valid data', async () => {
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+    renderWithI18n(<SignupPage />);
+
+    const emailInput = screen.getByLabelText('Email');
+    const passwordInput = screen.getByLabelText('Contraseña');
+    const confirmPasswordInput = screen.getByLabelText('Confirmar contraseña');
+    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.type(confirmPasswordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith('Signup with:', {
+        email: 'test@example.com',
+        password: 'password123',
+        confirmPassword: 'password123',
+      });
+    });
+
+    consoleSpy.mockRestore();
+  });
+
   it('should not submit form with invalid data', async () => {
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation();
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText('Email');
@@ -170,7 +203,7 @@ describe('SignupPage', () => {
 
   it('should call registration service with valid data', async () => {
     const { registrationService } = await import(
-      '../../app/services/registration.service'
+      '../services/registration.service'
     );
     const mockRegister = vi.mocked(registrationService.register);
     mockRegister.mockResolvedValue({
@@ -216,7 +249,7 @@ describe('SignupPage', () => {
 
   it('should show error message when registration fails', async () => {
     const { registrationService } = await import(
-      '../../app/services/registration.service'
+      '../services/registration.service'
     );
     const mockRegister = vi.mocked(registrationService.register);
     mockRegister.mockResolvedValue({
@@ -243,7 +276,7 @@ describe('SignupPage', () => {
 
   it('should show loading state during registration', async () => {
     const { registrationService } = await import(
-      '../../app/services/registration.service'
+      '../services/registration.service'
     );
     const mockRegister = vi.mocked(registrationService.register);
 

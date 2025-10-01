@@ -10,6 +10,11 @@ type Auth0CallbackData = {
   state: string;
 };
 
+type RegisterRequest = {
+  email: string;
+  password: string;
+};
+
 @Injectable()
 export class AuthService {
   private managementClient: ManagementClient;
@@ -98,6 +103,36 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  async register(registerRequest: RegisterRequest): Promise<AuthResponse> {
+    // For now, create a mock user for testing
+    // TODO: Implement actual Auth0 user creation
+    const mockAuth0Id = `auth0|mock-${Date.now()}`;
+
+    const user = await this.userRepository.createOrUpdateUser(mockAuth0Id, {
+      email: registerRequest.email,
+      displayName: registerRequest.email.split('@')[0],
+      preferredLocale: 'es-AR',
+      xp: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      isAdmin: false,
+      lastActiveAt: new Date(),
+    });
+
+    // Generate JWT token
+    const jwtToken = this.jwtService.sign({
+      sub: user.id,
+      email: user.email,
+      auth0Id: mockAuth0Id,
+    });
+
+    return {
+      user,
+      token: jwtToken,
+      refreshToken: 'mock-refresh-token',
+    };
   }
 
   async logout(auth0Id: string): Promise<void> {

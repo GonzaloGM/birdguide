@@ -7,6 +7,11 @@ type Auth0CallbackData = {
   state: string;
 };
 
+type RegisterRequest = {
+  email: string;
+  password: string;
+};
+
 type AuthenticatedRequest = {
   user: {
     sub: string;
@@ -16,6 +21,18 @@ type AuthenticatedRequest = {
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Post('register')
+  async register(
+    @Body() registerRequest: RegisterRequest
+  ): Promise<ApiResponse<AuthResponse>> {
+    const authResponse = await this.authService.register(registerRequest);
+
+    return {
+      success: true,
+      data: authResponse,
+    };
+  }
 
   @Post('callback')
   async handleAuth0Callback(

@@ -46,7 +46,16 @@ describe('AuthService', () => {
         {
           provide: UserRepository,
           useValue: {
-            createOrUpdateUser: jest.fn().mockResolvedValue(mockUser),
+            createOrUpdateUser: jest
+              .fn()
+              .mockImplementation((auth0Id, userData) =>
+                Promise.resolve({
+                  id: auth0Id,
+                  ...userData,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                })
+              ),
             findUserByAuth0Id: jest.fn().mockResolvedValue(mockUser),
           },
         },
@@ -178,6 +187,72 @@ describe('AuthService', () => {
         .mockResolvedValueOnce(null);
 
       await expect(service.getCurrentUser(auth0Id)).rejects.toThrow();
+    });
+  });
+
+  describe('register', () => {
+    it('should register new user and return auth response', async () => {
+      const registerRequest = {
+        email: 'newuser@example.com',
+        password: 'password123',
+      };
+
+      const result = await service.register(registerRequest);
+
+      expect(result).toHaveProperty('user');
+      expect(result).toHaveProperty('token');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result.user.email).toBe('newuser@example.com');
+      expect(result.user.displayName).toBe('newuser');
+      expect(result.token).toBe('mock-jwt-token');
+    });
+
+    it('should create user in database with correct data', async () => {
+      const registerRequest = {
+        email: 'testuser@example.com',
+        password: 'password123',
+      };
+
+      const userRepository = module.get<UserRepository>(UserRepository);
+      const createOrUpdateUserSpy = jest.spyOn(
+        userRepository,
+        'createOrUpdateUser'
+      );
+
+      const result = await service.register(registerRequest);
+
+      expect(createOrUpdateUserSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/^auth0\|mock-\d+$/),
+        {
+          email: 'testuser@example.com',
+          displayName: 'testuser',
+          preferredLocale: 'es-AR',
+          xp: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+          isAdmin: false,
+          lastActiveAt: expect.any(Date),
+        }
+      );
+    });
+
+    it('should generate JWT token for registered user', async () => {
+      const registerRequest = {
+        email: 'jwtuser@example.com',
+        password: 'password123',
+      };
+
+      const jwtService = module.get<JwtService>(JwtService);
+      const signSpy = jest.spyOn(jwtService, 'sign');
+
+      const result = await service.register(registerRequest);
+
+      expect(signSpy).toHaveBeenCalledWith({
+        sub: expect.any(String),
+        email: 'jwtuser@example.com',
+        auth0Id: expect.stringMatching(/^auth0\|mock-\d+$/),
+      });
+      expect(result.token).toBe('mock-jwt-token');
     });
   });
 
