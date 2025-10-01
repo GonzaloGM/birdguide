@@ -73,4 +73,11 @@ export class UserRepository {
     const entity = await this.createOrUpdate(auth0Id, userData);
     return this.mapEntityToUser(entity);
   }
+
+  async findUserByEmail(email: string): Promise<User | null> {
+    const entity = await this.userRepository.findOne({
+      where: { email },
+    });
+    return entity ? this.mapEntityToUser(entity) : null;
+  }
 }

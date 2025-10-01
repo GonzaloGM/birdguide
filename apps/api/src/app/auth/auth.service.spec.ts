@@ -57,6 +57,7 @@ describe('AuthService', () => {
                 })
               ),
             findUserByAuth0Id: jest.fn().mockResolvedValue(mockUser),
+            findUserByEmail: jest.fn().mockResolvedValue(null),
           },
         },
       ],
@@ -205,6 +206,42 @@ describe('AuthService', () => {
       expect(result.user.email).toBe('newuser@example.com');
       expect(result.user.displayName).toBe('newuser');
       expect(result.token).toBe('mock-jwt-token');
+    });
+
+    it('should throw error when trying to register with existing email', async () => {
+      const registerRequest = {
+        email: 'existing@example.com',
+        password: 'password123',
+      };
+
+      const userRepository = module.get<UserRepository>(UserRepository);
+      const findUserByEmailSpy = jest.spyOn(userRepository, 'findUserByEmail');
+
+      // Mock first call to return null (no existing user)
+      // Mock second call to return existing user
+      findUserByEmailSpy
+        .mockResolvedValueOnce(null) // First registration - no existing user
+        .mockResolvedValueOnce({
+          // Second registration - user exists
+          id: 'existing-user-id',
+          email: 'existing@example.com',
+          displayName: 'existing',
+          preferredLocale: 'es-AR',
+          xp: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+          isAdmin: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+
+      // First registration should succeed
+      await service.register(registerRequest);
+
+      // Second registration with same email should fail
+      await expect(service.register(registerRequest)).rejects.toThrow(
+        'User with this email already exists'
+      );
     });
 
     it('should create user in database with correct data', async () => {

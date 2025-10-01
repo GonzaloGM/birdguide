@@ -241,6 +241,38 @@ describe('SignupPage', () => {
     });
   });
 
+  it('should show error message when API returns duplicate email error', async () => {
+    const { registrationService } = await import(
+      '../../app/services/registration.service'
+    );
+    const mockRegister = vi.mocked(registrationService.register);
+    mockRegister.mockResolvedValue({
+      success: false,
+      error: {
+        message: 'User with this email already exists',
+        code: 'EMAIL_EXISTS',
+      },
+    });
+
+    renderWithI18n(<SignupPage />);
+
+    const emailInput = screen.getByLabelText('Email');
+    const passwordInput = screen.getByLabelText('Contraseña');
+    const confirmPasswordInput = screen.getByLabelText('Confirmar contraseña');
+    const submitButton = screen.getByRole('button', { name: 'Enviar' });
+
+    await user.type(emailInput, 'duplicate@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.type(confirmPasswordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('User with this email already exists')
+      ).toBeInTheDocument();
+    });
+  });
+
   it('should show loading state during registration', async () => {
     const { registrationService } = await import(
       '../../app/services/registration.service'

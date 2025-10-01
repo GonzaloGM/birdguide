@@ -74,9 +74,32 @@ describe('AuthController', () => {
         .spyOn(authService, 'register')
         .mockRejectedValue(new Error('Invalid email format'));
 
-      await expect(controller.register(registerRequest)).rejects.toThrow(
-        'Invalid email format'
-      );
+      const result = await controller.register(registerRequest);
+
+      expect(result).toEqual({
+        success: false,
+        error: 'Invalid email format',
+        message: 'Registration failed',
+      });
+    });
+
+    it('should return error when email already exists', async () => {
+      const registerRequest = {
+        email: 'existing@example.com',
+        password: 'password123',
+      };
+
+      jest
+        .spyOn(authService, 'register')
+        .mockRejectedValue(new Error('User with this email already exists'));
+
+      const result = await controller.register(registerRequest);
+
+      expect(result).toEqual({
+        success: false,
+        error: 'User with this email already exists',
+        message: 'Email already exists',
+      });
     });
   });
 

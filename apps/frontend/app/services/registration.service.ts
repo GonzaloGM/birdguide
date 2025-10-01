@@ -75,9 +75,23 @@ export const registrationService = {
         };
       }
 
+      // Handle API response format: { success: boolean, data?: T, error?: string, message?: string }
+      if (data.success === false) {
+        return {
+          success: false,
+          error: {
+            message: data.error || data.message || 'Registration failed',
+            code:
+              data.error === 'User with this email already exists'
+                ? 'EMAIL_EXISTS'
+                : 'REGISTRATION_FAILED',
+          },
+        };
+      }
+
       return {
         success: true,
-        data,
+        data: data.data,
       };
     } catch (error) {
       return {

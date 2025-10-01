@@ -26,12 +26,23 @@ export class AuthController {
   async register(
     @Body() registerRequest: RegisterRequest
   ): Promise<ApiResponse<AuthResponse>> {
-    const authResponse = await this.authService.register(registerRequest);
+    try {
+      const authResponse = await this.authService.register(registerRequest);
 
-    return {
-      success: true,
-      data: authResponse,
-    };
+      return {
+        success: true,
+        data: authResponse,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message:
+          error.message === 'User with this email already exists'
+            ? 'Email already exists'
+            : 'Registration failed',
+      };
+    }
   }
 
   @Post('callback')

@@ -106,6 +106,14 @@ export class AuthService {
   }
 
   async register(registerRequest: RegisterRequest): Promise<AuthResponse> {
+    // Check if user with this email already exists
+    const existingUser = await this.userRepository.findUserByEmail(
+      registerRequest.email
+    );
+    if (existingUser) {
+      throw new Error('User with this email already exists');
+    }
+
     // For now, create a mock user for testing
     // TODO: Implement actual Auth0 user creation
     const mockAuth0Id = `auth0|mock-${Date.now()}`;
