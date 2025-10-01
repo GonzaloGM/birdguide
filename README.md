@@ -1,10 +1,27 @@
-# Nx
+# BirdGuide - Nx Workspace
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+✨ A birding learning app built with Nx ✨.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+A "Duolingo for learning about birds" featuring flashcards, photo/audio quizzes, species lists, and daily challenges.
+
+## Setup
+
+### Environment Variables
+
+Create a `.env` file in the `apps/frontend/` directory with your Auth0 configuration:
+
+```bash
+# Auth0 Configuration
+VITE_AUTH0_DOMAIN=your-domain.auth0.com
+VITE_AUTH0_CLIENT_ID=your-client-id
+VITE_AUTH0_REDIRECT_URI=http://localhost:4200
+```
+
+**Note:** The application will fail to start if these environment variables are not set.
+
+[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created.
 
 ## Run tasks
 

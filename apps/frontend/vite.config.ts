@@ -5,6 +5,7 @@ import { reactRouter } from '@react-router/dev/vite';
 export default defineConfig(() => ({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/apps/frontend',
+  envDir: __dirname, // Load .env from the frontend app directory
   server: {
     port: 4200,
     host: 'localhost',
