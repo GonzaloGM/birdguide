@@ -6,6 +6,7 @@ import { vi } from 'vitest';
 import { SignupPage } from '../../app/components/signup-page';
 import { renderWithI18n } from '../../app/test-utils';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth } from '../../app/contexts/auth-context';
 import i18n from '../../app/i18n';
 
 // Mock Auth0
@@ -17,11 +18,12 @@ vi.mock('@auth0/auth0-react', () => ({
 }));
 
 // Mock react-router
+const mockNavigate = vi.fn();
 vi.mock('react-router', async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
-    useNavigate: () => vi.fn(),
+    useNavigate: () => mockNavigate,
   };
 });
 
@@ -32,12 +34,27 @@ vi.mock('../../app/services/registration.service', () => ({
   },
 }));
 
+// Mock auth context
+const mockLogin = vi.fn();
+const mockLogout = vi.fn();
+vi.mock('../../app/contexts/auth-context', () => ({
+  useAuth: () => ({
+    user: null,
+    isLoggedIn: false,
+    login: mockLogin,
+    logout: mockLogout,
+  }),
+}));
+
 describe('SignupPage', () => {
   const user = userEvent.setup();
 
   beforeEach(() => {
     vi.clearAllMocks();
     mockLoginWithPopup.mockClear();
+    mockLogin.mockClear();
+    mockLogout.mockClear();
+    mockNavigate.mockClear();
   });
 
   it('should render signup form with all required fields', () => {
@@ -534,6 +551,58 @@ describe('SignupPage', () => {
 
     await waitFor(() => {
       expect(screen.queryByText(i18n.t('loading'))).not.toBeInTheDocument();
+    });
+  });
+
+  it('should call login with user data and token after successful registration', async () => {
+    const { registrationService } = await import(
+      '../../app/services/registration.service'
+    );
+    const mockRegister = vi.mocked(registrationService.register);
+
+    const mockUser = {
+      id: 'user-123',
+      email: 'test@example.com',
+      username: 'testuser',
+      preferredLocale: 'es-AR',
+      xp: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      isAdmin: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    mockRegister.mockResolvedValue({
+      success: true,
+      data: {
+        user: mockUser,
+        token: 'mock-jwt-token',
+        refreshToken: null,
+      },
+    });
+
+    renderWithI18n(<SignupPage />);
+
+    const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const usernameInput = screen.getByLabelText(i18n.t('signup.username'));
+    const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
+    const confirmPasswordInput = screen.getByLabelText(
+      i18n.t('signup.confirmPassword')
+    );
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('signup.submit'),
+    });
+
+    await user.type(emailInput, 'test@example.com');
+    await user.type(usernameInput, 'testuser');
+    await user.type(passwordInput, 'password123');
+    await user.type(confirmPasswordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith(mockUser, 'mock-jwt-token');
+      expect(mockNavigate).toHaveBeenCalledWith('/');
     });
   });
 });

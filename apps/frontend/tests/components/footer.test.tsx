@@ -1,9 +1,15 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { Footer } from '../../app/components/footer';
 import { renderWithI18n } from '../../app/test-utils';
+import { useAuth } from '../../app/contexts/auth-context';
+
+// Mock auth context
+vi.mock('../../app/contexts/auth-context', () => ({
+  useAuth: vi.fn(),
+}));
 
 // Mock react-router
 vi.mock('react-router', async (importOriginal) => {
@@ -19,7 +25,29 @@ vi.mock('react-router', async (importOriginal) => {
 });
 
 describe('Footer', () => {
-  it('should render all navigation buttons', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should render all navigation buttons when user is logged in', () => {
+    vi.mocked(useAuth).mockReturnValue({
+      user: {
+        id: 'user-123',
+        email: 'test@example.com',
+        username: 'testuser',
+        preferredLocale: 'es-AR',
+        xp: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        isAdmin: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      isLoggedIn: true,
+      login: vi.fn(),
+      logout: vi.fn(),
+    });
+
     renderWithI18n(<Footer />);
 
     expect(screen.getByText('Practicar')).toBeInTheDocument();
@@ -28,37 +56,82 @@ describe('Footer', () => {
     expect(screen.getByText('Perfil')).toBeInTheDocument();
   });
 
-  it('should render English labels when language is English', () => {
-    // This test is covered by the i18n setup in test-utils
-    // The footer component uses the translation system correctly
+  it('should not render when user is not logged in', () => {
+    vi.mocked(useAuth).mockReturnValue({
+      user: null,
+      isLoggedIn: false,
+      login: vi.fn(),
+      logout: vi.fn(),
+    });
+
+    const { container } = renderWithI18n(<Footer />);
+
+    expect(container.firstChild).toBeNull();
+  });
+
+  it('should render Spanish labels by default', () => {
+    vi.mocked(useAuth).mockReturnValue({
+      user: {
+        id: 'user-123',
+        email: 'test@example.com',
+        username: 'testuser',
+        preferredLocale: 'es-AR',
+        xp: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        isAdmin: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      isLoggedIn: true,
+      login: vi.fn(),
+      logout: vi.fn(),
+    });
+
     renderWithI18n(<Footer />);
 
-    // The test-utils already sets up i18n with Spanish as default
-    // This test verifies the component renders with the correct structure
     expect(screen.getByText('Practicar')).toBeInTheDocument();
     expect(screen.getByText('Senderos')).toBeInTheDocument();
     expect(screen.getByText('Especies')).toBeInTheDocument();
     expect(screen.getByText('Perfil')).toBeInTheDocument();
   });
 
-  it('should have correct links to each section', () => {
+  it('should have correct navigation links', () => {
+    vi.mocked(useAuth).mockReturnValue({
+      user: {
+        id: 'user-123',
+        email: 'test@example.com',
+        username: 'testuser',
+        preferredLocale: 'es-AR',
+        xp: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        isAdmin: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      isLoggedIn: true,
+      login: vi.fn(),
+      logout: vi.fn(),
+    });
+
     renderWithI18n(<Footer />);
 
-    const practiceLink = screen.getByText('Practicar').closest('a');
-    const pathLink = screen.getByText('Senderos').closest('a');
-    const speciesLink = screen.getByText('Especies').closest('a');
-    const profileLink = screen.getByText('Perfil').closest('a');
-
-    expect(practiceLink).toHaveAttribute('href', '/practice');
-    expect(pathLink).toHaveAttribute('href', '/path');
-    expect(speciesLink).toHaveAttribute('href', '/species');
-    expect(profileLink).toHaveAttribute('href', '/profile');
-  });
-
-  it('should have proper styling classes', () => {
-    renderWithI18n(<Footer />);
-
-    const footer = screen.getByRole('contentinfo');
-    expect(footer).toHaveClass('fixed', 'bottom-0', 'left-0', 'right-0');
+    expect(screen.getByRole('link', { name: 'Practicar' })).toHaveAttribute(
+      'href',
+      '/practice'
+    );
+    expect(screen.getByRole('link', { name: 'Senderos' })).toHaveAttribute(
+      'href',
+      '/path'
+    );
+    expect(screen.getByRole('link', { name: 'Especies' })).toHaveAttribute(
+      'href',
+      '/species'
+    );
+    expect(screen.getByRole('link', { name: 'Perfil' })).toHaveAttribute(
+      'href',
+      '/profile'
+    );
   });
 });

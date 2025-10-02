@@ -1,24 +1,12 @@
 import React from 'react';
-import { createRoutesStub } from 'react-router';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { I18nextProvider } from 'react-i18next';
+import { renderWithI18n } from '../../app/test-utils';
+import IndexPage from '../../app/routes/_index';
 import i18n from '../../app/i18n';
-import App from '../../app/app';
 
 test('renders BirdGuide landing page', async () => {
-  const ReactRouterStub = createRoutesStub([
-    {
-      path: '/',
-      Component: App,
-    },
-  ]);
-
-  render(
-    <I18nextProvider i18n={i18n}>
-      <ReactRouterStub />
-    </I18nextProvider>
-  );
+  renderWithI18n(<IndexPage />);
 
   await waitFor(() => screen.findByText('BirdGuide'));
   expect(screen.getByText(i18n.t('tagline'))).toBeInTheDocument();

@@ -17,7 +17,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -29,9 +29,9 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
     // Check for existing session on mount
@@ -42,13 +42,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
-  const login = (user: User, token: string) => {
-    sessionService.saveSession(user, token);
-    setUser(user);
+  const login = (userData: User, token: string): void => {
+    sessionService.saveSession(userData, token);
+    setUser(userData);
     setIsLoggedIn(true);
   };
 
-  const logout = () => {
+  const logout = (): void => {
     sessionService.clearSession();
     setUser(null);
     setIsLoggedIn(false);

@@ -58,8 +58,8 @@ describe('SessionService', () => {
         currentStreak: 0,
         longestStreak: 0,
         isAdmin: false,
-        createdAt: '2025-10-02T02:12:17.266Z',
-        updatedAt: '2025-10-02T02:12:17.266Z',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       const token = 'mock-jwt-token';
 
