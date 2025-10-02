@@ -26,7 +26,7 @@ describe('SpeciesService', () => {
   const mockCommonName: SpeciesCommonName = {
     id: 1,
     speciesId: 1,
-    langCode: 'en-US',
+    langCode: 'es-AR',
     commonName: 'American Robin',
   };
 
@@ -113,7 +113,88 @@ describe('SpeciesService', () => {
         .spyOn(repository, 'findAll')
         .mockRejectedValue(new Error('Database error'));
 
-      await expect(service.findAll()).rejects.toThrow('Database error');
+      await expect(service.findAll('es-AR')).rejects.toThrow('Database error');
+    });
+
+    it('should return species sorted by common name alphabetically', async () => {
+      const unsortedSpecies: Species[] = [
+        {
+          id: 3,
+          scientificName: 'Zenaida macroura',
+          eBirdId: 'moudov',
+          genus: 'Zenaida',
+          family: 'Columbidae',
+          orderName: 'Columbiformes',
+          iucnStatus: 'LC',
+          sizeMm: 300,
+          summary: 'A common North American dove',
+          rangeMapUrl: 'https://example.com/range-map-3.png',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 1,
+          scientificName: 'Turdus migratorius',
+          eBirdId: 'amerob',
+          genus: 'Turdus',
+          family: 'Turdidae',
+          orderName: 'Passeriformes',
+          iucnStatus: 'LC',
+          sizeMm: 250,
+          summary: 'A common North American thrush',
+          rangeMapUrl: 'https://example.com/range-map.png',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          scientificName: 'Cardinalis cardinalis',
+          eBirdId: 'norcar',
+          genus: 'Cardinalis',
+          family: 'Cardinalidae',
+          orderName: 'Passeriformes',
+          iucnStatus: 'LC',
+          sizeMm: 220,
+          summary: 'A bright red songbird',
+          rangeMapUrl: 'https://example.com/range-map-2.png',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+
+      const commonNames: SpeciesCommonName[] = [
+        {
+          id: 1,
+          speciesId: 1,
+          langCode: 'es-AR',
+          commonName: 'Zorzal Americano',
+        },
+        {
+          id: 2,
+          speciesId: 2,
+          langCode: 'es-AR',
+          commonName: 'Cardenal Norteño',
+        },
+        {
+          id: 3,
+          speciesId: 3,
+          langCode: 'es-AR',
+          commonName: 'Paloma Huilota',
+        },
+      ];
+
+      jest.spyOn(repository, 'findAll').mockResolvedValue(unsortedSpecies);
+      jest
+        .spyOn(repository, 'findCommonNamesBySpeciesIds')
+        .mockResolvedValue(commonNames);
+
+      const result = await service.findAll('es-AR');
+
+      expect(result).toHaveLength(3);
+      // Should be sorted alphabetically by common name
+      expect(result[0].commonName).toBe('Cardenal Norteño');
+      expect(result[1].commonName).toBe('Paloma Huilota');
+      expect(result[2].commonName).toBe('Zorzal Americano');
     });
   });
 

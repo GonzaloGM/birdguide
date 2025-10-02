@@ -57,11 +57,18 @@ export class SpeciesService {
         };
       });
 
-      this.logger.infoWithContext('Successfully fetched species', {
-        count: speciesWithCommonNames.length,
+      // Sort species by common name alphabetically
+      const sortedSpecies = speciesWithCommonNames.sort((a, b) => {
+        const nameA = a.commonName || '';
+        const nameB = b.commonName || '';
+        return nameA.localeCompare(nameB);
       });
 
-      return speciesWithCommonNames;
+      this.logger.infoWithContext('Successfully fetched species', {
+        count: sortedSpecies.length,
+      });
+
+      return sortedSpecies;
     } catch (error) {
       this.logger.errorWithContext('Failed to fetch species', {
         error: error instanceof Error ? error.message : String(error),

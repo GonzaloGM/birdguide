@@ -17,7 +17,15 @@ export default function SpeciesPage() {
         const data = await response.json();
 
         if (data.success) {
-          setSpecies(data.data);
+          // Sort species by common name alphabetically
+          const sortedSpecies = data.data.sort(
+            (a: SpeciesWithCommonName, b: SpeciesWithCommonName) => {
+              const nameA = a.commonName || '';
+              const nameB = b.commonName || '';
+              return nameA.localeCompare(nameB);
+            }
+          );
+          setSpecies(sortedSpecies);
         } else {
           setError(data.message || 'Failed to fetch species');
         }

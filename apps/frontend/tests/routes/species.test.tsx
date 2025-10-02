@@ -182,4 +182,73 @@ describe('SpeciesPage', () => {
       expect(screen.getByText('Cardinalidae')).toBeInTheDocument();
     });
   });
+
+  it('should display species sorted by common name alphabetically', async () => {
+    const unsortedSpecies: SpeciesWithCommonName[] = [
+      {
+        id: 3,
+        scientificName: 'Zenaida macroura',
+        eBirdId: 'moudov',
+        commonName: 'Mourning Dove',
+        genus: 'Zenaida',
+        family: 'Columbidae',
+        orderName: 'Columbiformes',
+        iucnStatus: 'LC',
+        sizeMm: 300,
+        summary: 'A common North American dove',
+        rangeMapUrl: 'https://example.com/range-map-3.png',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 1,
+        scientificName: 'Turdus migratorius',
+        eBirdId: 'amerob',
+        commonName: 'American Robin',
+        genus: 'Turdus',
+        family: 'Turdidae',
+        orderName: 'Passeriformes',
+        iucnStatus: 'LC',
+        sizeMm: 250,
+        summary: 'A common North American thrush',
+        rangeMapUrl: 'https://example.com/range-map.png',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 2,
+        scientificName: 'Cardinalis cardinalis',
+        eBirdId: 'norcar',
+        commonName: 'Northern Cardinal',
+        genus: 'Cardinalis',
+        family: 'Cardinalidae',
+        orderName: 'Passeriformes',
+        iucnStatus: 'LC',
+        sizeMm: 220,
+        summary: 'A bright red songbird',
+        rangeMapUrl: 'https://example.com/range-map-2.png',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    mockFetch.mockResolvedValueOnce({
+      json: async () => ({
+        success: true,
+        data: unsortedSpecies,
+      }),
+    });
+
+    renderWithI18n(<SpeciesPage />);
+
+    await waitFor(() => {
+      const speciesLinks = screen.getAllByRole('link');
+      expect(speciesLinks).toHaveLength(3);
+
+      // Should be sorted alphabetically by common name
+      expect(speciesLinks[0]).toHaveTextContent('American Robin');
+      expect(speciesLinks[1]).toHaveTextContent('Mourning Dove');
+      expect(speciesLinks[2]).toHaveTextContent('Northern Cardinal');
+    });
+  });
 });

@@ -12,9 +12,6 @@ export class SpeciesController {
 
   @Get()
   async findAll(): Promise<ApiResponse<SpeciesWithCommonName[]>> {
-    console.log(
-      '🔍 SpeciesController.findAll() called - this should appear in logs'
-    );
     this.logger.infoWithContext('Species list request received', {
       operation: 'findAll',
     });
@@ -22,7 +19,6 @@ export class SpeciesController {
     try {
       // Default to Spanish (Argentina) for now
       const species = await this.speciesService.findAll('es-AR');
-      console.log('🔍 Species from service:', species.length, 'species found');
 
       this.logger.infoWithContext('Species list request successful', {
         count: species.length,

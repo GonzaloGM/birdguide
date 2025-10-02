@@ -15,12 +15,12 @@ interface SpeciesData {
 // Extract language code from filename
 function extractLanguageFromFilename(filePath: string): string {
   const filename = path.basename(filePath);
-  const match = filename.match(/argentina-([a-z]{2}_[A-Z]{2})\.json$/);
+  const match = filename.match(/argentina-([a-z]{2}-[A-Z]{2})\.json$/);
   if (match) {
     return match[1];
   }
   throw new Error(
-    'Filename must match pattern: argentina-{langCode}.json (e.g., argentina-es_AR.json, argentina-en_US.json)'
+    'Filename must match pattern: argentina-{langCode}.json (e.g., argentina-es-AR.json, argentina-en-US.json)'
   );
 }
 
