@@ -76,9 +76,9 @@ export const SignupPage = () => {
       const result = await registrationService.register(formData);
 
       if (result.success) {
-        // Registration successful - save session and redirect to home
+        // Registration successful - save session and redirect to practice
         login(result.data.user, result.data.token);
-        navigate('/');
+        navigate('/practice');
       } else {
         // Show error message - use i18n for specific error types
         let errorMessage = result.error.message;

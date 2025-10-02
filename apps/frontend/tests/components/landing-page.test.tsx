@@ -7,6 +7,7 @@ import { MemoryRouter } from 'react-router';
 import { vi } from 'vitest';
 import i18n from '../../app/i18n';
 import { LandingPage } from '../../app/components/landing-page';
+import { AuthProvider } from '../../app/contexts/auth-context';
 
 // Mock the navigation
 const mockNavigate = vi.fn();
@@ -18,10 +19,23 @@ vi.mock('react-router', async (importOriginal) => {
   };
 });
 
+// Mock auth context
+vi.mock('../../app/contexts/auth-context', () => ({
+  useAuth: () => ({
+    user: null,
+    isLoggedIn: false,
+    login: vi.fn(),
+    logout: vi.fn(),
+  }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
 const renderWithI18n = (component: React.ReactElement) => {
   return render(
     <MemoryRouter>
-      <I18nextProvider i18n={i18n}>{component}</I18nextProvider>
+      <I18nextProvider i18n={i18n}>
+        <AuthProvider>{component}</AuthProvider>
+      </I18nextProvider>
     </MemoryRouter>
   );
 };

@@ -1,10 +1,20 @@
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 import { Header } from './header';
+import { useAuth } from '../contexts/auth-context';
 
 export const LandingPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { isLoggedIn } = useAuth();
+
+  // Redirect to practice page if user is logged in
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/practice');
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleSignup = () => {
     navigate('/signup');

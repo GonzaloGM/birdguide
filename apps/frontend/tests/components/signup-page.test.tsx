@@ -602,7 +602,7 @@ describe('SignupPage', () => {
 
     await waitFor(() => {
       expect(mockLogin).toHaveBeenCalledWith(mockUser, 'mock-jwt-token');
-      expect(mockNavigate).toHaveBeenCalledWith('/');
+      expect(mockNavigate).toHaveBeenCalledWith('/practice');
     });
   });
 });
