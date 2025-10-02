@@ -16,6 +16,23 @@ const resources = {
         profile: 'Perfil',
       },
 
+      // Practice page
+      practice: {
+        title: 'Practicar',
+        flashcards: {
+          title: 'Flashcards',
+          subtitle: 'Repetí y dominá el nombre de cada ave',
+        },
+        photoQuiz: {
+          title: 'Photo Quiz',
+          subtitle: '¿Podés identificarla con sólo verla?',
+        },
+        soundQuiz: {
+          title: 'Audio Quiz',
+          subtitle: 'Aprendé a reconocerlas por su canto',
+        },
+      },
+
       // Profile page
       profile: {
         title: 'Perfil',
@@ -137,6 +154,23 @@ const resources = {
         path: 'Path',
         species: 'Species',
         profile: 'Profile',
+      },
+
+      // Practice page
+      practice: {
+        title: 'Practice',
+        flashcards: {
+          title: 'Flashcards',
+          subtitle: 'Repeat and master the name of each bird',
+        },
+        photoQuiz: {
+          title: 'Photo Quiz',
+          subtitle: 'Can you identify it just by seeing it?',
+        },
+        soundQuiz: {
+          title: 'Audio Quiz',
+          subtitle: 'Learn to recognize them by their song',
+        },
       },
 
       // Profile page

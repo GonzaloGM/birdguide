@@ -1529,3 +1529,14 @@ To enable proper password authentication in production, follow these steps in yo
 - **Profile Page Integration**: Added language selector to profile page so users can change language while logged in
 - **Translation Keys**: Added profile-specific translation keys for language label in both Spanish and English
 - **UI Layout**: Integrated language selector with proper labeling and spacing in profile page layout
+
+### Practice Cards Implementation with TDD
+- **TDD Approach**: Implemented practice cards using Test-Driven Development - wrote failing tests first, then implemented functionality
+- **Card Design**: Created three large, centered cards with titles and subtitles in both Spanish and English
+- **Navigation**: Flashcards card is clickable and navigates to `/flashcards`, while Photo Quiz and Sound Quiz cards are disabled
+- **Route Configuration**: Added new routes for `/flashcards`, `/photo-quiz`, and `/sound-quiz` with placeholder content
+- **Translation Keys**: Added comprehensive practice page translations with card titles and subtitles
+- **Disabled State**: Photo Quiz and Sound Quiz cards are visually disabled with opacity and cursor styling
+- **Test Coverage**: Comprehensive test coverage for card rendering, navigation, and disabled state behavior
+- **UI/UX**: Cards are large, well-spaced, and centered with hover effects for active cards
+- **Accessibility**: Proper cursor states and visual feedback for interactive elements
