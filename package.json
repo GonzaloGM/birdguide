@@ -7,7 +7,8 @@
     "test:api": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx test api",
     "test:frontend": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx test frontend",
     "serve:api": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx serve api",
-    "serve:frontend": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx serve frontend"
+    "serve:frontend": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx serve frontend",
+    "populate:argentina": "NODE_OPTIONS=\"--max-old-space-size=4096\" npx ts-node --transpile-only --experimental-specifier-resolution=node apps/api/src/scripts/populate-argentina-species.ts"
   },
   "private": true,
   "engines": {
@@ -94,6 +95,7 @@
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
+    "tsx": "^4.20.6",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
     "vite": "^7.0.0",

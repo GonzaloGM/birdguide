@@ -197,7 +197,7 @@ describe('SpeciesDetailPage', () => {
     renderWithI18n(<SpeciesDetailPage />);
 
     await waitFor(() => {
-      expect(screen.getAllByText('Unknown')).toHaveLength(5);
+      expect(screen.getAllByText('Not available')).toHaveLength(5);
     });
   });
 

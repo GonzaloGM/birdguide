@@ -94,16 +94,20 @@ export default function SpeciesDetailPage() {
             <dl className="space-y-2">
               <div>
                 <dt className="font-medium">Family:</dt>
-                <dd className="text-gray-600">{species.family || 'Unknown'}</dd>
+                <dd className="text-gray-600">
+                  {species.family || 'Not available'}
+                </dd>
               </div>
               <div>
                 <dt className="font-medium">Genus:</dt>
-                <dd className="text-gray-600">{species.genus || 'Unknown'}</dd>
+                <dd className="text-gray-600">
+                  {species.genus || 'Not available'}
+                </dd>
               </div>
               <div>
                 <dt className="font-medium">Order:</dt>
                 <dd className="text-gray-600">
-                  {species.orderName || 'Unknown'}
+                  {species.orderName || 'Not available'}
                 </dd>
               </div>
             </dl>
@@ -115,13 +119,13 @@ export default function SpeciesDetailPage() {
               <div>
                 <dt className="font-medium">IUCN Status:</dt>
                 <dd className="text-gray-600">
-                  {species.iucnStatus || 'Unknown'}
+                  {species.iucnStatus || 'Not available'}
                 </dd>
               </div>
               <div>
                 <dt className="font-medium">Size:</dt>
                 <dd className="text-gray-600">
-                  {species.sizeMm ? `${species.sizeMm}mm` : 'Unknown'}
+                  {species.sizeMm ? `${species.sizeMm}mm` : 'Not available'}
                 </dd>
               </div>
             </dl>
