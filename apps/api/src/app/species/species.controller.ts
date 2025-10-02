@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { SpeciesService, SpeciesWithCommonName } from './species.service';
 import { PinoLoggerService } from '../services/logger.service';
 import type { ApiResponse } from '@birdguide/shared-types';
@@ -11,17 +11,22 @@ export class SpeciesController {
   ) {}
 
   @Get()
-  async findAll(): Promise<ApiResponse<SpeciesWithCommonName[]>> {
+  async findAll(
+    @Query('lang') lang?: string
+  ): Promise<ApiResponse<SpeciesWithCommonName[]>> {
+    const language = lang || 'es-AR';
+
     this.logger.infoWithContext('Species list request received', {
       operation: 'findAll',
+      language,
     });
 
     try {
-      // Default to Spanish (Argentina) for now
-      const species = await this.speciesService.findAll('es-AR');
+      const species = await this.speciesService.findAll(language);
 
       this.logger.infoWithContext('Species list request successful', {
         count: species.length,
+        language,
       });
 
       return {
@@ -31,6 +36,7 @@ export class SpeciesController {
     } catch (error) {
       this.logger.errorWithContext('Species list request failed', {
         error: error.message,
+        language,
       });
 
       return {
@@ -43,9 +49,11 @@ export class SpeciesController {
 
   @Get(':id')
   async findOne(
-    @Param('id') id: string
+    @Param('id') id: string,
+    @Query('lang') lang?: string
   ): Promise<ApiResponse<SpeciesWithCommonName>> {
     const speciesId = parseInt(id, 10);
+    const language = lang || 'es-AR';
 
     if (isNaN(speciesId)) {
       return {
@@ -57,14 +65,16 @@ export class SpeciesController {
 
     this.logger.infoWithContext('Species detail request received', {
       speciesId: speciesId,
+      language,
     });
 
     try {
-      const species = await this.speciesService.findOne(speciesId);
+      const species = await this.speciesService.findOne(speciesId, language);
 
       if (!species) {
         this.logger.warnWithContext('Species not found', {
           speciesId: speciesId,
+          language,
         });
 
         return {
@@ -76,6 +86,7 @@ export class SpeciesController {
 
       this.logger.infoWithContext('Species detail request successful', {
         speciesId: id,
+        language,
       });
 
       return {
@@ -85,6 +96,7 @@ export class SpeciesController {
     } catch (error) {
       this.logger.errorWithContext('Species detail request failed', {
         speciesId: speciesId,
+        language,
         error: error.message,
       });
 

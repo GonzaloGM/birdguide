@@ -13,6 +13,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
 import { auth0Config } from './auth0-config';
 import { AuthProvider } from './contexts/auth-context';
+import { LanguageProvider } from './contexts/language-context';
 import { Footer } from './components/footer';
 import '../styles.css';
 
@@ -47,10 +48,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body suppressHydrationWarning={true}>
         <Auth0Provider {...auth0Config}>
           <I18nextProvider i18n={i18n}>
-            <AuthProvider>
-              <Outlet />
-              <Footer />
-            </AuthProvider>
+            <LanguageProvider>
+              <AuthProvider>
+                <Outlet />
+                <Footer />
+              </AuthProvider>
+            </LanguageProvider>
             <ScrollRestoration />
             <Scripts />
           </I18nextProvider>

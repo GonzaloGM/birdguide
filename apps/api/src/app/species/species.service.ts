@@ -77,9 +77,13 @@ export class SpeciesService {
     }
   }
 
-  async findOne(id: number): Promise<SpeciesWithCommonName | null> {
+  async findOne(
+    id: number,
+    langCode: string = 'es-AR'
+  ): Promise<SpeciesWithCommonName | null> {
     this.logger.infoWithContext('Fetching species by id', {
       speciesId: id,
+      langCode,
     });
 
     try {
@@ -88,14 +92,21 @@ export class SpeciesService {
       if (!specie) {
         this.logger.warnWithContext('Species not found', {
           speciesId: id,
+          langCode,
         });
         return null;
       }
 
       const commonNames =
         await this.speciesRepository.findCommonNamesBySpeciesId(id);
+
+      // Filter common names by language
+      const filteredCommonNames = commonNames.filter(
+        (commonName) => commonName.langCode === langCode
+      );
+
       // Just take the first common name if available
-      const firstCommonName = commonNames[0];
+      const firstCommonName = filteredCommonNames[0];
 
       const speciesWithCommonName = {
         ...specie,
@@ -104,6 +115,7 @@ export class SpeciesService {
 
       this.logger.infoWithContext('Successfully fetched species', {
         speciesId: id,
+        langCode,
         hasCommonName: !!speciesWithCommonName.commonName,
       });
 
@@ -111,6 +123,7 @@ export class SpeciesService {
     } catch (error) {
       this.logger.errorWithContext('Failed to fetch species', {
         speciesId: id,
+        langCode,
         error: error instanceof Error ? error.message : String(error),
       });
       throw error;

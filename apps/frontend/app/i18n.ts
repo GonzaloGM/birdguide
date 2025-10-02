@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 const resources = {
-  es: {
+  'es-AR': {
     translation: {
       // Common
       loading: 'Cargando...',
@@ -124,7 +124,7 @@ const resources = {
       },
     },
   },
-  en: {
+  'en-US': {
     translation: {
       // Common
       loading: 'Loading...',
@@ -249,8 +249,8 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'es', // default language
-  fallbackLng: 'en',
+  lng: 'es-AR', // default language
+  fallbackLng: 'en-US',
   interpolation: {
     escapeValue: false,
   },

@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import LanguageSelector from './language-selector';
 
 export const Header = () => {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ export const Header = () => {
           >
             {t('appName')}
           </Link>
+          <LanguageSelector />
         </div>
       </div>
     </header>

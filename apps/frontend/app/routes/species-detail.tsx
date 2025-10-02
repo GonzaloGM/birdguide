@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../contexts/language-context';
+import { SpeciesService } from '../services/species.service';
 import type { SpeciesWithCommonName } from '@birdguide/shared-types';
 
 export default function SpeciesDetailPage() {
   const { t } = useTranslation();
+  const { language } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const [species, setSpecies] = useState<SpeciesWithCommonName | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const speciesService = new SpeciesService();
 
   useEffect(() => {
     const fetchSpecies = async () => {
@@ -20,25 +24,17 @@ export default function SpeciesDetailPage() {
 
       try {
         setLoading(true);
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/species/${id}`
-        );
-        const data = await response.json();
-
-        if (data.success) {
-          setSpecies(data.data);
-        } else {
-          setError(data.message || t('species.speciesNotFound'));
-        }
+        const speciesData = await speciesService.getSpeciesDetail(parseInt(id, 10), language);
+        setSpecies(speciesData);
       } catch (err) {
-        setError(t('species.networkError'));
+        setError(err instanceof Error ? err.message : t('species.networkError'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchSpecies();
-  }, [id]);
+  }, [id, language]);
 
   if (loading) {
     return (

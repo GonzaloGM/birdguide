@@ -1511,3 +1511,18 @@ To enable proper password authentication in production, follow these steps in yo
 - **Test Coverage**: Comprehensive test coverage for both success and error scenarios
 - **Refactoring**: Optimized service layer to batch common name queries and simplified controller return types
 - **Module Integration**: Properly integrated new entities and services into the main `AppModule`
+
+### Language Selector Implementation with TDD
+- **TDD Approach**: Implemented language selector using Test-Driven Development - wrote failing tests first, then implemented functionality
+- **Language Context**: Created `LanguageProvider` context to manage language state across the application with localStorage persistence
+- **Component Refactoring**: Refactored `LanguageSelector` component to use language context instead of managing its own state
+- **i18n Integration**: Updated i18n configuration to use proper language codes ('es-AR', 'en-US') instead of generic ('es', 'en')
+- **API Integration**: Species service already supported language parameters - integrated with language context for automatic language switching
+- **Test Coverage**: Created comprehensive test suite including unit tests, integration tests, and end-to-end language switching behavior
+- **Accessibility**: Language selector includes proper ARIA attributes and keyboard navigation support
+- **Error Handling**: Graceful handling of invalid language values with fallback to default language
+- **State Management**: Language choice persists across page reloads and component re-renders
+- **Type Safety**: Strong typing for language values with TypeScript union types ('es-AR' | 'en-US')
+- **Test Organization**: Separate test files for component, context, service, and integration testing
+- **Mock Strategy**: Proper mocking of localStorage and fetch for reliable test execution
+- **User Experience**: Seamless language switching that updates both UI translations and API calls

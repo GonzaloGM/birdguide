@@ -2,45 +2,42 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import ProtectedRoute from '../components/protected-route';
+import { useLanguage } from '../contexts/language-context';
+import { SpeciesService } from '../services/species.service';
 import type { SpeciesWithCommonName } from '@birdguide/shared-types';
 
 export default function SpeciesPage() {
   const { t } = useTranslation();
+  const { language } = useLanguage();
   const [species, setSpecies] = useState<SpeciesWithCommonName[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const speciesService = new SpeciesService();
 
   useEffect(() => {
     const fetchSpecies = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/species`
+        const speciesData = await speciesService.getSpecies(language);
+        
+        // Sort species by common name alphabetically
+        const sortedSpecies = speciesData.sort(
+          (a: SpeciesWithCommonName, b: SpeciesWithCommonName) => {
+            const nameA = a.commonName || '';
+            const nameB = b.commonName || '';
+            return nameA.localeCompare(nameB);
+          }
         );
-        const data = await response.json();
-
-        if (data.success) {
-          // Sort species by common name alphabetically
-          const sortedSpecies = data.data.sort(
-            (a: SpeciesWithCommonName, b: SpeciesWithCommonName) => {
-              const nameA = a.commonName || '';
-              const nameB = b.commonName || '';
-              return nameA.localeCompare(nameB);
-            }
-          );
-          setSpecies(sortedSpecies);
-        } else {
-          setError(data.message || t('species.error'));
-        }
+        setSpecies(sortedSpecies);
       } catch (err) {
-        setError(t('species.networkError'));
+        setError(err instanceof Error ? err.message : t('species.networkError'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchSpecies();
-  }, []);
+  }, [language]);
 
   if (loading) {
     return (
