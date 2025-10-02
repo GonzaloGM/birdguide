@@ -1461,3 +1461,23 @@ To enable proper password authentication in production, follow these steps in yo
    ```
 
 **Note**: The password grant is disabled by default for security reasons. Only enable it if you have a specific use case that requires it, and ensure you have proper security measures in place.
+
+### Route Protection Implementation
+- **TDD Approach**: Implemented route protection using Test-Driven Development - wrote failing tests first, then implemented authentication checks
+- **Protected Routes**: Added authentication protection to `/practice`, `/path`, `/species`, and `/profile` routes
+- **Authentication Check**: Each protected route component checks `isLoggedIn` status using `useAuth` hook
+- **Redirect Logic**: Unauthenticated users are automatically redirected to `/login` using `useNavigate` and `useEffect`
+- **Component Rendering**: Protected routes return `null` when user is not authenticated to prevent flash of content
+- **Test Coverage**: Comprehensive test coverage for both authenticated and unauthenticated states
+- **Mock Strategy**: Updated existing route tests to mock `useAuth` and `useNavigate` for proper testing
+- **User Experience**: Seamless redirection ensures users can't access protected content without authentication
+
+### Route Protection Refactoring - DRY Principle
+- **Code Duplication Identified**: Route protection logic was repeated across all protected route components
+- **TDD Refactoring**: Used TDD to extract repeated logic into reusable `ProtectedRoute` component
+- **Component Extraction**: Created `ProtectedRoute` wrapper component that handles authentication checks and redirection
+- **Simplified Route Components**: Route components now focus only on their content, wrapped in `ProtectedRoute`
+- **Reduced Code**: Eliminated ~15 lines of repeated code per route component (60+ lines total)
+- **Maintainability**: Single source of truth for authentication logic makes future changes easier
+- **Test Simplification**: Individual route tests now mock `ProtectedRoute` instead of complex auth mocks
+- **Reusability**: `ProtectedRoute` can be used for any future protected components
