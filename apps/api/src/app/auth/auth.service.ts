@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UserRepository } from '../repositories/user.repository';
+import { PinoLoggerService } from '../services/logger.service';
 import {
   User,
   AuthResponse,
@@ -16,7 +17,8 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userRepository: UserRepository,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly logger: PinoLoggerService
   ) {
     // Initialize ManagementClient with proper configuration
     const ManagementClient = require('auth0').ManagementClient;
@@ -64,11 +66,17 @@ export class AuthService {
   }
 
   async register(registerRequest: RegisterRequest): Promise<AuthResponse> {
+    this.logger.infoWithContext('Starting user registration', {
+      email: registerRequest.email,
+      username: registerRequest.username,
+    });
+
     try {
       // Validate username uniqueness
       await this.validateUsername(registerRequest.username);
 
       // Create user in Auth0
+      this.logger.debug('Creating user in Auth0', 'AuthService');
       const auth0User = await this.managementClient.users.create({
         connection: 'Username-Password-Authentication',
         email: registerRequest.email,
@@ -78,7 +86,13 @@ export class AuthService {
         email_verified: false,
       });
 
+      this.logger.infoWithContext('User created in Auth0', {
+        auth0Id: auth0User.data.user_id,
+        email: registerRequest.email,
+      });
+
       // Create user in our database
+      this.logger.debug('Creating user in local database', 'AuthService');
       const user = await this.createOrUpdateUser(auth0User);
 
       // Generate JWT token
@@ -88,12 +102,23 @@ export class AuthService {
         auth0Id: auth0User.data.user_id,
       });
 
+      this.logger.infoWithContext('User registration completed successfully', {
+        userId: user.id,
+        email: user.email,
+        username: user.username,
+      });
+
       return {
         user,
         token: jwtToken,
         refreshToken: null, // Auth0 Management API doesn't provide refresh tokens
       };
     } catch (error) {
+      this.logger.errorWithContext('User registration failed', {
+        email: registerRequest.email,
+        username: registerRequest.username,
+        error: error.message,
+      });
       throw new Error(`Registration failed: ${error.message}`);
     }
   }
@@ -176,19 +201,32 @@ export class AuthService {
   }
 
   async login(loginRequest: LoginRequest): Promise<AuthResponse> {
+    this.logger.infoWithContext('Starting user login', {
+      emailOrUsername: loginRequest.emailOrUsername,
+    });
+
     try {
       // Authenticate with Auth0 using the Management API
+      this.logger.debug('Authenticating with Auth0', 'AuthService');
       const auth0Response = await this.authenticateWithAuth0(
         loginRequest.emailOrUsername,
         loginRequest.password
       );
 
       // Find user in our database by Auth0 ID
+      this.logger.debug('Looking up user in local database', 'AuthService');
       const user = await this.userRepository.findUserByAuth0Id(
         auth0Response.user_id
       );
 
       if (!user) {
+        this.logger.warnWithContext(
+          'User not found in database after Auth0 authentication',
+          {
+            auth0Id: auth0Response.user_id,
+            emailOrUsername: loginRequest.emailOrUsername,
+          }
+        );
         throw new Error('User not found in database');
       }
 
@@ -199,12 +237,23 @@ export class AuthService {
         auth0Id: auth0Response.user_id,
       });
 
+      this.logger.infoWithContext('User login completed successfully', {
+        userId: user.id,
+        email: user.email,
+        username: user.username,
+      });
+
       return {
         user,
         token: jwtToken,
         refreshToken: auth0Response.refresh_token || null,
       };
     } catch (error) {
+      this.logger.errorWithContext('User login failed', {
+        emailOrUsername: loginRequest.emailOrUsername,
+        error: error.message,
+      });
+
       // If it's a specific database error, preserve the message
       if (error.message === 'User not found in database') {
         throw error;

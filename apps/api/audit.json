@@ -1,0 +1,16 @@
+{
+    "keepSettings": {
+        "type": 2,
+        "amount": 10
+    },
+    "auditFilename": "/Users/gonzalogm/Work/birdguide/nx/apps/api/audit.json",
+    "hashType": "md5",
+    "extension": ".log",
+    "files": [
+        {
+            "date": 1759410905287,
+            "name": "/Users/gonzalogm/Work/birdguide/nx/apps/api/File-2025-10-02.0.log",
+            "hash": "962b447d7c539bdc92784af3d364f7e7"
+        }
+    ]
+}

@@ -1481,3 +1481,20 @@ To enable proper password authentication in production, follow these steps in yo
 - **Maintainability**: Single source of truth for authentication logic makes future changes easier
 - **Test Simplification**: Individual route tests now mock `ProtectedRoute` instead of complex auth mocks
 - **Reusability**: `ProtectedRoute` can be used for any future protected components
+
+### Logger Service Implementation with Pino (NestJS Best Practices)
+- **TDD Approach**: Implemented PinoLoggerService using Test-Driven Development - wrote failing tests first, then implemented functionality
+- **NestJS Compliance**: Followed official [NestJS Logger documentation](https://docs.nestjs.com/techniques/logger) patterns
+- **PinoLoggerService**: Custom logger implementing NestJS `LoggerService` interface with Pino backend
+- **Application-wide Integration**: Used `app.useLogger()` in `main.ts` to replace NestJS built-in logger
+- **Logger Factory Pattern**: Created `createLogger()` factory function as recommended in NestJS docs
+- **Dual Output**: Logs are written to both files (for persistence) and console (for development)
+- **Environment Configuration**: Different log levels and formats based on NODE_ENV (development vs production)
+- **Structured Logging**: Support for both simple string logging and structured context logging
+- **Child Loggers**: Ability to create child loggers with default context for different services
+- **File Rotation**: Logs are saved to files with daily rotation (app-YYYY-MM-DD.log format)
+- **Test Coverage**: Comprehensive test coverage for all logging methods and configurations
+- **Service Integration**: Updated AuthService to use structured logging for registration and login flows
+- **Proper DI**: Logger is properly injected throughout the application using NestJS dependency injection
+- **Import Fix**: Fixed missing `ConfigService` import in `app.module.ts` that was causing ESM loader errors
+- **Pretty Console Output**: Added `pino-pretty` for readable console output in development while keeping JSON format for log files

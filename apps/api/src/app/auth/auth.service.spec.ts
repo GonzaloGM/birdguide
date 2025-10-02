@@ -5,6 +5,7 @@ import { ManagementClient } from 'auth0';
 import { AuthService } from './auth.service';
 import { User, AuthResponse } from '@birdguide/shared-types';
 import { UserRepository } from '../repositories/user.repository';
+import { PinoLoggerService } from '../services/logger.service';
 
 // Mock ManagementClient
 jest.mock('auth0', () => ({
@@ -98,6 +99,22 @@ describe('AuthService', () => {
             findUserByAuth0Id: jest.fn().mockResolvedValue(mockUser),
             findUserByEmail: jest.fn().mockResolvedValue(null),
             findUserByUsername: jest.fn().mockResolvedValue(null),
+          },
+        },
+        {
+          provide: PinoLoggerService,
+          useValue: {
+            log: jest.fn(),
+            error: jest.fn(),
+            warn: jest.fn(),
+            debug: jest.fn(),
+            verbose: jest.fn(),
+            info: jest.fn(),
+            infoWithContext: jest.fn(),
+            errorWithContext: jest.fn(),
+            warnWithContext: jest.fn(),
+            debugWithContext: jest.fn(),
+            child: jest.fn().mockReturnThis(),
           },
         },
       ],

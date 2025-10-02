@@ -1,0 +1,16 @@
+{"level":"info","time":"2025-10-02T13:17:09.009Z","pid":93310,"hostname":"MBA.local","msg":"Test info message"}
+{"level":"info","time":"2025-10-02T13:17:09.015Z","pid":93310,"hostname":"MBA.local","userId":"123","action":"login","msg":"Test message"}
+{"level":"warn","time":"2025-10-02T13:17:09.012Z","pid":93310,"hostname":"MBA.local","msg":"Test warning message"}
+{"level":"error","time":"2025-10-02T13:17:09.011Z","pid":93310,"hostname":"MBA.local","msg":"Test error message"}
+{"level":"error","time":"2025-10-02T13:19:07.189Z","pid":94287,"hostname":"MBA.local","msg":"Test error message"}
+{"level":"warn","time":"2025-10-02T13:19:07.191Z","pid":94287,"hostname":"MBA.local","msg":"Test warning message"}
+{"level":"info","time":"2025-10-02T13:19:07.195Z","pid":94287,"hostname":"MBA.local","userId":"123","action":"login","msg":"Test message"}
+{"level":"info","time":"2025-10-02T13:19:07.186Z","pid":94287,"hostname":"MBA.local","msg":"Test info message"}
+{"level":"error","time":"2025-10-02T13:22:36.116Z","pid":95858,"hostname":"MBA.local","msg":"Test error message"}
+{"level":"warn","time":"2025-10-02T13:22:36.120Z","pid":95858,"hostname":"MBA.local","msg":"Test warning message"}
+{"level":"info","time":"2025-10-02T13:22:36.127Z","pid":95858,"hostname":"MBA.local","userId":"123","action":"login","msg":"Test message"}
+{"level":"info","time":"2025-10-02T13:22:36.110Z","pid":95858,"hostname":"MBA.local","msg":"Test info message"}
+{"level":"info","time":"2025-10-02T13:22:53.051Z","pid":96124,"hostname":"MBA.local","msg":"Test info message"}
+{"level":"error","time":"2025-10-02T13:22:53.053Z","pid":96124,"hostname":"MBA.local","msg":"Test error message"}
+{"level":"info","time":"2025-10-02T13:22:53.067Z","pid":96124,"hostname":"MBA.local","userId":"123","action":"login","msg":"Test message"}
+{"level":"warn","time":"2025-10-02T13:22:53.057Z","pid":96124,"hostname":"MBA.local","msg":"Test warning message"}

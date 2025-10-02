@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -11,6 +11,8 @@ import { getDatabaseConfig } from './config/database.config';
 import { getJwtConfig } from './config/jwt.config';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './repositories/user.repository';
+import { PinoLoggerService } from './services/logger.service';
+import { createLogger } from './services/logger.factory';
 
 @Module({
   imports: [
@@ -33,6 +35,16 @@ import { UserRepository } from './repositories/user.repository';
     }),
   ],
   controllers: [AppController, AuthController],
-  providers: [AppService, AuthService, UserRepository],
+  providers: [
+    AppService,
+    AuthService,
+    UserRepository,
+    PinoLoggerService,
+    {
+      provide: 'LOGGER',
+      useFactory: (configService: ConfigService) => createLogger(configService),
+      inject: [ConfigService],
+    },
+  ],
 })
 export class AppModule {}
