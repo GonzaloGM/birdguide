@@ -52,7 +52,9 @@ describe('SpeciesDetailPage', () => {
 
     renderWithI18n(<SpeciesDetailPage />);
 
-    expect(screen.getByText('Loading species details...')).toBeInTheDocument();
+    expect(
+      screen.getByText('Cargando detalles de la especie...')
+    ).toBeInTheDocument();
   });
 
   it('should display species details when data loads successfully', async () => {
@@ -96,7 +98,7 @@ describe('SpeciesDetailPage', () => {
     renderWithI18n(<SpeciesDetailPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('No common name')).toBeInTheDocument();
+      expect(screen.getByText('Sin nombre común')).toBeInTheDocument();
     });
   });
 
@@ -122,7 +124,7 @@ describe('SpeciesDetailPage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Error: Network error occurred')
+        screen.getByText('Error: Ocurrió un error de red')
       ).toBeInTheDocument();
     });
   });
@@ -138,7 +140,7 @@ describe('SpeciesDetailPage', () => {
     renderWithI18n(<SpeciesDetailPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Species not found')).toBeInTheDocument();
+      expect(screen.getByText('Especie no encontrada')).toBeInTheDocument();
     });
   });
 
@@ -154,7 +156,7 @@ describe('SpeciesDetailPage', () => {
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/species/1'
+        `${import.meta.env.VITE_API_BASE_URL}/species/1`
       );
     });
   });
@@ -170,7 +172,7 @@ describe('SpeciesDetailPage', () => {
     renderWithI18n(<SpeciesDetailPage />);
 
     await waitFor(() => {
-      const backLink = screen.getByText('← Back to Species List');
+      const backLink = screen.getByText('← Volver a la Lista de Especies');
       expect(backLink).toBeInTheDocument();
       expect(backLink).toHaveAttribute('href', '/species');
     });
@@ -197,7 +199,7 @@ describe('SpeciesDetailPage', () => {
     renderWithI18n(<SpeciesDetailPage />);
 
     await waitFor(() => {
-      expect(screen.getAllByText('Not available')).toHaveLength(5);
+      expect(screen.getAllByText('No disponible')).toHaveLength(5);
     });
   });
 
@@ -217,7 +219,7 @@ describe('SpeciesDetailPage', () => {
     renderWithI18n(<SpeciesDetailPage />);
 
     await waitFor(() => {
-      expect(screen.queryByText('Description')).not.toBeInTheDocument();
+      expect(screen.queryByText('Descripción')).not.toBeInTheDocument();
     });
   });
 });

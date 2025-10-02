@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import ProtectedRoute from '../components/protected-route';
 import type { SpeciesWithCommonName } from '@birdguide/shared-types';
 
 export default function SpeciesPage() {
+  const { t } = useTranslation();
   const [species, setSpecies] = useState<SpeciesWithCommonName[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,10 +30,10 @@ export default function SpeciesPage() {
           );
           setSpecies(sortedSpecies);
         } else {
-          setError(data.message || 'Failed to fetch species');
+          setError(data.message || t('species.error'));
         }
       } catch (err) {
-        setError('Network error occurred');
+        setError(t('species.networkError'));
       } finally {
         setLoading(false);
       }
@@ -41,43 +44,53 @@ export default function SpeciesPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-lg">Loading species...</div>
-      </div>
+      <ProtectedRoute>
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="text-lg">{t('species.loading')}</div>
+        </div>
+      </ProtectedRoute>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-red-600">Error: {error}</div>
-      </div>
+      <ProtectedRoute>
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="text-red-600">
+            {t('species.error')}: {error}
+          </div>
+        </div>
+      </ProtectedRoute>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Bird Species</h1>
+    <ProtectedRoute>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-8">{t('species.title')}</h1>
 
-      <div className="grid gap-4">
-        {species.map((specie) => (
-          <Link
-            key={specie.id}
-            to={`/species/${specie.id}`}
-            className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-xl font-semibold">
-                  {specie.commonName || 'No common name'}
-                </h2>
-                <p className="text-gray-600 italic">{specie.scientificName}</p>
+        <div className="grid gap-4">
+          {species.map((specie) => (
+            <Link
+              key={specie.id}
+              to={`/species/${specie.id}`}
+              className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-xl font-semibold">
+                    {specie.commonName || t('species.noCommonName')}
+                  </h2>
+                  <p className="text-gray-600 italic">
+                    {specie.scientificName}
+                  </p>
+                </div>
+                <div className="text-sm text-gray-500">{specie.family}</div>
               </div>
-              <div className="text-sm text-gray-500">{specie.family}</div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

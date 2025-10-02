@@ -1,8 +1,14 @@
+import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import SpeciesPage from '../../app/routes/species';
 import { renderWithI18n } from '../../app/test-utils';
 import type { SpeciesWithCommonName } from '@birdguide/shared-types';
+
+// Mock ProtectedRoute to render children directly
+vi.mock('../../app/components/protected-route', () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
 
 // Mock fetch globally
 const mockFetch = vi.fn();
@@ -58,7 +64,7 @@ describe('SpeciesPage', () => {
 
     renderWithI18n(<SpeciesPage />);
 
-    expect(screen.getByText('Loading species...')).toBeInTheDocument();
+    expect(screen.getByText('Cargando especies...')).toBeInTheDocument();
   });
 
   it('should display species list when data loads successfully', async () => {
@@ -72,7 +78,7 @@ describe('SpeciesPage', () => {
     renderWithI18n(<SpeciesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Bird Species')).toBeInTheDocument();
+      expect(screen.getByText('Especies de Aves')).toBeInTheDocument();
     });
 
     expect(screen.getByText('American Robin')).toBeInTheDocument();
@@ -99,7 +105,7 @@ describe('SpeciesPage', () => {
     renderWithI18n(<SpeciesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('No common name')).toBeInTheDocument();
+      expect(screen.getByText('Sin nombre común')).toBeInTheDocument();
     });
   });
 
@@ -127,7 +133,7 @@ describe('SpeciesPage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Error: Network error occurred')
+        screen.getByText('Error: Ocurrió un error de red')
       ).toBeInTheDocument();
     });
   });
@@ -144,7 +150,7 @@ describe('SpeciesPage', () => {
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/species'
+        `${import.meta.env.VITE_API_BASE_URL}/species`
       );
     });
   });

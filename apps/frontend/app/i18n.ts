@@ -22,6 +22,31 @@ const resources = {
         logout: 'Salir',
       },
 
+      // Species pages
+      species: {
+        title: 'Especies de Aves',
+        listTitle: 'Lista de Especies',
+        detailTitle: 'Detalles de la Especie',
+        loading: 'Cargando especies...',
+        loadingDetails: 'Cargando detalles de la especie...',
+        noSpecies: 'No se encontraron especies.',
+        noCommonName: 'Sin nombre común',
+        backToList: '← Volver a la Lista de Especies',
+        classification: 'Clasificación',
+        details: 'Detalles',
+        description: 'Descripción',
+        family: 'Familia:',
+        genus: 'Género:',
+        order: 'Orden:',
+        iucnStatus: 'Estado UICN:',
+        size: 'Tamaño:',
+        notAvailable: 'No disponible',
+        speciesNotFound: 'Especie no encontrada',
+        error: 'Error',
+        networkError: 'Ocurrió un error de red',
+        speciesIdRequired: 'Se requiere ID de especie',
+      },
+
       // Landing page
       tagline: 'Descubrí cada ave',
       signupButton: 'Registrate',
@@ -117,6 +142,31 @@ const resources = {
       profile: {
         title: 'Profile',
         logout: 'Logout',
+      },
+
+      // Species pages
+      species: {
+        title: 'Bird Species',
+        listTitle: 'Species List',
+        detailTitle: 'Species Details',
+        loading: 'Loading species...',
+        loadingDetails: 'Loading species details...',
+        noSpecies: 'No species found.',
+        noCommonName: 'No common name',
+        backToList: '← Back to Species List',
+        classification: 'Classification',
+        details: 'Details',
+        description: 'Description',
+        family: 'Family:',
+        genus: 'Genus:',
+        order: 'Order:',
+        iucnStatus: 'IUCN Status:',
+        size: 'Size:',
+        notAvailable: 'Not available',
+        speciesNotFound: 'Species not found',
+        error: 'Error',
+        networkError: 'Network error occurred',
+        speciesIdRequired: 'Species ID is required',
       },
 
       // Landing page

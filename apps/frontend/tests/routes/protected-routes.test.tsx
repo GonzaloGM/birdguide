@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { renderWithI18n } from '../../app/test-utils';
 import PracticePage from '../../app/routes/practice';
 import PathPage from '../../app/routes/path';
@@ -122,11 +122,21 @@ describe('Protected Routes', () => {
     });
 
     describe('Species Page', () => {
-      it('should render the species page when user is authenticated', () => {
+      it('should render the species page when user is authenticated', async () => {
+        // Mock fetch to return empty species list
+        global.fetch = vi.fn().mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ success: true, data: [] }),
+        });
+
         renderWithI18n(<SpeciesPage />);
 
         expect(mockNavigate).not.toHaveBeenCalled();
-        expect(screen.getByText('Especies')).toBeInTheDocument();
+
+        // Wait for loading to complete and check for the title
+        await waitFor(() => {
+          expect(screen.getByText('Especies de Aves')).toBeInTheDocument();
+        });
       });
     });
 

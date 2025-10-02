@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import type { SpeciesWithCommonName } from '@birdguide/shared-types';
 
 export default function SpeciesDetailPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const [species, setSpecies] = useState<SpeciesWithCommonName | null>(null);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ export default function SpeciesDetailPage() {
   useEffect(() => {
     const fetchSpecies = async () => {
       if (!id) {
-        setError('Species ID is required');
+        setError(t('species.speciesIdRequired'));
         setLoading(false);
         return;
       }
@@ -26,10 +28,10 @@ export default function SpeciesDetailPage() {
         if (data.success) {
           setSpecies(data.data);
         } else {
-          setError(data.message || 'Species not found');
+          setError(data.message || t('species.speciesNotFound'));
         }
       } catch (err) {
-        setError('Network error occurred');
+        setError(t('species.networkError'));
       } finally {
         setLoading(false);
       }
@@ -41,7 +43,7 @@ export default function SpeciesDetailPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="text-lg">Loading species details...</div>
+        <div className="text-lg">{t('species.loadingDetails')}</div>
       </div>
     );
   }
@@ -50,9 +52,11 @@ export default function SpeciesDetailPage() {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-center">
-          <div className="text-red-600 mb-4">Error: {error}</div>
+          <div className="text-red-600 mb-4">
+            {t('species.error')}: {error}
+          </div>
           <Link to="/species" className="text-blue-600 hover:underline">
-            ← Back to Species List
+            {t('species.backToList')}
           </Link>
         </div>
       </div>
@@ -63,9 +67,11 @@ export default function SpeciesDetailPage() {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-center">
-          <div className="text-gray-600 mb-4">Species not found</div>
+          <div className="text-gray-600 mb-4">
+            {t('species.speciesNotFound')}
+          </div>
           <Link to="/species" className="text-blue-600 hover:underline">
-            ← Back to Species List
+            {t('species.backToList')}
           </Link>
         </div>
       </div>
@@ -76,13 +82,13 @@ export default function SpeciesDetailPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
         <Link to="/species" className="text-blue-600 hover:underline">
-          ← Back to Species List
+          {t('species.backToList')}
         </Link>
       </div>
 
       <div className="max-w-4xl">
         <h1 className="text-4xl font-bold mb-4">
-          {species.commonName || 'No common name'}
+          {species.commonName || t('species.noCommonName')}
         </h1>
         <p className="text-2xl text-gray-600 italic mb-8">
           {species.scientificName}
@@ -90,42 +96,48 @@ export default function SpeciesDetailPage() {
 
         <div className="grid md:grid-cols-2 gap-8">
           <div>
-            <h2 className="text-xl font-semibold mb-4">Classification</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {t('species.classification')}
+            </h2>
             <dl className="space-y-2">
               <div>
-                <dt className="font-medium">Family:</dt>
+                <dt className="font-medium">{t('species.family')}</dt>
                 <dd className="text-gray-600">
-                  {species.family || 'Not available'}
+                  {species.family || t('species.notAvailable')}
                 </dd>
               </div>
               <div>
-                <dt className="font-medium">Genus:</dt>
+                <dt className="font-medium">{t('species.genus')}</dt>
                 <dd className="text-gray-600">
-                  {species.genus || 'Not available'}
+                  {species.genus || t('species.notAvailable')}
                 </dd>
               </div>
               <div>
-                <dt className="font-medium">Order:</dt>
+                <dt className="font-medium">{t('species.order')}</dt>
                 <dd className="text-gray-600">
-                  {species.orderName || 'Not available'}
+                  {species.orderName || t('species.notAvailable')}
                 </dd>
               </div>
             </dl>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold mb-4">Details</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {t('species.details')}
+            </h2>
             <dl className="space-y-2">
               <div>
-                <dt className="font-medium">IUCN Status:</dt>
+                <dt className="font-medium">{t('species.iucnStatus')}</dt>
                 <dd className="text-gray-600">
-                  {species.iucnStatus || 'Not available'}
+                  {species.iucnStatus || t('species.notAvailable')}
                 </dd>
               </div>
               <div>
-                <dt className="font-medium">Size:</dt>
+                <dt className="font-medium">{t('species.size')}</dt>
                 <dd className="text-gray-600">
-                  {species.sizeMm ? `${species.sizeMm}mm` : 'Not available'}
+                  {species.sizeMm
+                    ? `${species.sizeMm}mm`
+                    : t('species.notAvailable')}
                 </dd>
               </div>
             </dl>
@@ -134,7 +146,9 @@ export default function SpeciesDetailPage() {
 
         {species.summary && (
           <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Description</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {t('species.description')}
+            </h2>
             <p className="text-gray-700">{species.summary}</p>
           </div>
         )}
