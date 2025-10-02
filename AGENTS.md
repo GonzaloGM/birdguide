@@ -1499,3 +1499,15 @@ To enable proper password authentication in production, follow these steps in yo
 - **Import Fix**: Fixed missing `ConfigService` import in `app.module.ts` that was causing ESM loader errors
 - **Pretty Console Output**: Added `pino-pretty` for readable console output in development while keeping JSON format for log files
 - **Comprehensive Logging Audit**: Ensured all backend services use the custom logger service instead of direct console statements
+
+### Species API Implementation with TDD
+- **TDD Approach**: Implemented species list and detail endpoints using Test-Driven Development - wrote failing tests first, then implemented functionality
+- **Database Entities**: Created `SpeciesEntity` and `SpeciesCommonNameEntity` with proper TypeORM decorators and relationships
+- **Repository Pattern**: Implemented `SpeciesRepository` with batch querying capabilities for performance optimization
+- **Service Layer**: Created `SpeciesService` with structured logging and error handling for species operations
+- **Controller Layer**: Implemented `SpeciesController` with proper API response formatting and error handling
+- **Performance Optimization**: Used batch queries (`findCommonNamesBySpeciesIds`) instead of individual queries for better performance
+- **Type Safety**: Used proper TypeScript types with `SpeciesWithCommonName` extending base `Species` type
+- **Test Coverage**: Comprehensive test coverage for both success and error scenarios
+- **Refactoring**: Optimized service layer to batch common name queries and simplified controller return types
+- **Module Integration**: Properly integrated new entities and services into the main `AppModule`

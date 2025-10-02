@@ -8,5 +8,6 @@ export default [
   route('practice', './routes/practice.tsx'),
   route('path', './routes/path.tsx'),
   route('species', './routes/species.tsx'),
+  route('species/:id', './routes/species-detail.tsx'),
   route('profile', './routes/profile.tsx'),
 ] satisfies RouteConfig;

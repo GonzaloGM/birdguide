@@ -122,8 +122,9 @@ export type AuthResponse = {
 
 // Species and Taxonomy
 export type Species = {
-  id: string;
+  id: number;
   scientificName: string;
+  eBirdId: string;
   genus?: string;
   family?: string;
   orderName?: string;
@@ -136,12 +137,16 @@ export type Species = {
 };
 
 export type SpeciesCommonName = {
-  id: string;
-  speciesId: string;
+  id: number;
+  speciesId: number;
   langCode: string; // e.g. 'es-AR', 'es-ES', 'en-US'
   commonName: string;
   isPreferred: boolean;
   notes?: string;
+};
+
+export type SpeciesWithCommonName = Species & {
+  commonName: string | null;
 };
 
 export type SpeciesDescription = {

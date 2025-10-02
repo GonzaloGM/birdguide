@@ -10,7 +10,12 @@ import { getAuth0Config } from './auth/auth0.config';
 import { getDatabaseConfig } from './config/database.config';
 import { getJwtConfig } from './config/jwt.config';
 import { UserEntity } from './entities/user.entity';
+import { SpeciesEntity } from './entities/species.entity';
+import { SpeciesCommonNameEntity } from './entities/species-common-name.entity';
 import { UserRepository } from './repositories/user.repository';
+import { SpeciesRepository } from './repositories/species.repository';
+import { SpeciesService } from './species/species.service';
+import { SpeciesController } from './species/species.controller';
 import { PinoLoggerService } from './services/logger.service';
 import { createLogger } from './services/logger.factory';
 
@@ -22,10 +27,14 @@ import { createLogger } from './services/logger.factory';
     TypeOrmModule.forRoot({
       type: 'postgres',
       ...getDatabaseConfig(),
-      entities: [UserEntity],
+      entities: [UserEntity, SpeciesEntity, SpeciesCommonNameEntity],
       synchronize: process.env.NODE_ENV !== 'production', // Only for development
     }),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      SpeciesEntity,
+      SpeciesCommonNameEntity,
+    ]),
     JwtModule.register({
       ...getJwtConfig(),
       signOptions: {
@@ -34,11 +43,13 @@ import { createLogger } from './services/logger.factory';
       },
     }),
   ],
-  controllers: [AppController, AuthController],
+  controllers: [AppController, AuthController, SpeciesController],
   providers: [
     AppService,
     AuthService,
     UserRepository,
+    SpeciesRepository,
+    SpeciesService,
     PinoLoggerService,
     {
       provide: 'LOGGER',

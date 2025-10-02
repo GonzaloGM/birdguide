@@ -20,3 +20,83 @@
 {"level":"info","time":"2025-10-02T13:24:16.558Z","pid":96922,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/logout, POST} route"}
 {"level":"info","time":"2025-10-02T13:24:16.560Z","pid":96922,"hostname":"MBA.local","context":"NestApplication","msg":"Nest application successfully started"}
 {"level":"info","time":"2025-10-02T13:24:16.561Z","pid":96922,"hostname":"MBA.local","msg":"🚀 Application is running on: http://localhost:3000/api"}
+{"level":"info","time":"2025-10-02T14:31:22.767Z","pid":96922,"hostname":"MBA.local","emailOrUsername":"hb.razor+11@gmail.com","msg":"Starting user login"}
+{"level":"info","time":"2025-10-02T14:31:24.028Z","pid":96922,"hostname":"MBA.local","userId":"3dd71fc9-5a8c-463d-89d4-ed14180017f4","email":"hb.razor+11@gmail.com","username":"hb11","msg":"User login completed successfully"}
+{"level":"info","time":"2025-10-02T14:50:33.278Z","pid":96922,"hostname":"MBA.local","emailOrUsername":"hb.razor+11@gmail.com","msg":"Starting user login"}
+{"level":"info","time":"2025-10-02T14:50:34.374Z","pid":96922,"hostname":"MBA.local","userId":"3dd71fc9-5a8c-463d-89d4-ed14180017f4","email":"hb.razor+11@gmail.com","username":"hb11","msg":"User login completed successfully"}
+{"level":"info","time":"2025-10-02T15:01:24.534Z","pid":51878,"hostname":"MBA.local","context":"RoutesResolver","msg":"AppController {/api}:"}
+{"level":"info","time":"2025-10-02T15:01:24.536Z","pid":51878,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api, GET} route"}
+{"level":"info","time":"2025-10-02T15:01:24.536Z","pid":51878,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species, GET} route"}
+{"level":"info","time":"2025-10-02T15:01:24.536Z","pid":51878,"hostname":"MBA.local","context":"RoutesResolver","msg":"AuthController {/api/auth}:"}
+{"level":"info","time":"2025-10-02T15:01:24.537Z","pid":51878,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/register, POST} route"}
+{"level":"info","time":"2025-10-02T15:01:24.537Z","pid":51878,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/login, POST} route"}
+{"level":"info","time":"2025-10-02T15:01:24.537Z","pid":51878,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/callback, POST} route"}
+{"level":"info","time":"2025-10-02T15:01:24.538Z","pid":51878,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/me, GET} route"}
+{"level":"info","time":"2025-10-02T15:01:24.538Z","pid":51878,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/logout, POST} route"}
+{"level":"info","time":"2025-10-02T15:01:24.538Z","pid":51878,"hostname":"MBA.local","context":"RoutesResolver","msg":"SpeciesController {/api/species}:"}
+{"level":"info","time":"2025-10-02T15:01:24.538Z","pid":51878,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species, GET} route"}
+{"level":"info","time":"2025-10-02T15:01:24.539Z","pid":51878,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species/:id, GET} route"}
+{"level":"info","time":"2025-10-02T15:01:24.542Z","pid":51878,"hostname":"MBA.local","context":"NestApplication","msg":"Nest application successfully started"}
+{"level":"info","time":"2025-10-02T15:01:24.544Z","pid":51878,"hostname":"MBA.local","msg":"🚀 Application is running on: http://localhost:3000/api"}
+{"level":"info","time":"2025-10-02T15:03:53.947Z","pid":53382,"hostname":"MBA.local","context":"RoutesResolver","msg":"AppController {/api}:"}
+{"level":"info","time":"2025-10-02T15:03:53.951Z","pid":53382,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api, GET} route"}
+{"level":"info","time":"2025-10-02T15:03:53.952Z","pid":53382,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species, GET} route"}
+{"level":"info","time":"2025-10-02T15:03:53.952Z","pid":53382,"hostname":"MBA.local","context":"RoutesResolver","msg":"AuthController {/api/auth}:"}
+{"level":"info","time":"2025-10-02T15:03:53.954Z","pid":53382,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/register, POST} route"}
+{"level":"info","time":"2025-10-02T15:03:53.954Z","pid":53382,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/login, POST} route"}
+{"level":"info","time":"2025-10-02T15:03:53.954Z","pid":53382,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/callback, POST} route"}
+{"level":"info","time":"2025-10-02T15:03:53.954Z","pid":53382,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/me, GET} route"}
+{"level":"info","time":"2025-10-02T15:03:53.955Z","pid":53382,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/logout, POST} route"}
+{"level":"info","time":"2025-10-02T15:03:53.955Z","pid":53382,"hostname":"MBA.local","context":"RoutesResolver","msg":"SpeciesController {/api/species}:"}
+{"level":"info","time":"2025-10-02T15:03:53.955Z","pid":53382,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species, GET} route"}
+{"level":"info","time":"2025-10-02T15:03:53.956Z","pid":53382,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species/:id, GET} route"}
+{"level":"info","time":"2025-10-02T15:03:53.958Z","pid":53382,"hostname":"MBA.local","context":"NestApplication","msg":"Nest application successfully started"}
+{"level":"info","time":"2025-10-02T15:03:53.960Z","pid":53382,"hostname":"MBA.local","msg":"🚀 Application is running on: http://localhost:3000/api"}
+{"level":"info","time":"2025-10-02T15:04:36.518Z","pid":53382,"hostname":"MBA.local","speciesId":"1","msg":"Species detail request received"}
+{"level":"info","time":"2025-10-02T15:04:36.519Z","pid":53382,"hostname":"MBA.local","speciesId":"1","msg":"Fetching species by id"}
+{"level":"error","time":"2025-10-02T15:04:36.536Z","pid":53382,"hostname":"MBA.local","speciesId":"1","error":"invalid input syntax for type uuid: \"1\"","msg":"Failed to fetch species"}
+{"level":"error","time":"2025-10-02T15:04:36.536Z","pid":53382,"hostname":"MBA.local","speciesId":"1","error":"invalid input syntax for type uuid: \"1\"","msg":"Species detail request failed"}
+{"level":"info","time":"2025-10-02T15:04:42.922Z","pid":53382,"hostname":"MBA.local","speciesId":"550e8400-e29b-41d4-a716-446655440000","msg":"Species detail request received"}
+{"level":"info","time":"2025-10-02T15:04:42.922Z","pid":53382,"hostname":"MBA.local","speciesId":"550e8400-e29b-41d4-a716-446655440000","msg":"Fetching species by id"}
+{"level":"warn","time":"2025-10-02T15:04:42.926Z","pid":53382,"hostname":"MBA.local","speciesId":"550e8400-e29b-41d4-a716-446655440000","msg":"Species not found"}
+{"level":"warn","time":"2025-10-02T15:04:42.926Z","pid":53382,"hostname":"MBA.local","speciesId":"550e8400-e29b-41d4-a716-446655440000","msg":"Species not found"}
+{"level":"info","time":"2025-10-02T15:08:54.573Z","pid":53382,"hostname":"MBA.local","speciesId":"1","msg":"Species detail request received"}
+{"level":"info","time":"2025-10-02T15:08:54.574Z","pid":53382,"hostname":"MBA.local","speciesId":"1","msg":"Fetching species by id"}
+{"level":"error","time":"2025-10-02T15:08:54.588Z","pid":53382,"hostname":"MBA.local","speciesId":"1","error":"invalid input syntax for type uuid: \"1\"","msg":"Failed to fetch species"}
+{"level":"error","time":"2025-10-02T15:08:54.588Z","pid":53382,"hostname":"MBA.local","speciesId":"1","error":"invalid input syntax for type uuid: \"1\"","msg":"Species detail request failed"}
+{"level":"info","time":"2025-10-02T15:09:40.893Z","pid":56935,"hostname":"MBA.local","context":"RoutesResolver","msg":"AppController {/api}:"}
+{"level":"info","time":"2025-10-02T15:09:40.896Z","pid":56935,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api, GET} route"}
+{"level":"info","time":"2025-10-02T15:09:40.900Z","pid":56935,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species, GET} route"}
+{"level":"info","time":"2025-10-02T15:09:40.900Z","pid":56935,"hostname":"MBA.local","context":"RoutesResolver","msg":"AuthController {/api/auth}:"}
+{"level":"info","time":"2025-10-02T15:09:40.901Z","pid":56935,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/register, POST} route"}
+{"level":"info","time":"2025-10-02T15:09:40.902Z","pid":56935,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/login, POST} route"}
+{"level":"info","time":"2025-10-02T15:09:40.902Z","pid":56935,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/callback, POST} route"}
+{"level":"info","time":"2025-10-02T15:09:40.902Z","pid":56935,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/me, GET} route"}
+{"level":"info","time":"2025-10-02T15:09:40.902Z","pid":56935,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/logout, POST} route"}
+{"level":"info","time":"2025-10-02T15:09:40.903Z","pid":56935,"hostname":"MBA.local","context":"RoutesResolver","msg":"SpeciesController {/api/species}:"}
+{"level":"info","time":"2025-10-02T15:09:40.903Z","pid":56935,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species, GET} route"}
+{"level":"info","time":"2025-10-02T15:09:40.904Z","pid":56935,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species/:id, GET} route"}
+{"level":"info","time":"2025-10-02T15:09:40.906Z","pid":56935,"hostname":"MBA.local","context":"NestApplication","msg":"Nest application successfully started"}
+{"level":"info","time":"2025-10-02T15:09:40.907Z","pid":56935,"hostname":"MBA.local","msg":"🚀 Application is running on: http://localhost:3000/api"}
+{"level":"info","time":"2025-10-02T15:17:56.217Z","pid":61268,"hostname":"MBA.local","context":"RoutesResolver","msg":"AppController {/api}:"}
+{"level":"info","time":"2025-10-02T15:17:56.220Z","pid":61268,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api, GET} route"}
+{"level":"info","time":"2025-10-02T15:17:56.220Z","pid":61268,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species, GET} route"}
+{"level":"info","time":"2025-10-02T15:17:56.220Z","pid":61268,"hostname":"MBA.local","context":"RoutesResolver","msg":"AuthController {/api/auth}:"}
+{"level":"info","time":"2025-10-02T15:17:56.220Z","pid":61268,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/register, POST} route"}
+{"level":"info","time":"2025-10-02T15:17:56.221Z","pid":61268,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/login, POST} route"}
+{"level":"info","time":"2025-10-02T15:17:56.221Z","pid":61268,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/callback, POST} route"}
+{"level":"info","time":"2025-10-02T15:17:56.222Z","pid":61268,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/me, GET} route"}
+{"level":"info","time":"2025-10-02T15:17:56.222Z","pid":61268,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/auth/logout, POST} route"}
+{"level":"info","time":"2025-10-02T15:17:56.222Z","pid":61268,"hostname":"MBA.local","context":"RoutesResolver","msg":"SpeciesController {/api/species}:"}
+{"level":"info","time":"2025-10-02T15:17:56.222Z","pid":61268,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species, GET} route"}
+{"level":"info","time":"2025-10-02T15:17:56.223Z","pid":61268,"hostname":"MBA.local","context":"RouterExplorer","msg":"Mapped {/api/species/:id, GET} route"}
+{"level":"info","time":"2025-10-02T15:17:56.225Z","pid":61268,"hostname":"MBA.local","context":"NestApplication","msg":"Nest application successfully started"}
+{"level":"info","time":"2025-10-02T15:17:56.226Z","pid":61268,"hostname":"MBA.local","msg":"🚀 Application is running on: http://localhost:3000/api"}
+{"level":"info","time":"2025-10-02T15:23:54.493Z","pid":61268,"hostname":"MBA.local","speciesId":1,"msg":"Species detail request received"}
+{"level":"info","time":"2025-10-02T15:23:54.496Z","pid":61268,"hostname":"MBA.local","speciesId":1,"msg":"Fetching species by id"}
+{"level":"info","time":"2025-10-02T15:23:54.507Z","pid":61268,"hostname":"MBA.local","speciesId":1,"msg":"Species detail request received"}
+{"level":"info","time":"2025-10-02T15:23:54.507Z","pid":61268,"hostname":"MBA.local","speciesId":1,"msg":"Fetching species by id"}
+{"level":"warn","time":"2025-10-02T15:23:54.523Z","pid":61268,"hostname":"MBA.local","speciesId":1,"msg":"Species not found"}
+{"level":"warn","time":"2025-10-02T15:23:54.523Z","pid":61268,"hostname":"MBA.local","speciesId":1,"msg":"Species not found"}
+{"level":"warn","time":"2025-10-02T15:23:54.524Z","pid":61268,"hostname":"MBA.local","speciesId":1,"msg":"Species not found"}
+{"level":"warn","time":"2025-10-02T15:23:54.524Z","pid":61268,"hostname":"MBA.local","speciesId":1,"msg":"Species not found"}
