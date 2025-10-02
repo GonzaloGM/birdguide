@@ -46,7 +46,9 @@ describe('LoginPage', () => {
   it('should render the login form with email and password fields', () => {
     renderWithI18n(<LoginPage />);
 
-    expect(screen.getByLabelText(i18n.t('login.email'))).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18n.t('login.emailOrUsername'))
+    ).toBeInTheDocument();
     expect(screen.getByLabelText(i18n.t('login.password'))).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: i18n.t('login.submit') })
@@ -83,7 +85,7 @@ describe('LoginPage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(i18n.t('login.errors.emailRequired'))
+        screen.getByText(i18n.t('login.errors.emailOrUsernameRequired'))
       ).toBeInTheDocument();
       expect(
         screen.getByText(i18n.t('login.errors.passwordRequired'))
@@ -95,8 +97,8 @@ describe('LoginPage', () => {
     const user = userEvent.setup();
     renderWithI18n(<LoginPage />);
 
-    const emailInput = screen.getByLabelText(i18n.t('login.email'));
-    await user.type(emailInput, 'invalid-email');
+    const emailInput = screen.getByLabelText(i18n.t('login.emailOrUsername'));
+    await user.type(emailInput, 'invalid@email');
 
     const submitButton = screen.getByRole('button', {
       name: i18n.t('login.submit'),
@@ -146,7 +148,9 @@ describe('LoginPage', () => {
     i18n.changeLanguage('en');
     renderWithI18n(<LoginPage />);
 
-    expect(screen.getByLabelText(i18n.t('login.email'))).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18n.t('login.emailOrUsername'))
+    ).toBeInTheDocument();
     expect(screen.getByLabelText(i18n.t('login.password'))).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: i18n.t('login.submit') })

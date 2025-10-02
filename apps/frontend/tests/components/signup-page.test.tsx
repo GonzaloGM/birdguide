@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
@@ -204,7 +205,7 @@ describe('SignupPage', () => {
         user: {
           id: 'user-123',
           email: 'test@example.com',
-          displayName: 'Test User',
+          username: 'testuser',
           preferredLocale: 'es-AR',
           xp: 0,
           currentStreak: 0,
@@ -221,6 +222,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const usernameInput = screen.getByLabelText(i18n.t('signup.username'));
     const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
     const confirmPasswordInput = screen.getByLabelText(
       i18n.t('signup.confirmPassword')
@@ -230,6 +232,7 @@ describe('SignupPage', () => {
     });
 
     await user.type(emailInput, 'test@example.com');
+    await user.type(usernameInput, 'testuser');
     await user.type(passwordInput, 'password123');
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
@@ -237,6 +240,7 @@ describe('SignupPage', () => {
     await waitFor(() => {
       expect(mockRegister).toHaveBeenCalledWith({
         email: 'test@example.com',
+        username: 'testuser',
         password: 'password123',
         confirmPassword: 'password123',
       });
@@ -256,6 +260,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const usernameInput = screen.getByLabelText(i18n.t('signup.username'));
     const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
     const confirmPasswordInput = screen.getByLabelText(
       i18n.t('signup.confirmPassword')
@@ -265,6 +270,7 @@ describe('SignupPage', () => {
     });
 
     await user.type(emailInput, 'existing@example.com');
+    await user.type(usernameInput, 'existinguser');
     await user.type(passwordInput, 'password123');
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
@@ -292,6 +298,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const usernameInput = screen.getByLabelText(i18n.t('signup.username'));
     const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
     const confirmPasswordInput = screen.getByLabelText(
       i18n.t('signup.confirmPassword')
@@ -301,6 +308,7 @@ describe('SignupPage', () => {
     });
 
     await user.type(emailInput, 'duplicate@example.com');
+    await user.type(usernameInput, 'duplicateuser');
     await user.type(passwordInput, 'password123');
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
@@ -329,6 +337,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const usernameInput = screen.getByLabelText(i18n.t('signup.username'));
     const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
     const confirmPasswordInput = screen.getByLabelText(
       i18n.t('signup.confirmPassword')
@@ -338,6 +347,7 @@ describe('SignupPage', () => {
     });
 
     await user.type(emailInput, 'weakpass@example.com');
+    await user.type(usernameInput, 'weakuser');
     await user.type(passwordInput, '123');
     await user.type(confirmPasswordInput, '123');
     await user.click(submitButton);
@@ -365,6 +375,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const usernameInput = screen.getByLabelText(i18n.t('signup.username'));
     const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
     const confirmPasswordInput = screen.getByLabelText(
       i18n.t('signup.confirmPassword')
@@ -374,6 +385,7 @@ describe('SignupPage', () => {
     });
 
     await user.type(emailInput, 'commonpass@example.com');
+    await user.type(usernameInput, 'commonuser');
     await user.type(passwordInput, 'password123');
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
@@ -402,6 +414,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const usernameInput = screen.getByLabelText(i18n.t('signup.username'));
     const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
     const confirmPasswordInput = screen.getByLabelText(
       i18n.t('signup.confirmPassword')
@@ -411,6 +424,7 @@ describe('SignupPage', () => {
     });
 
     await user.type(emailInput, 'existing@example.com');
+    await user.type(usernameInput, 'existinguser2');
     await user.type(passwordInput, 'password123');
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
@@ -439,6 +453,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const usernameInput = screen.getByLabelText(i18n.t('signup.username'));
     const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
     const confirmPasswordInput = screen.getByLabelText(
       i18n.t('signup.confirmPassword')
@@ -448,6 +463,7 @@ describe('SignupPage', () => {
     });
 
     await user.type(emailInput, 'blocked@example.com');
+    await user.type(usernameInput, 'blockeduser');
     await user.type(passwordInput, 'password123');
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
@@ -475,6 +491,7 @@ describe('SignupPage', () => {
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText(i18n.t('signup.email'));
+    const usernameInput = screen.getByLabelText(i18n.t('signup.username'));
     const passwordInput = screen.getByLabelText(i18n.t('signup.password'));
     const confirmPasswordInput = screen.getByLabelText(
       i18n.t('signup.confirmPassword')
@@ -484,6 +501,7 @@ describe('SignupPage', () => {
     });
 
     await user.type(emailInput, 'test@example.com');
+    await user.type(usernameInput, 'testuser');
     await user.type(passwordInput, 'password123');
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
@@ -500,7 +518,7 @@ describe('SignupPage', () => {
         user: {
           id: 'user-123',
           email: 'test@example.com',
-          displayName: 'Test User',
+          username: 'testuser',
           preferredLocale: 'es-AR',
           xp: 0,
           currentStreak: 0,

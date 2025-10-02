@@ -1,16 +1,19 @@
 import { Controller, Post, Get, Req, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthResponse, User, ApiResponse } from '@birdguide/shared-types';
+import {
+  AuthResponse,
+  User,
+  ApiResponse,
+  RegisterRequest,
+  LoginRequest,
+} from '@birdguide/shared-types';
 
 type Auth0CallbackData = {
   code: string;
   state: string;
 };
 
-type RegisterRequest = {
-  email: string;
-  password: string;
-};
+// RegisterRequest and LoginRequest are now imported from shared-types
 
 type AuthenticatedRequest = {
   user: {
@@ -40,7 +43,29 @@ export class AuthController {
         message:
           error.message === 'User with this email already exists'
             ? 'Email already exists'
+            : error.message === 'Username is already taken'
+            ? 'Username is already taken'
             : 'Registration failed',
+      };
+    }
+  }
+
+  @Post('login')
+  async login(
+    @Body() loginRequest: LoginRequest
+  ): Promise<ApiResponse<AuthResponse>> {
+    try {
+      const authResponse = await this.authService.login(loginRequest);
+
+      return {
+        success: true,
+        data: authResponse,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Login failed',
       };
     }
   }

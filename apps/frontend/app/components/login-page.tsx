@@ -19,7 +19,7 @@ export const LoginPage = () => {
   const { t } = useTranslation();
   const { loginWithPopup } = useAuth0();
   const [formData, setFormData] = useState({
-    email: '',
+    emailOrUsername: '',
     password: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -27,10 +27,22 @@ export const LoginPage = () => {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.email) {
-      newErrors.email = t('login.errors.emailRequired');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = t('login.errors.emailInvalid');
+    if (!formData.emailOrUsername) {
+      newErrors.emailOrUsername = t('login.errors.emailOrUsernameRequired');
+    } else if (formData.emailOrUsername.includes('@')) {
+      // If it contains @, validate as email
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailOrUsername)) {
+        newErrors.emailOrUsername = t('login.errors.emailInvalid');
+      }
+    } else {
+      // If it doesn't contain @, validate as username
+      if (formData.emailOrUsername.length < 3) {
+        newErrors.emailOrUsername = t('login.errors.usernameTooShort');
+      } else if (formData.emailOrUsername.length > 20) {
+        newErrors.emailOrUsername = t('login.errors.usernameTooLong');
+      } else if (!/^[a-zA-Z0-9_]+$/.test(formData.emailOrUsername)) {
+        newErrors.emailOrUsername = t('login.errors.usernameInvalid');
+      }
     }
 
     if (!formData.password) {
@@ -87,16 +99,21 @@ export const LoginPage = () => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="email">{t('login.email')}</Label>
+                <Label htmlFor="emailOrUsername">
+                  {t('login.emailOrUsername')}
+                </Label>
                 <Input
                   type="text"
-                  id="email"
-                  name="email"
-                  value={formData.email}
+                  id="emailOrUsername"
+                  name="emailOrUsername"
+                  value={formData.emailOrUsername}
                   onChange={handleInputChange}
+                  placeholder={t('login.emailOrUsernamePlaceholder')}
                 />
-                {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email}</p>
+                {errors.emailOrUsername && (
+                  <p className="text-sm text-destructive">
+                    {errors.emailOrUsername}
+                  </p>
                 )}
               </div>
 

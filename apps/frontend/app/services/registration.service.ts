@@ -2,6 +2,7 @@ import { User, AuthResponse } from '@birdguide/shared-types';
 
 type RegistrationRequest = {
   email: string;
+  username: string;
   password: string;
   confirmPassword: string;
 };
@@ -29,10 +30,10 @@ const getApiBaseUrl = (): string => {
 export const registrationService = {
   async register(request: RegistrationRequest): Promise<RegistrationResult> {
     // Validate required fields
-    if (!request.email || !request.password) {
+    if (!request.email || !request.username || !request.password) {
       return {
         success: false,
-        error: { message: 'Email and password are required' },
+        error: { message: 'Email, username and password are required' },
       };
     }
 
@@ -62,6 +63,7 @@ export const registrationService = {
         },
         body: JSON.stringify({
           email: request.email,
+          username: request.username,
           password: request.password,
         }),
       });
@@ -84,6 +86,10 @@ export const registrationService = {
         // Handle specific Auth0 error patterns
         if (data.error === 'User with this email already exists') {
           errorCode = 'EMAIL_EXISTS';
+        } else if (data.error === 'Username is already taken') {
+          errorCode = 'USERNAME_EXISTS';
+          errorMessage =
+            'Username is already taken. Please choose a different username';
         } else if (
           data.error &&
           data.error.includes('PasswordStrengthError: Password is too weak')

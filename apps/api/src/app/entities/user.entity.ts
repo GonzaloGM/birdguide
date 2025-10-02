@@ -9,43 +9,43 @@ import {
 @Entity('users')
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ unique: true })
-  auth0Id: string;
+  auth0Id!: string;
 
   @Column()
-  email: string;
+  email!: string;
 
-  @Column()
-  displayName: string;
+  @Column({ unique: true })
+  username!: string;
 
   @Column({ default: 'es-AR' })
-  preferredLocale: string;
+  preferredLocale!: string;
 
   @Column({ nullable: true })
   preferredRegionId?: string;
 
   @Column({ default: 0 })
-  xp: number;
+  xp!: number;
 
   @Column({ default: 0 })
-  currentStreak: number;
+  currentStreak!: number;
 
   @Column({ default: 0 })
-  longestStreak: number;
+  longestStreak!: number;
 
   @Column({ nullable: true })
   lastActiveAt?: Date;
 
   @Column({ default: false })
-  isAdmin: boolean;
+  isAdmin!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ nullable: true })
   deletedAt?: Date;

@@ -1,7 +1,9 @@
+import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
-import { vi } from 'vitest';
+import { vi, describe, it, beforeEach, expect } from 'vitest';
+import '@testing-library/jest-dom';
 import { SignupPage } from './signup-page';
 import { renderWithI18n } from '../test-utils';
 
@@ -185,7 +187,7 @@ describe('SignupPage', () => {
   });
 
   it('should not submit form with invalid data', async () => {
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation();
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     renderWithI18n(<SignupPage />);
 
     const emailInput = screen.getByLabelText('Email');
@@ -212,7 +214,7 @@ describe('SignupPage', () => {
         user: {
           id: 'user-123',
           email: 'test@example.com',
-          displayName: 'Test User',
+          username: 'testuser',
           preferredLocale: 'es-AR',
           xp: 0,
           currentStreak: 0,
@@ -311,7 +313,7 @@ describe('SignupPage', () => {
         user: {
           id: 'user-123',
           email: 'test@example.com',
-          displayName: 'Test User',
+          username: 'testuser',
           preferredLocale: 'es-AR',
           xp: 0,
           currentStreak: 0,

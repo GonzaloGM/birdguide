@@ -15,9 +15,14 @@ jest.mock('auth0', () => ({
         name: 'Test User',
       }),
       create: jest.fn().mockResolvedValue({
-        user_id: 'auth0|created-user-123',
-        email: 'created@example.com',
-        name: 'created',
+        data: {
+          user_id: 'auth0|created-user-123',
+          email: 'created@example.com',
+          name: 'created',
+        },
+        headers: {},
+        status: 201,
+        statusText: 'Created',
       }),
     },
   })),
@@ -30,7 +35,7 @@ describe('AuthService', () => {
   const mockUser: User = {
     id: 'user-123',
     email: 'test@example.com',
-    displayName: 'Test User',
+    username: 'testuser',
     preferredLocale: 'es-AR',
     xp: 0,
     currentStreak: 0,
@@ -76,6 +81,7 @@ describe('AuthService', () => {
               ),
             findUserByAuth0Id: jest.fn().mockResolvedValue(mockUser),
             findUserByEmail: jest.fn().mockResolvedValue(null),
+            findUserByUsername: jest.fn().mockResolvedValue(null),
           },
         },
       ],
@@ -111,7 +117,7 @@ describe('AuthService', () => {
       // This test will fail initially because we haven't implemented Auth0 integration
       // We expect the service to make actual HTTP calls to Auth0
       expect(result.user.email).toBeDefined();
-      expect(result.user.displayName).toBeDefined();
+      expect(result.user.username).toBeDefined();
     });
 
     it('should generate valid JWT token for authenticated user', async () => {
@@ -192,7 +198,7 @@ describe('AuthService', () => {
 
       expect(result).toHaveProperty('id');
       expect(result).toHaveProperty('email');
-      expect(result).toHaveProperty('displayName');
+      expect(result).toHaveProperty('username');
       expect(result.email).toBe('test@example.com');
     });
 
@@ -210,9 +216,10 @@ describe('AuthService', () => {
   });
 
   describe('register', () => {
-    it('should register new user and return auth response', async () => {
+    it('should register new user with username and return auth response', async () => {
       const registerRequest = {
         email: 'newuser@example.com',
+        username: 'newuser123',
         password: 'password123',
       };
 
@@ -222,13 +229,77 @@ describe('AuthService', () => {
       expect(result).toHaveProperty('token');
       expect(result).toHaveProperty('refreshToken');
       expect(result.user.email).toBe('newuser@example.com');
-      expect(result.user.displayName).toBe('newuser');
+      expect(result.user.username).toBe('newuser123');
       expect(result.token).toBe('mock-jwt-token');
+    });
+
+    it('should throw error when username is already taken', async () => {
+      const registerRequest = {
+        email: 'newuser@example.com',
+        username: 'takenusername',
+        password: 'password123',
+      };
+
+      const userRepository = module.get<UserRepository>(UserRepository);
+      jest.spyOn(userRepository, 'findUserByUsername').mockResolvedValue({
+        id: 'existing-user-id',
+        email: 'existing@example.com',
+        username: 'takenusername',
+        username: 'existing',
+        preferredLocale: 'es-AR',
+        xp: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        isAdmin: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      await expect(service.register(registerRequest)).rejects.toThrow(
+        'Username is already taken'
+      );
+    });
+
+    it('should throw error when username is invalid format', async () => {
+      const registerRequest = {
+        email: 'newuser@example.com',
+        username: 'invalid@username!',
+        password: 'password123',
+      };
+
+      await expect(service.register(registerRequest)).rejects.toThrow(
+        'Username must contain only letters, numbers, and underscores'
+      );
+    });
+
+    it('should throw error when username is too short', async () => {
+      const registerRequest = {
+        email: 'newuser@example.com',
+        username: 'ab',
+        password: 'password123',
+      };
+
+      await expect(service.register(registerRequest)).rejects.toThrow(
+        'Username must be at least 3 characters long'
+      );
+    });
+
+    it('should throw error when username is too long', async () => {
+      const registerRequest = {
+        email: 'newuser@example.com',
+        username: 'a'.repeat(21),
+        password: 'password123',
+      };
+
+      await expect(service.register(registerRequest)).rejects.toThrow(
+        'Username must be no more than 20 characters long'
+      );
     });
 
     it('should throw error when trying to register with existing email', async () => {
       const registerRequest = {
         email: 'existing@example.com',
+        username: 'newuser123',
         password: 'password123',
       };
 
@@ -243,7 +314,8 @@ describe('AuthService', () => {
           // Second registration - user exists
           id: 'existing-user-id',
           email: 'existing@example.com',
-          displayName: 'existing',
+          username: 'existinguser',
+          username: 'existing',
           preferredLocale: 'es-AR',
           xp: 0,
           currentStreak: 0,
@@ -265,6 +337,7 @@ describe('AuthService', () => {
     it('should create user in database with correct data', async () => {
       const registerRequest = {
         email: 'testuser@example.com',
+        username: 'testuser123',
         password: 'password123',
       };
 
@@ -280,7 +353,7 @@ describe('AuthService', () => {
         'auth0|created-user-123', // Mock Auth0 user ID from the mock
         {
           email: 'testuser@example.com',
-          displayName: 'testuser',
+          username: 'testuser123',
           preferredLocale: 'es-AR',
           xp: 0,
           currentStreak: 0,
@@ -294,6 +367,7 @@ describe('AuthService', () => {
     it('should generate JWT token for registered user', async () => {
       const registerRequest = {
         email: 'jwtuser@example.com',
+        username: 'jwtuser123',
         password: 'password123',
       };
 
@@ -313,13 +387,19 @@ describe('AuthService', () => {
     it('should create user in Auth0 when registering', async () => {
       const registerRequest = {
         email: 'auth0user@example.com',
+        username: 'auth0user123',
         password: 'password123',
       };
 
       const mockCreateUser = jest.fn().mockResolvedValue({
-        user_id: 'auth0|real-user-123',
-        email: 'auth0user@example.com',
-        name: 'auth0user',
+        data: {
+          user_id: 'auth0|real-user-123',
+          email: 'auth0user@example.com',
+          name: 'auth0user',
+        },
+        headers: {},
+        status: 201,
+        statusText: 'Created',
       });
 
       const getManagementClientSpy = jest
@@ -344,6 +424,7 @@ describe('AuthService', () => {
     it('should throw error when Auth0 user creation fails', async () => {
       const registerRequest = {
         email: 'failing@example.com',
+        username: 'failinguser123',
         password: 'password123',
       };
 
@@ -360,6 +441,80 @@ describe('AuthService', () => {
       await expect(service.register(registerRequest)).rejects.toThrow(
         'Auth0 user creation failed: Auth0 user creation failed'
       );
+    });
+  });
+
+  describe('login', () => {
+    it('should login with email and return auth response', async () => {
+      const loginRequest = {
+        emailOrUsername: 'test@example.com',
+        password: 'password123',
+      };
+
+      const userRepository = module.get<UserRepository>(UserRepository);
+      jest.spyOn(userRepository, 'findUserByEmail').mockResolvedValue(mockUser);
+
+      const result = await service.login(loginRequest);
+
+      expect(result).toHaveProperty('user');
+      expect(result).toHaveProperty('token');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result.user.email).toBe('test@example.com');
+      expect(result.user.username).toBe('testuser');
+      expect(result.token).toBe('mock-jwt-token');
+    });
+
+    it('should login with username and return auth response', async () => {
+      const loginRequest = {
+        emailOrUsername: 'testuser',
+        password: 'password123',
+      };
+
+      const userRepository = module.get<UserRepository>(UserRepository);
+      jest
+        .spyOn(userRepository, 'findUserByUsername')
+        .mockResolvedValue(mockUser);
+
+      const result = await service.login(loginRequest);
+
+      expect(result).toHaveProperty('user');
+      expect(result).toHaveProperty('token');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result.user.email).toBe('test@example.com');
+      expect(result.user.username).toBe('testuser');
+      expect(result.token).toBe('mock-jwt-token');
+    });
+
+    it('should throw error when user not found by email or username', async () => {
+      const loginRequest = {
+        emailOrUsername: 'nonexistent@example.com',
+        password: 'password123',
+      };
+
+      const userRepository = module.get<UserRepository>(UserRepository);
+      jest.spyOn(userRepository, 'findUserByEmail').mockResolvedValue(null);
+      jest.spyOn(userRepository, 'findUserByUsername').mockResolvedValue(null);
+
+      await expect(service.login(loginRequest)).rejects.toThrow(
+        'Invalid credentials'
+      );
+    });
+
+    it('should login successfully even with wrong password (no password validation yet)', async () => {
+      const loginRequest = {
+        emailOrUsername: 'test@example.com',
+        password: 'wrongpassword',
+      };
+
+      const userRepository = module.get<UserRepository>(UserRepository);
+      jest.spyOn(userRepository, 'findUserByEmail').mockResolvedValue(mockUser);
+
+      const result = await service.login(loginRequest);
+
+      expect(result).toHaveProperty('user');
+      expect(result).toHaveProperty('token');
+      expect(result.user.email).toBe('test@example.com');
+      expect(result.user.username).toBe('testuser');
     });
   });
 

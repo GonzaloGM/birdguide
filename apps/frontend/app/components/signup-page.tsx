@@ -21,6 +21,7 @@ export const SignupPage = () => {
   const { loginWithPopup } = useAuth0();
   const [formData, setFormData] = useState({
     email: '',
+    username: '',
     password: '',
     confirmPassword: '',
   });
@@ -34,6 +35,16 @@ export const SignupPage = () => {
       newErrors.email = t('signup.errors.emailRequired');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = t('signup.errors.emailInvalid');
+    }
+
+    if (!formData.username) {
+      newErrors.username = t('signup.errors.usernameRequired');
+    } else if (formData.username.length < 3) {
+      newErrors.username = t('signup.errors.usernameTooShort');
+    } else if (formData.username.length > 20) {
+      newErrors.username = t('signup.errors.usernameTooLong');
+    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      newErrors.username = t('signup.errors.usernameInvalid');
     }
 
     if (!formData.password) {
@@ -96,6 +107,9 @@ export const SignupPage = () => {
             break;
           case 'EMAIL_EXISTS':
             errorMessage = t('signup.errors.userAlreadyExists');
+            break;
+          case 'USERNAME_EXISTS':
+            errorMessage = t('signup.errors.usernameAlreadyExists');
             break;
           default:
             // Keep the original error message for unknown errors
@@ -167,6 +181,20 @@ export const SignupPage = () => {
                 />
                 {errors.email && (
                   <p className="text-sm text-destructive">{errors.email}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="username">{t('signup.username')}</Label>
+                <Input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                />
+                {errors.username && (
+                  <p className="text-sm text-destructive">{errors.username}</p>
                 )}
               </div>
 

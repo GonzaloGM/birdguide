@@ -64,7 +64,7 @@ export type BirdSize =
 export type User = {
   id: string;
   email: string;
-  displayName: string;
+  username: string;
   preferredLocale: string; // e.g. 'es-AR', 'en-US'
   preferredRegionId?: string;
   xp: number;
@@ -96,27 +96,27 @@ export type UserDevice = {
 
 export type CreateUserRequest = {
   email: string;
-  displayName: string;
+  username: string;
   password?: string; // optional for social login
   preferredLocale: string;
   preferredRegionId?: string;
 };
 
 export type UpdateUserRequest = {
-  displayName?: string;
+  username?: string;
   preferredLocale?: string;
   preferredRegionId?: string;
 };
 
 export type LoginRequest = {
-  email: string;
+  emailOrUsername: string;
   password: string;
 };
 
 export type AuthResponse = {
   user: User;
   token: string;
-  refreshToken: string;
+  refreshToken: string | null;
 };
 
 // Species and Taxonomy

@@ -21,7 +21,7 @@ describe('RegistrationService', () => {
       user: {
         id: 'user-123',
         email: 'test@example.com',
-        displayName: 'Test User',
+        username: 'testuser',
         preferredLocale: 'es-AR',
         xp: 0,
         currentStreak: 0,
@@ -46,6 +46,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'test@example.com',
+      username: 'testuser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -59,6 +60,7 @@ describe('RegistrationService', () => {
         },
         body: JSON.stringify({
           email: 'test@example.com',
+          username: 'testuser',
           password: 'password123',
         }),
       }
@@ -84,6 +86,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'existing@example.com',
+      username: 'existinguser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -108,6 +111,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'duplicate@example.com',
+      username: 'duplicateuser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -136,6 +140,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'valid@example.com',
+      username: 'validuser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -165,6 +170,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'weakpass@example.com',
+      username: 'weakuser',
       password: '123',
       confirmPassword: '123',
     });
@@ -195,6 +201,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'commonpass@example.com',
+      username: 'commonuser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -224,6 +231,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'john@example.com',
+      username: 'johnuser',
       password: 'john123',
       confirmPassword: 'john123',
     });
@@ -253,6 +261,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'existing@example.com',
+      username: 'existinguser2',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -282,6 +291,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'blocked@example.com',
+      username: 'blockeduser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -311,6 +321,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'valid@example.com', // Use valid email to pass client-side validation
+      username: 'validuser2',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -339,6 +350,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'disabled@example.com',
+      username: 'disableduser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -367,6 +379,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'server@example.com',
+      username: 'serveruser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -386,6 +399,7 @@ describe('RegistrationService', () => {
 
     const result = await registrationService.register({
       email: 'test@example.com',
+      username: 'testuser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -399,6 +413,7 @@ describe('RegistrationService', () => {
   it('should validate password confirmation before making API call', async () => {
     const result = await registrationService.register({
       email: 'test@example.com',
+      username: 'testuser',
       password: 'password123',
       confirmPassword: 'different123',
     });
@@ -413,6 +428,7 @@ describe('RegistrationService', () => {
   it('should validate email format before making API call', async () => {
     const result = await registrationService.register({
       email: 'invalid-email',
+      username: 'testuser',
       password: 'password123',
       confirmPassword: 'password123',
     });
@@ -427,6 +443,7 @@ describe('RegistrationService', () => {
   it('should validate required fields before making API call', async () => {
     const result = await registrationService.register({
       email: '',
+      username: '',
       password: '',
       confirmPassword: '',
     });
@@ -434,7 +451,7 @@ describe('RegistrationService', () => {
     expect(fetch).not.toHaveBeenCalled();
     expect(result).toEqual({
       success: false,
-      error: { message: 'Email and password are required' },
+      error: { message: 'Email, username and password are required' },
     });
   });
 });

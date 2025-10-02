@@ -13,7 +13,7 @@ describe('RegistrationService', () => {
       user: {
         id: 'user-123',
         email: 'test@example.com',
-        displayName: 'Test User',
+        username: 'testuser',
         preferredLocale: 'es-AR',
         xp: 0,
         currentStreak: 0,

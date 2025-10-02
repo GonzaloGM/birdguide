@@ -1358,3 +1358,15 @@ The key is to write clean, testable, functional code that evolves through small,
 - **Environment Configuration**: Set proper Node version in `.nvmrc` and `package.json` engines field
 - **NX Daemon Issues**: When switching Node versions, always run `nx reset` to clear the daemon cache and restart with the correct Node version
 - **Dependency Conflicts**: NestJS 11 requires compatible versions of all @nestjs packages - update @nestjs/jwt, @nestjs/passport, and @nestjs/typeorm to version 11 when upgrading
+- **Build Requirements**: Frontend builds require Node.js 22.16+ - always switch to Node 22 before building frontend
+
+### Username Authentication Feature Implementation
+- **TDD Approach**: Implemented username field using Test-Driven Development - wrote failing tests first, then implemented functionality
+- **Database Schema**: Added unique `username` column to `UserEntity` with proper validation constraints
+- **API Validation**: Username validation includes length (3-20 chars), format (alphanumeric + underscore), and uniqueness checks
+- **Frontend Forms**: Updated both login and signup forms to support username field with proper validation and error handling
+- **Login Flexibility**: Login form accepts either email or username, with smart validation based on input format (@ symbol detection)
+- **Translation Keys**: Added comprehensive i18n support for username field and all related error messages in both Spanish and English
+- **Test Coverage**: Achieved 100% test coverage through behavior-driven testing - all validation logic covered by testing user-facing behavior
+- **Auth0 Integration**: Username is stored in local database only, Auth0 still uses email for authentication
+- **Error Handling**: Proper error messages for username conflicts, invalid formats, and validation failures

@@ -47,7 +47,7 @@ export class UserRepository {
     return {
       id: entity.id,
       email: entity.email,
-      displayName: entity.displayName,
+      username: entity.username,
       preferredLocale: entity.preferredLocale,
       preferredRegionId: entity.preferredRegionId,
       xp: entity.xp,
@@ -77,6 +77,13 @@ export class UserRepository {
   async findUserByEmail(email: string): Promise<User | null> {
     const entity = await this.userRepository.findOne({
       where: { email },
+    });
+    return entity ? this.mapEntityToUser(entity) : null;
+  }
+
+  async findUserByUsername(username: string): Promise<User | null> {
+    const entity = await this.userRepository.findOne({
+      where: { username },
     });
     return entity ? this.mapEntityToUser(entity) : null;
   }

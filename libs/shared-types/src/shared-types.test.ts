@@ -37,7 +37,7 @@ describe('BirdGuide Shared Types', () => {
     const user: User = {
       id: '1',
       email: 'birder@example.com',
-      displayName: 'John Doe',
+      username: 'johndoe',
       preferredLocale: 'es-AR',
       preferredRegionId: 'region-1',
       xp: 1250,
@@ -51,7 +51,7 @@ describe('BirdGuide Shared Types', () => {
 
     expect(user.id).toBe('1');
     expect(user.email).toBe('birder@example.com');
-    expect(user.displayName).toBe('John Doe');
+    expect(user.username).toBe('johndoe');
     expect(user.preferredLocale).toBe('es-AR');
     expect(user.xp).toBe(1250);
     expect(user.currentStreak).toBe(7);
