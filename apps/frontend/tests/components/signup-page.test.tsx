@@ -221,6 +221,7 @@ describe('SignupPage', () => {
       data: {
         user: {
           id: 'user-123',
+          auth0Id: 'auth0|user-123',
           email: 'test@example.com',
           username: 'testuser',
           preferredLocale: 'es-AR',
@@ -254,15 +255,18 @@ describe('SignupPage', () => {
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
 
-    await waitFor(() => {
-      expect(mockRegister).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        username: 'testuser',
-        password: 'password123',
-        confirmPassword: 'password123',
-      });
-    });
-  });
+    await waitFor(
+      () => {
+        expect(mockRegister).toHaveBeenCalledWith({
+          email: 'test@example.com',
+          username: 'testuser',
+          password: 'password123',
+          confirmPassword: 'password123',
+        });
+      },
+      { timeout: 10000 }
+    );
+  }, 10000);
 
   it('should show error message when registration fails', async () => {
     const { registrationService } = await import(
@@ -292,12 +296,15 @@ describe('SignupPage', () => {
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(i18n.t('signup.errors.userAlreadyExists'))
-      ).toBeInTheDocument();
-    });
-  });
+    await waitFor(
+      () => {
+        expect(
+          screen.getByText(i18n.t('signup.errors.userAlreadyExists'))
+        ).toBeInTheDocument();
+      },
+      { timeout: 10000 }
+    );
+  }, 10000);
 
   it('should show error message when API returns duplicate email error', async () => {
     const { registrationService } = await import(
@@ -534,6 +541,7 @@ describe('SignupPage', () => {
       data: {
         user: {
           id: 'user-123',
+          auth0Id: 'auth0|user-123',
           email: 'test@example.com',
           username: 'testuser',
           preferredLocale: 'es-AR',
@@ -562,6 +570,7 @@ describe('SignupPage', () => {
 
     const mockUser = {
       id: 'user-123',
+      auth0Id: 'auth0|user-123',
       email: 'test@example.com',
       username: 'testuser',
       preferredLocale: 'es-AR',

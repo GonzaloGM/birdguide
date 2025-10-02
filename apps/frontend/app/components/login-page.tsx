@@ -13,11 +13,14 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
+import { useAuth } from '../contexts/auth-context';
+import { loginService } from '../services/login.service';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { loginWithPopup } = useAuth0();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     emailOrUsername: '',
     password: '',
@@ -53,11 +56,26 @@ export const LoginPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // TODO: Implement actual login logic
-      console.log('Login with:', formData);
+      try {
+        const result = await loginService.login({
+          emailOrUsername: formData.emailOrUsername,
+          password: formData.password,
+        });
+
+        if (result.success) {
+          login(result.data.user, result.data.token);
+          navigate('/practice');
+        } else {
+          setErrors({ general: t(result.error) });
+        }
+      } catch (error) {
+        setErrors({
+          general: t('login.errors.invalidCredentials'),
+        });
+      }
     }
   };
 
@@ -135,6 +153,12 @@ export const LoginPage = () => {
                 {t('login.submit')}
               </Button>
             </form>
+
+            {errors.general && (
+              <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md">
+                <p className="text-sm text-destructive">{errors.general}</p>
+              </div>
+            )}
 
             <div className="mt-6 text-center">
               <a

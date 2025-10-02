@@ -47,6 +47,10 @@ const resources = {
           usernameInvalid:
             'El usuario solo puede contener letras, números y guiones bajos',
           passwordRequired: 'La contraseña es requerida',
+          invalidCredentials: 'Email o contraseña incorrectos',
+          tooManyAttempts: 'Demasiados intentos. Probá de nuevo más tarde',
+          accountLocked: 'Cuenta bloqueada temporalmente. Contactanos',
+          userNotFound: 'Usuario no encontrado',
         },
       },
 
@@ -140,6 +144,10 @@ const resources = {
           usernameInvalid:
             'Username can only contain letters, numbers and underscores',
           passwordRequired: 'Password is required',
+          invalidCredentials: 'Invalid email or password',
+          tooManyAttempts: 'Too many attempts. Please try again later',
+          accountLocked: 'Account temporarily locked. Please contact support',
+          userNotFound: 'User not found',
         },
       },
 

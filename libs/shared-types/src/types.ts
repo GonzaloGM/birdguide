@@ -63,6 +63,7 @@ export type BirdSize =
 // User and Authentication
 export type User = {
   id: string;
+  auth0Id: string;
   email: string;
   username: string;
   preferredLocale: string; // e.g. 'es-AR', 'en-US'

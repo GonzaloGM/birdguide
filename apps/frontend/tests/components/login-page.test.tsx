@@ -7,6 +7,8 @@ import { MemoryRouter } from 'react-router';
 import { vi } from 'vitest';
 import i18n from '../../app/i18n';
 import { LoginPage } from '../../app/components/login-page';
+import { useAuth } from '../../app/contexts/auth-context';
+import { loginService } from '../../app/services/login.service';
 
 // Mock Auth0
 const mockLoginWithRedirect = vi.fn();
@@ -28,6 +30,24 @@ vi.mock('react-router', async (importOriginal) => {
   };
 });
 
+// Mock auth context
+const mockLogin = vi.fn();
+vi.mock('../../app/contexts/auth-context', () => ({
+  useAuth: () => ({
+    user: null,
+    isLoggedIn: false,
+    login: mockLogin,
+    logout: vi.fn(),
+  }),
+}));
+
+// Mock login service
+vi.mock('../../app/services/login.service', () => ({
+  loginService: {
+    login: vi.fn(),
+  },
+}));
+
 const renderWithI18n = (component: React.ReactElement) => {
   return render(
     <MemoryRouter>
@@ -41,6 +61,8 @@ describe('LoginPage', () => {
     mockNavigate.mockClear();
     mockLoginWithRedirect.mockClear();
     mockLoginWithPopup.mockClear();
+    mockLogin.mockClear();
+    vi.mocked(loginService.login).mockClear();
   });
 
   it('should render the login form with email and password fields', () => {
@@ -161,5 +183,111 @@ describe('LoginPage', () => {
     expect(
       screen.getByRole('button', { name: i18n.t('login.apple') })
     ).toBeInTheDocument();
+  });
+
+  it('should call login service and auth context on successful login', async () => {
+    const user = userEvent.setup();
+    const mockUser = {
+      id: 'user-123',
+      email: 'test@example.com',
+      username: 'testuser',
+      preferredLocale: 'es-AR',
+      xp: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      isAdmin: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    vi.mocked(loginService.login).mockResolvedValue({
+      success: true,
+      data: {
+        user: mockUser,
+        token: 'mock-jwt-token',
+        refreshToken: null,
+      },
+    });
+
+    renderWithI18n(<LoginPage />);
+
+    const emailInput = screen.getByLabelText(i18n.t('login.emailOrUsername'));
+    const passwordInput = screen.getByLabelText(i18n.t('login.password'));
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('login.submit'),
+    });
+
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(vi.mocked(loginService.login)).toHaveBeenCalledWith({
+        emailOrUsername: 'test@example.com',
+        password: 'password123',
+      });
+      expect(mockLogin).toHaveBeenCalledWith(mockUser, 'mock-jwt-token');
+      expect(mockNavigate).toHaveBeenCalledWith('/practice');
+    });
+  });
+
+  it('should show error message on login failure', async () => {
+    const user = userEvent.setup();
+
+    vi.mocked(loginService.login).mockResolvedValue({
+      success: false,
+      error: 'login.errors.invalidCredentials',
+    });
+
+    renderWithI18n(<LoginPage />);
+
+    const emailInput = screen.getByLabelText(i18n.t('login.emailOrUsername'));
+    const passwordInput = screen.getByLabelText(i18n.t('login.password'));
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('login.submit'),
+    });
+
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'wrongpassword');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(i18n.t('login.errors.invalidCredentials'))
+      ).toBeInTheDocument();
+    });
+
+    expect(mockLogin).not.toHaveBeenCalled();
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it('should show error message on network error', async () => {
+    const user = userEvent.setup();
+
+    vi.mocked(loginService.login).mockResolvedValue({
+      success: false,
+      error: 'login.errors.invalidCredentials',
+    });
+
+    renderWithI18n(<LoginPage />);
+
+    const emailInput = screen.getByLabelText(i18n.t('login.emailOrUsername'));
+    const passwordInput = screen.getByLabelText(i18n.t('login.password'));
+    const submitButton = screen.getByRole('button', {
+      name: i18n.t('login.submit'),
+    });
+
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(i18n.t('login.errors.invalidCredentials'))
+      ).toBeInTheDocument();
+    });
+
+    expect(mockLogin).not.toHaveBeenCalled();
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });

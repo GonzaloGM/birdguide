@@ -58,6 +58,7 @@ export class UserRepository {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       deletedAt: entity.deletedAt,
+      auth0Id: entity.auth0Id,
     };
   }
 
