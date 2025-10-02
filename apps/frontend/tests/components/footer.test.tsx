@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { Footer } from '../../app/components/footer';
@@ -14,10 +14,18 @@ vi.mock('../../app/contexts/auth-context', () => ({
 
 // Mock react-router
 vi.mock('react-router', async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
-    Link: ({ to, children, ...props }: any) => (
+    Link: ({
+      to,
+      children,
+      ...props
+    }: {
+      to: string;
+      children: React.ReactNode;
+      [key: string]: unknown;
+    }) => (
       <a href={to} {...props}>
         {children}
       </a>
@@ -45,6 +53,7 @@ describe('Footer', () => {
         updatedAt: new Date(),
       },
       isLoggedIn: true,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -52,7 +61,6 @@ describe('Footer', () => {
     renderWithI18n(<Footer />);
 
     expect(screen.getByText(i18n.t('footer.practice'))).toBeInTheDocument();
-    expect(screen.getByText(i18n.t('footer.path'))).toBeInTheDocument();
     expect(screen.getByText(i18n.t('footer.species'))).toBeInTheDocument();
     expect(screen.getByText(i18n.t('footer.profile'))).toBeInTheDocument();
   });
@@ -61,6 +69,7 @@ describe('Footer', () => {
     vi.mocked(useAuth).mockReturnValue({
       user: null,
       isLoggedIn: false,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -85,6 +94,7 @@ describe('Footer', () => {
         updatedAt: new Date(),
       },
       isLoggedIn: true,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -92,7 +102,6 @@ describe('Footer', () => {
     renderWithI18n(<Footer />);
 
     expect(screen.getByText(i18n.t('footer.practice'))).toBeInTheDocument();
-    expect(screen.getByText(i18n.t('footer.path'))).toBeInTheDocument();
     expect(screen.getByText(i18n.t('footer.species'))).toBeInTheDocument();
     expect(screen.getByText(i18n.t('footer.profile'))).toBeInTheDocument();
   });
@@ -112,6 +121,7 @@ describe('Footer', () => {
         updatedAt: new Date(),
       },
       isLoggedIn: true,
+      isLoading: false,
       login: vi.fn(),
       logout: vi.fn(),
     });
@@ -121,9 +131,6 @@ describe('Footer', () => {
     expect(
       screen.getByRole('link', { name: i18n.t('footer.practice') })
     ).toHaveAttribute('href', '/practice');
-    expect(
-      screen.getByRole('link', { name: i18n.t('footer.path') })
-    ).toHaveAttribute('href', '/path');
     expect(
       screen.getByRole('link', { name: i18n.t('footer.species') })
     ).toHaveAttribute('href', '/species');

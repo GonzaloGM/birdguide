@@ -22,12 +22,6 @@ export const Footer: React.FC = () => {
           <span className="text-xs font-medium">{t('footer.practice')}</span>
         </Link>
         <Link
-          to="/path"
-          className="flex flex-col items-center py-2 px-3 text-gray-600 hover:text-blue-600 transition-colors duration-200"
-        >
-          <span className="text-xs font-medium">{t('footer.path')}</span>
-        </Link>
-        <Link
           to="/species"
           className="flex flex-col items-center py-2 px-3 text-gray-600 hover:text-blue-600 transition-colors duration-200"
         >

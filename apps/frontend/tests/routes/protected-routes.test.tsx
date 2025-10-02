@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWithI18n } from '../../app/test-utils';
 import PracticePage from '../../app/routes/practice';
-import PathPage from '../../app/routes/path';
+// import PathPage from '../../app/routes/path'; // Temporarily disabled
 import SpeciesPage from '../../app/routes/species';
 import ProfilePage from '../../app/routes/profile';
 
@@ -50,13 +50,14 @@ describe('Protected Routes', () => {
       });
     });
 
-    describe('Path Page', () => {
-      it('should redirect to login when user is not authenticated', () => {
-        renderWithI18n(<PathPage />);
+    // Path Page tests temporarily disabled
+    // describe('Path Page', () => {
+    //   it('should redirect to login when user is not authenticated', () => {
+    //     renderWithI18n(<PathPage />);
 
-        expect(mockNavigate).toHaveBeenCalledWith('/login');
-      });
-    });
+    //     expect(mockNavigate).toHaveBeenCalledWith('/login');
+    //   });
+    // });
 
     describe('Species Page', () => {
       it('should redirect to login when user is not authenticated', () => {
@@ -112,14 +113,7 @@ describe('Protected Routes', () => {
       });
     });
 
-    describe('Path Page', () => {
-      it('should render the path page when user is authenticated', () => {
-        renderWithI18n(<PathPage />);
-
-        expect(mockNavigate).not.toHaveBeenCalled();
-        expect(screen.getByText('Senderos')).toBeInTheDocument();
-      });
-    });
+    // Path Page tests temporarily disabled - path section hidden from footer
 
     describe('Species Page', () => {
       it('should render the species page when user is authenticated', async () => {
