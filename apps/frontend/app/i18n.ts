@@ -8,6 +8,14 @@ const resources = {
       loading: 'Cargando...',
       appName: 'BirdGuide',
 
+      // Footer navigation
+      footer: {
+        practice: 'Practicar',
+        path: 'Senderos',
+        species: 'Especies',
+        profile: 'Perfil',
+      },
+
       // Landing page
       tagline: 'Descubrí cada ave',
       signupButton: 'Registrate',
@@ -86,6 +94,14 @@ const resources = {
       // Common
       loading: 'Loading...',
       appName: 'BirdGuide',
+
+      // Footer navigation
+      footer: {
+        practice: 'Practice',
+        path: 'Path',
+        species: 'Species',
+        profile: 'Profile',
+      },
 
       // Landing page
       tagline: 'Discover every bird',

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Header } from './header';
 import { registrationService } from '../services/registration.service';
+import { useAuth } from '../contexts/auth-context';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -19,6 +20,7 @@ export const SignupPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { loginWithPopup } = useAuth0();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -74,7 +76,8 @@ export const SignupPage = () => {
       const result = await registrationService.register(formData);
 
       if (result.success) {
-        // Registration successful - redirect to home or dashboard
+        // Registration successful - save session and redirect to home
+        login(result.data.user, result.data.token);
         navigate('/');
       } else {
         // Show error message - use i18n for specific error types

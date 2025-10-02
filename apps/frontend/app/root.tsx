@@ -12,6 +12,9 @@ import { I18nextProvider } from 'react-i18next';
 
 import i18n from './i18n';
 import { auth0Config } from './auth0-config';
+import { AuthProvider } from './contexts/auth-context';
+import { Footer } from './components/footer';
+import { useAuth } from './contexts/auth-context';
 import '../styles.css';
 
 export const meta: MetaFunction = () => [
@@ -33,6 +36,17 @@ export const links: LinksFunction = () => [
   },
 ];
 
+const AppContent = () => {
+  const { isLoggedIn } = useAuth();
+
+  return (
+    <>
+      <Outlet />
+      {isLoggedIn && <Footer />}
+    </>
+  );
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -45,7 +59,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body suppressHydrationWarning={true}>
         <Auth0Provider {...auth0Config}>
           <I18nextProvider i18n={i18n}>
-            <Outlet />
+            <AuthProvider>
+              <AppContent />
+            </AuthProvider>
             <ScrollRestoration />
             <Scripts />
           </I18nextProvider>
