@@ -1,5 +1,6 @@
 import { Controller, Post, Get, Req, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { PinoLoggerService } from '../services/logger.service';
 import {
   AuthResponse,
   User,
@@ -23,20 +24,39 @@ type AuthenticatedRequest = {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly logger: PinoLoggerService
+  ) {}
 
   @Post('register')
   async register(
     @Body() registerRequest: RegisterRequest
   ): Promise<ApiResponse<AuthResponse>> {
+    this.logger.infoWithContext('Registration request received', {
+      email: registerRequest.email,
+      username: registerRequest.username,
+    });
+
     try {
       const authResponse = await this.authService.register(registerRequest);
+
+      this.logger.infoWithContext('Registration successful', {
+        userId: authResponse.user.id,
+        email: authResponse.user.email,
+      });
 
       return {
         success: true,
         data: authResponse,
       };
     } catch (error) {
+      this.logger.errorWithContext('Registration failed', {
+        email: registerRequest.email,
+        username: registerRequest.username,
+        error: error.message,
+      });
+
       return {
         success: false,
         error: error.message,
@@ -54,14 +74,28 @@ export class AuthController {
   async login(
     @Body() loginRequest: LoginRequest
   ): Promise<ApiResponse<AuthResponse>> {
+    this.logger.infoWithContext('Login request received', {
+      emailOrUsername: loginRequest.emailOrUsername,
+    });
+
     try {
       const authResponse = await this.authService.login(loginRequest);
+
+      this.logger.infoWithContext('Login successful', {
+        userId: authResponse.user.id,
+        email: authResponse.user.email,
+      });
 
       return {
         success: true,
         data: authResponse,
       };
     } catch (error) {
+      this.logger.errorWithContext('Login failed', {
+        emailOrUsername: loginRequest.emailOrUsername,
+        error: error.message,
+      });
+
       return {
         success: false,
         error: error.message,

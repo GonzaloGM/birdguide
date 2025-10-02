@@ -14,3 +14,7 @@
 {"level":"error","time":"2025-10-02T13:22:53.053Z","pid":96124,"hostname":"MBA.local","msg":"Test error message"}
 {"level":"info","time":"2025-10-02T13:22:53.067Z","pid":96124,"hostname":"MBA.local","userId":"123","action":"login","msg":"Test message"}
 {"level":"warn","time":"2025-10-02T13:22:53.057Z","pid":96124,"hostname":"MBA.local","msg":"Test warning message"}
+{"level":"info","time":"2025-10-02T13:28:43.360Z","pid":97685,"hostname":"MBA.local","msg":"Test info message"}
+{"level":"error","time":"2025-10-02T13:28:43.365Z","pid":97685,"hostname":"MBA.local","msg":"Test error message"}
+{"level":"info","time":"2025-10-02T13:28:43.419Z","pid":97685,"hostname":"MBA.local","userId":"123","action":"login","msg":"Test message"}
+{"level":"warn","time":"2025-10-02T13:28:43.369Z","pid":97685,"hostname":"MBA.local","msg":"Test warning message"}

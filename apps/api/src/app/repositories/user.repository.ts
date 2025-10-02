@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { User } from '@birdguide/shared-types';
+import { PinoLoggerService } from '../services/logger.service';
 
 @Injectable()
 export class UserRepository {
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>
+    private userRepository: Repository<UserEntity>,
+    private readonly logger: PinoLoggerService
   ) {}
 
   async findByAuth0Id(auth0Id: string): Promise<UserEntity | null> {
@@ -71,11 +73,17 @@ export class UserRepository {
     auth0Id: string,
     userData: Partial<UserEntity>
   ): Promise<User> {
+    this.logger.debug(
+      'Creating or updating user in database',
+      'UserRepository'
+    );
     const entity = await this.createOrUpdate(auth0Id, userData);
+    this.logger.debug('User created or updated successfully', 'UserRepository');
     return this.mapEntityToUser(entity);
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
+    this.logger.debug('Looking up user by email', 'UserRepository');
     const entity = await this.userRepository.findOne({
       where: { email },
     });
@@ -83,6 +91,7 @@ export class UserRepository {
   }
 
   async findUserByUsername(username: string): Promise<User | null> {
+    this.logger.debug('Looking up user by username', 'UserRepository');
     const entity = await this.userRepository.findOne({
       where: { username },
     });

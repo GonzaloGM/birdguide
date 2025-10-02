@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { PinoLoggerService } from '../services/logger.service';
 import { User, AuthResponse, ApiResponse } from '@birdguide/shared-types';
 
 describe('AuthController', () => {
@@ -37,6 +38,22 @@ describe('AuthController', () => {
             handleAuth0Callback: jest.fn(),
             getCurrentUser: jest.fn(),
             logout: jest.fn(),
+          },
+        },
+        {
+          provide: PinoLoggerService,
+          useValue: {
+            log: jest.fn(),
+            error: jest.fn(),
+            warn: jest.fn(),
+            debug: jest.fn(),
+            verbose: jest.fn(),
+            info: jest.fn(),
+            infoWithContext: jest.fn(),
+            errorWithContext: jest.fn(),
+            warnWithContext: jest.fn(),
+            debugWithContext: jest.fn(),
+            child: jest.fn().mockReturnThis(),
           },
         },
       ],
