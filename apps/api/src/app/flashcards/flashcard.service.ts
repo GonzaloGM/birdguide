@@ -31,4 +31,13 @@ export class FlashcardService {
     console.log('Session started:', sessionData);
     return { sessionId: 'session_' + Date.now() };
   }
+
+  async getProgress() {
+    // Mock implementation for now
+    return {
+      totalSpecies: 10,
+      masteredSpecies: 3,
+      accuracy: 75,
+    };
+  }
 }

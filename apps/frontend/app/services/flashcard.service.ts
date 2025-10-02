@@ -21,6 +21,12 @@ type SessionResponse = {
   sessionId: string;
 };
 
+type ProgressData = {
+  totalSpecies: number;
+  masteredSpecies: number;
+  accuracy: number;
+};
+
 const API_BASE_URL = 'http://localhost:3000/api';
 
 export const flashcardService = {
@@ -58,6 +64,14 @@ export const flashcardService = {
     });
     if (!response.ok) {
       throw new Error('Failed to start session');
+    }
+    return response.json();
+  },
+
+  async getProgress(): Promise<ProgressData> {
+    const response = await fetch(`${API_BASE_URL}/flashcards/progress`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch progress');
     }
     return response.json();
   },

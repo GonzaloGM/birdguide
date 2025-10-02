@@ -45,6 +45,10 @@ const resources = {
         networkError: 'Error de red al cargar las especies',
         sessionProgress: '{{current}} de {{total}}',
         sessionCompleted: '¡Sesión completada!',
+        progress: 'Progreso',
+        totalSpecies: 'Total de especies',
+        masteredSpecies: 'Especies dominadas',
+        accuracy: 'Precisión',
       },
 
       // Profile page
@@ -199,6 +203,10 @@ const resources = {
         networkError: 'Network error loading species',
         sessionProgress: '{{current}} of {{total}}',
         sessionCompleted: 'Session completed!',
+        progress: 'Progress',
+        totalSpecies: 'Total species',
+        masteredSpecies: 'Mastered species',
+        accuracy: 'Accuracy',
       },
 
       // Profile page

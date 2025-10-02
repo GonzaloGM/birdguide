@@ -84,4 +84,23 @@ describe('flashcardService', () => {
       }
     );
   });
+
+  it('should fetch progress data', async () => {
+    const mockProgress = {
+      totalSpecies: 10,
+      masteredSpecies: 3,
+      accuracy: 75,
+    };
+
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockProgress,
+    } as Response);
+
+    const result = await flashcardService.getProgress();
+    expect(result).toEqual(mockProgress);
+    expect(fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/flashcards/progress'
+    );
+  });
 });

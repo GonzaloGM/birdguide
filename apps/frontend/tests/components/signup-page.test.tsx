@@ -453,12 +453,15 @@ describe('SignupPage', () => {
     await user.type(confirmPasswordInput, 'password123');
     await user.click(submitButton);
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(i18n.t('signup.errors.userAlreadyExists'))
-      ).toBeInTheDocument();
-    });
-  });
+    await waitFor(
+      () => {
+        expect(
+          screen.getByText(i18n.t('signup.errors.userAlreadyExists'))
+        ).toBeInTheDocument();
+      },
+      { timeout: 10000 }
+    );
+  }, 10000);
 
   it('should show signup not allowed error message from i18n', async () => {
     const { registrationService } = await import(

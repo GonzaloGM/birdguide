@@ -28,4 +28,9 @@ export class FlashcardController {
   async startSession(@Body() sessionData: SessionData) {
     return this.flashcardService.startSession(sessionData);
   }
+
+  @Get('progress')
+  async getProgress() {
+    return this.flashcardService.getProgress();
+  }
 }
