@@ -4678,3 +4678,87 @@
 {"level":"info","time":"2025-10-02T18:48:32.865Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
 {"level":"info","time":"2025-10-02T18:48:32.917Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
 {"level":"info","time":"2025-10-02T18:48:32.917Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:50:50.246Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:50:50.247Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:50:50.253Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:50:50.253Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:50:50.335Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:50:50.335Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:50:50.364Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:50:50.364Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:52:22.472Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:52:22.472Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:52:22.583Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:52:22.583Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:52:55.455Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:52:55.456Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:52:55.470Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:52:55.470Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:52:55.545Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:52:55.545Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:52:55.562Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:52:55.562Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:52:56.587Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:52:56.587Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:52:56.595Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:52:56.596Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:52:56.625Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:52:56.625Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:52:56.649Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:52:56.649Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:52:58.336Z","pid":48560,"hostname":"MBA.local","speciesId":1561,"msg":"Species detail request received"}
+{"level":"info","time":"2025-10-02T18:52:58.337Z","pid":48560,"hostname":"MBA.local","speciesId":1561,"msg":"Fetching species by id"}
+{"level":"info","time":"2025-10-02T18:52:58.344Z","pid":48560,"hostname":"MBA.local","speciesId":1561,"msg":"Species detail request received"}
+{"level":"info","time":"2025-10-02T18:52:58.345Z","pid":48560,"hostname":"MBA.local","speciesId":1561,"msg":"Fetching species by id"}
+{"level":"info","time":"2025-10-02T18:52:58.353Z","pid":48560,"hostname":"MBA.local","speciesId":1561,"hasCommonName":true,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:52:58.353Z","pid":48560,"hostname":"MBA.local","speciesId":"1561","msg":"Species detail request successful"}
+{"level":"info","time":"2025-10-02T18:52:58.354Z","pid":48560,"hostname":"MBA.local","speciesId":1561,"hasCommonName":true,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:52:58.354Z","pid":48560,"hostname":"MBA.local","speciesId":"1561","msg":"Species detail request successful"}
+{"level":"info","time":"2025-10-02T18:53:00.038Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:53:00.038Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:53:00.043Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:53:00.043Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:53:00.104Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:53:00.104Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:53:00.126Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:53:00.126Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:53:47.002Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:53:47.003Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:53:47.086Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:53:47.086Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:53:52.880Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:53:52.880Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:53:52.933Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:53:52.933Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:53:57.726Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:53:57.726Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:53:58.188Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:53:58.188Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:54:06.763Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:54:06.764Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:54:06.771Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:54:06.771Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:54:06.835Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:54:06.836Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:54:06.917Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:54:06.917Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:54:07.988Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:54:07.988Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:54:07.995Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:54:07.995Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:54:08.483Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:54:08.483Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:54:08.620Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:54:08.620Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:54:10.385Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:54:10.385Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:54:10.423Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:54:10.423Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:54:21.855Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:54:21.856Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:54:21.873Z","pid":48560,"hostname":"MBA.local","operation":"findAll","msg":"Species list request received"}
+{"level":"info","time":"2025-10-02T18:54:21.873Z","pid":48560,"hostname":"MBA.local","operation":"findAll","langCode":"es-AR","msg":"Fetching all species"}
+{"level":"info","time":"2025-10-02T18:54:21.952Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:54:21.952Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}
+{"level":"info","time":"2025-10-02T18:54:21.993Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Successfully fetched species"}
+{"level":"info","time":"2025-10-02T18:54:21.994Z","pid":48560,"hostname":"MBA.local","count":1054,"msg":"Species list request successful"}

@@ -5,10 +5,10 @@ import { useAuth } from '../contexts/auth-context';
 
 export const Footer: React.FC = () => {
   const { t } = useTranslation();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, isLoading } = useAuth();
 
-  // Don't render footer if user is not logged in
-  if (!isLoggedIn) {
+  // Don't render footer if still loading or user is not logged in
+  if (isLoading || !isLoggedIn) {
     return null;
   }
 

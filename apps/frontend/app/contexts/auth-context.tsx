@@ -11,6 +11,7 @@ import { sessionService, Session } from '../services/session.service';
 type AuthContextType = {
   user: User | null;
   isLoggedIn: boolean;
+  isLoading: boolean;
   login: (user: User, token: string) => void;
   logout: () => void;
 };
@@ -32,6 +33,7 @@ type AuthProviderProps = {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // Check for existing session on mount
@@ -40,6 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(session.user);
       setIsLoggedIn(true);
     }
+    setIsLoading(false);
   }, []);
 
   const login = (userData: User, token: string): void => {
@@ -57,6 +60,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value: AuthContextType = {
     user,
     isLoggedIn,
+    isLoading,
     login,
     logout,
   };
