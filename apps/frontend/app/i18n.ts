@@ -49,6 +49,7 @@ const resources = {
         totalSpecies: 'Total de especies',
         masteredSpecies: 'Especies dominadas',
         accuracy: 'Precisión',
+        badges: 'Insignias',
       },
 
       // Profile page
@@ -56,6 +57,7 @@ const resources = {
         title: 'Perfil',
         logout: 'Salir',
         language: 'Idioma',
+        badges: 'Insignias',
       },
 
       // Species pages
@@ -207,6 +209,7 @@ const resources = {
         totalSpecies: 'Total species',
         masteredSpecies: 'Mastered species',
         accuracy: 'Accuracy',
+        badges: 'Badges',
       },
 
       // Profile page
@@ -214,6 +217,7 @@ const resources = {
         title: 'Profile',
         logout: 'Logout',
         language: 'Language',
+        badges: 'Badges',
       },
 
       // Species pages

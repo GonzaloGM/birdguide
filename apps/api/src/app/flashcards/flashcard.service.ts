@@ -40,4 +40,28 @@ export class FlashcardService {
       accuracy: 75,
     };
   }
+
+  async getBadges() {
+    // Mock implementation for now
+    return [
+      {
+        id: 1,
+        name: 'first_review',
+        title: 'First Review',
+        description: 'Complete your first flashcard review',
+      },
+      {
+        id: 2,
+        name: 'ten_correct',
+        title: 'Quick Learner',
+        description: 'Get 10 correct answers in a row',
+      },
+      {
+        id: 3,
+        name: 'three_day_streak',
+        title: 'Consistent',
+        description: 'Practice for 3 days in a row',
+      },
+    ];
+  }
 }

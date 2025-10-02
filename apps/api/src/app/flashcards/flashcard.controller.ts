@@ -33,4 +33,9 @@ export class FlashcardController {
   async getProgress() {
     return this.flashcardService.getProgress();
   }
+
+  @Get('badges')
+  async getBadges() {
+    return this.flashcardService.getBadges();
+  }
 }

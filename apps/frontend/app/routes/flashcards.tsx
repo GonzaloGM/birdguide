@@ -19,7 +19,6 @@ export default function FlashcardsPage() {
     masteredSpecies: 0,
     accuracy: 0,
   });
-
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -90,6 +89,7 @@ export default function FlashcardsPage() {
           </div>
         </div>
       </div>
+
       <FlashcardSession species={species} />
     </div>
   );

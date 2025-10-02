@@ -10,6 +10,7 @@ vi.mock('../../app/services/flashcard.service', () => ({
   flashcardService: {
     getSpeciesForSession: vi.fn(),
     getProgress: vi.fn(),
+    submitReview: vi.fn(),
   },
 }));
 

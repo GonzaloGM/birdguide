@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import ProfilePage from '../../app/routes/profile';
@@ -38,6 +38,13 @@ const mockLocalStorage = {
 Object.defineProperty(window, 'localStorage', {
   value: mockLocalStorage,
 });
+
+// Mock flashcard service
+vi.mock('../../app/services/flashcard.service', () => ({
+  flashcardService: {
+    getBadges: vi.fn(),
+  },
+}));
 
 describe('ProfilePage', () => {
   beforeEach(() => {
@@ -94,5 +101,36 @@ describe('ProfilePage', () => {
 
     const languageSelector = screen.getByRole('combobox');
     expect(languageSelector).toHaveValue('en-US');
+  });
+
+  it('should display user badges', async () => {
+    const { flashcardService } = await import(
+      '../../app/services/flashcard.service'
+    );
+
+    const mockBadges = [
+      {
+        id: 1,
+        name: 'first_review',
+        title: 'First Review',
+        description: 'Complete your first flashcard review',
+      },
+      {
+        id: 2,
+        name: 'ten_correct',
+        title: 'Quick Learner',
+        description: 'Get 10 correct answers in a row',
+      },
+    ];
+
+    vi.mocked(flashcardService.getBadges).mockResolvedValue(mockBadges);
+
+    renderWithI18n(<ProfilePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText(i18n.t('profile.badges'))).toBeInTheDocument();
+      expect(screen.getByText('First Review')).toBeInTheDocument();
+      expect(screen.getByText('Quick Learner')).toBeInTheDocument();
+    });
   });
 });

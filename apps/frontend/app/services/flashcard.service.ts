@@ -27,6 +27,13 @@ type ProgressData = {
   accuracy: number;
 };
 
+type Badge = {
+  id: number;
+  name: string;
+  title: string;
+  description: string;
+};
+
 const API_BASE_URL = 'http://localhost:3000/api';
 
 export const flashcardService = {
@@ -72,6 +79,14 @@ export const flashcardService = {
     const response = await fetch(`${API_BASE_URL}/flashcards/progress`);
     if (!response.ok) {
       throw new Error('Failed to fetch progress');
+    }
+    return response.json();
+  },
+
+  async getBadges(): Promise<Badge[]> {
+    const response = await fetch(`${API_BASE_URL}/flashcards/badges`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch badges');
     }
     return response.json();
   },

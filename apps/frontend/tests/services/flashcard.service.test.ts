@@ -103,4 +103,26 @@ describe('flashcardService', () => {
       'http://localhost:3000/api/flashcards/progress'
     );
   });
+
+  it('should fetch badges data', async () => {
+    const mockBadges = [
+      {
+        id: 1,
+        name: 'first_review',
+        title: 'First Review',
+        description: 'Complete your first flashcard review',
+      },
+    ];
+
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockBadges,
+    } as Response);
+
+    const result = await flashcardService.getBadges();
+    expect(result).toEqual(mockBadges);
+    expect(fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/flashcards/badges'
+    );
+  });
 });
