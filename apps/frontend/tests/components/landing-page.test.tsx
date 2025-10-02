@@ -47,7 +47,7 @@ describe('LandingPage', () => {
   it('should render the BirdGuide logo in the header', () => {
     renderWithI18n(<LandingPage />);
 
-    const logoLink = screen.getByRole('link', { name: 'BirdGuide' });
+    const logoLink = screen.getByRole('link', { name: i18n.t('appName') });
     expect(logoLink).toBeInTheDocument();
     expect(logoLink).toHaveAttribute('href', '/');
   });

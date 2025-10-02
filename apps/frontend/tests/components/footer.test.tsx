@@ -5,6 +5,7 @@ import '@testing-library/jest-dom';
 import { Footer } from '../../app/components/footer';
 import { renderWithI18n } from '../../app/test-utils';
 import { useAuth } from '../../app/contexts/auth-context';
+import i18n from '../../app/i18n';
 
 // Mock auth context
 vi.mock('../../app/contexts/auth-context', () => ({
@@ -50,10 +51,10 @@ describe('Footer', () => {
 
     renderWithI18n(<Footer />);
 
-    expect(screen.getByText('Practicar')).toBeInTheDocument();
-    expect(screen.getByText('Senderos')).toBeInTheDocument();
-    expect(screen.getByText('Especies')).toBeInTheDocument();
-    expect(screen.getByText('Perfil')).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('footer.practice'))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('footer.path'))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('footer.species'))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('footer.profile'))).toBeInTheDocument();
   });
 
   it('should not render when user is not logged in', () => {
@@ -90,10 +91,10 @@ describe('Footer', () => {
 
     renderWithI18n(<Footer />);
 
-    expect(screen.getByText('Practicar')).toBeInTheDocument();
-    expect(screen.getByText('Senderos')).toBeInTheDocument();
-    expect(screen.getByText('Especies')).toBeInTheDocument();
-    expect(screen.getByText('Perfil')).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('footer.practice'))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('footer.path'))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('footer.species'))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('footer.profile'))).toBeInTheDocument();
   });
 
   it('should have correct navigation links', () => {
@@ -117,21 +118,17 @@ describe('Footer', () => {
 
     renderWithI18n(<Footer />);
 
-    expect(screen.getByRole('link', { name: 'Practicar' })).toHaveAttribute(
-      'href',
-      '/practice'
-    );
-    expect(screen.getByRole('link', { name: 'Senderos' })).toHaveAttribute(
-      'href',
-      '/path'
-    );
-    expect(screen.getByRole('link', { name: 'Especies' })).toHaveAttribute(
-      'href',
-      '/species'
-    );
-    expect(screen.getByRole('link', { name: 'Perfil' })).toHaveAttribute(
-      'href',
-      '/profile'
-    );
+    expect(
+      screen.getByRole('link', { name: i18n.t('footer.practice') })
+    ).toHaveAttribute('href', '/practice');
+    expect(
+      screen.getByRole('link', { name: i18n.t('footer.path') })
+    ).toHaveAttribute('href', '/path');
+    expect(
+      screen.getByRole('link', { name: i18n.t('footer.species') })
+    ).toHaveAttribute('href', '/species');
+    expect(
+      screen.getByRole('link', { name: i18n.t('footer.profile') })
+    ).toHaveAttribute('href', '/profile');
   });
 });

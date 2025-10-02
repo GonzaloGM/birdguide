@@ -4,6 +4,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { AuthProvider, useAuth } from '../../app/contexts/auth-context';
 import { sessionService } from '../../app/services/session.service';
+import { renderWithI18n } from '../../app/test-utils';
+import i18n from '../../app/i18n';
 
 // Mock session service
 vi.mock('../../app/services/session.service', () => ({
@@ -22,8 +24,10 @@ const TestComponent = () => {
     <div>
       <div data-testid="is-logged-in">{isLoggedIn ? 'true' : 'false'}</div>
       <div data-testid="user-username">{user?.username || 'no-user'}</div>
-      <button onClick={() => login({} as any, 'token')}>Login</button>
-      <button onClick={logout}>Logout</button>
+      <button onClick={() => login({} as any, 'token')}>
+        {i18n.t('loginButton')}
+      </button>
+      <button onClick={logout}>{i18n.t('profile.logout')}</button>
     </div>
   );
 };
@@ -37,7 +41,7 @@ describe('AuthContext', () => {
     vi.mocked(sessionService.getSession).mockReturnValue(null);
     vi.mocked(sessionService.isLoggedIn).mockReturnValue(false);
 
-    render(
+    renderWithI18n(
       <AuthProvider>
         <TestComponent />
       </AuthProvider>
@@ -67,7 +71,7 @@ describe('AuthContext', () => {
     });
     vi.mocked(sessionService.isLoggedIn).mockReturnValue(true);
 
-    render(
+    renderWithI18n(
       <AuthProvider>
         <TestComponent />
       </AuthProvider>
@@ -101,20 +105,22 @@ describe('AuthContext', () => {
         <div>
           <div data-testid="is-logged-in">{isLoggedIn ? 'true' : 'false'}</div>
           <div data-testid="user-username">{user?.username || 'no-user'}</div>
-          <button onClick={() => login(mockUser, 'token')}>Login</button>
-          <button onClick={logout}>Logout</button>
+          <button onClick={() => login(mockUser, 'token')}>
+            {i18n.t('loginButton')}
+          </button>
+          <button onClick={logout}>{i18n.t('profile.logout')}</button>
         </div>
       );
     };
 
-    render(
+    renderWithI18n(
       <AuthProvider>
         <TestComponentWithUser />
       </AuthProvider>
     );
 
     act(() => {
-      screen.getByText('Login').click();
+      screen.getByText(i18n.t('loginButton')).click();
     });
 
     expect(sessionService.saveSession).toHaveBeenCalledWith(mockUser, 'token');
@@ -124,14 +130,14 @@ describe('AuthContext', () => {
     vi.mocked(sessionService.getSession).mockReturnValue(null);
     vi.mocked(sessionService.isLoggedIn).mockReturnValue(false);
 
-    render(
+    renderWithI18n(
       <AuthProvider>
         <TestComponent />
       </AuthProvider>
     );
 
     act(() => {
-      screen.getByText('Logout').click();
+      screen.getByText(i18n.t('profile.logout')).click();
     });
 
     expect(sessionService.clearSession).toHaveBeenCalled();

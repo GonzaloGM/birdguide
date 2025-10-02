@@ -16,6 +16,12 @@ const resources = {
         profile: 'Perfil',
       },
 
+      // Profile page
+      profile: {
+        title: 'Perfil',
+        logout: 'Salir',
+      },
+
       // Landing page
       tagline: 'Descubrí cada ave',
       signupButton: 'Registrate',
@@ -101,6 +107,12 @@ const resources = {
         path: 'Path',
         species: 'Species',
         profile: 'Profile',
+      },
+
+      // Profile page
+      profile: {
+        title: 'Profile',
+        logout: 'Logout',
       },
 
       // Landing page

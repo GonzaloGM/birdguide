@@ -19,7 +19,7 @@ vi.mock('../../app/contexts/auth-context', () => ({
 test('renders BirdGuide landing page', async () => {
   renderWithI18n(<IndexPage />);
 
-  await waitFor(() => screen.findByText('BirdGuide'));
+  await waitFor(() => screen.findByText(i18n.t('appName')));
   expect(screen.getByText(i18n.t('tagline'))).toBeInTheDocument();
   expect(screen.getByText(i18n.t('signupButton'))).toBeInTheDocument();
   expect(screen.getByText(i18n.t('loginButton'))).toBeInTheDocument();

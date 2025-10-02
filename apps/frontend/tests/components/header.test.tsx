@@ -18,7 +18,7 @@ describe('Header', () => {
   it('should render the BirdGuide logo as a link', () => {
     renderWithI18n(<Header />);
 
-    const logoLink = screen.getByRole('link', { name: 'BirdGuide' });
+    const logoLink = screen.getByRole('link', { name: i18n.t('appName') });
     expect(logoLink).toBeInTheDocument();
     expect(logoLink).toHaveAttribute('href', '/');
   });
@@ -26,7 +26,7 @@ describe('Header', () => {
   it('should have hover effect on the logo', () => {
     renderWithI18n(<Header />);
 
-    const logoLink = screen.getByRole('link', { name: 'BirdGuide' });
+    const logoLink = screen.getByRole('link', { name: i18n.t('appName') });
     expect(logoLink).toHaveClass('hover:text-blue-600');
   });
 
