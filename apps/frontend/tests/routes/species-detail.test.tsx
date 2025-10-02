@@ -4,11 +4,38 @@ import { screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SpeciesDetailPage from '../../app/routes/species-detail';
 import { renderWithI18n } from '../../app/test-utils';
-import type { SpeciesWithCommonName } from '@birdguide/shared-types';
+// Define the type locally for testing
+type SpeciesWithCommonName = {
+  id: number;
+  scientificName: string;
+  eBirdId: string;
+  commonName: string | null;
+  genus?: string;
+  family?: string;
+  orderName?: string;
+  iucnStatus?: string;
+  sizeMm?: number;
+  summary?: string;
+  rangeMapUrl?: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 // Mock fetch globally
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
+
+// Mock localStorage
+const mockLocalStorage = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+
+Object.defineProperty(window, 'localStorage', {
+  value: mockLocalStorage,
+});
 
 // Mock environment variable
 vi.mock('import.meta', () => ({
@@ -19,7 +46,7 @@ vi.mock('import.meta', () => ({
 
 // Mock useParams to return the species ID
 vi.mock('react-router', async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
     useParams: () => ({ id: '1' }),
@@ -45,10 +72,16 @@ const mockSpecies: SpeciesWithCommonName = {
 describe('SpeciesDetailPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockLocalStorage.getItem.mockReturnValue('es-AR');
   });
 
   it('should display loading state initially', () => {
-    mockFetch.mockImplementation(() => new Promise(() => {})); // Never resolves
+    mockFetch.mockImplementation(
+      () =>
+        new Promise(() => {
+          // Never resolves to keep loading state
+        })
+    );
 
     renderWithI18n(<SpeciesDetailPage />);
 
@@ -59,6 +92,7 @@ describe('SpeciesDetailPage', () => {
 
   it('should display species details when data loads successfully', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: mockSpecies,
@@ -84,11 +118,23 @@ describe('SpeciesDetailPage', () => {
 
   it('should display species without common name when commonName is null', async () => {
     const speciesWithoutCommonName: SpeciesWithCommonName = {
-      ...mockSpecies,
+      id: mockSpecies.id,
+      scientificName: mockSpecies.scientificName,
+      eBirdId: mockSpecies.eBirdId,
       commonName: null,
+      genus: mockSpecies.genus,
+      family: mockSpecies.family,
+      orderName: mockSpecies.orderName,
+      iucnStatus: mockSpecies.iucnStatus,
+      sizeMm: mockSpecies.sizeMm,
+      summary: mockSpecies.summary,
+      rangeMapUrl: mockSpecies.rangeMapUrl,
+      createdAt: mockSpecies.createdAt,
+      updatedAt: mockSpecies.updatedAt,
     };
 
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: speciesWithoutCommonName,
@@ -104,6 +150,7 @@ describe('SpeciesDetailPage', () => {
 
   it('should display error message when API call fails', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: false,
         message: 'Species not found',
@@ -131,6 +178,7 @@ describe('SpeciesDetailPage', () => {
 
   it('should display species not found when data is null', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: null,
@@ -144,8 +192,9 @@ describe('SpeciesDetailPage', () => {
     });
   });
 
-  it('should make correct API call to fetch species by id', async () => {
+  it('should make correct API call to fetch species by id with language parameter', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: mockSpecies,
@@ -156,13 +205,14 @@ describe('SpeciesDetailPage', () => {
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(
-        `${import.meta.env.VITE_API_BASE_URL}/species/1`
+        'http://localhost:3000/api/species/1?lang=es-AR'
       );
     });
   });
 
   it('should display back to species list link', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: mockSpecies,
@@ -180,16 +230,23 @@ describe('SpeciesDetailPage', () => {
 
   it('should display unknown for missing optional fields', async () => {
     const speciesWithMissingFields: SpeciesWithCommonName = {
-      ...mockSpecies,
-      family: undefined,
+      id: mockSpecies.id,
+      scientificName: mockSpecies.scientificName,
+      eBirdId: mockSpecies.eBirdId,
+      commonName: mockSpecies.commonName,
       genus: undefined,
+      family: undefined,
       orderName: undefined,
       iucnStatus: undefined,
       sizeMm: undefined,
       summary: undefined,
+      rangeMapUrl: mockSpecies.rangeMapUrl,
+      createdAt: mockSpecies.createdAt,
+      updatedAt: mockSpecies.updatedAt,
     };
 
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: speciesWithMissingFields,
@@ -205,11 +262,23 @@ describe('SpeciesDetailPage', () => {
 
   it('should not display description section when summary is missing', async () => {
     const speciesWithoutSummary: SpeciesWithCommonName = {
-      ...mockSpecies,
+      id: mockSpecies.id,
+      scientificName: mockSpecies.scientificName,
+      eBirdId: mockSpecies.eBirdId,
+      commonName: mockSpecies.commonName,
+      genus: mockSpecies.genus,
+      family: mockSpecies.family,
+      orderName: mockSpecies.orderName,
+      iucnStatus: mockSpecies.iucnStatus,
+      sizeMm: mockSpecies.sizeMm,
       summary: undefined,
+      rangeMapUrl: mockSpecies.rangeMapUrl,
+      createdAt: mockSpecies.createdAt,
+      updatedAt: mockSpecies.updatedAt,
     };
 
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: speciesWithoutSummary,

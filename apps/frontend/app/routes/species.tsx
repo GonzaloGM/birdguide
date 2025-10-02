@@ -19,7 +19,7 @@ export default function SpeciesPage() {
       try {
         setLoading(true);
         const speciesData = await speciesService.getSpecies(language);
-        
+
         // Sort species by common name alphabetically
         const sortedSpecies = speciesData.sort(
           (a: SpeciesWithCommonName, b: SpeciesWithCommonName) => {
@@ -30,7 +30,21 @@ export default function SpeciesPage() {
         );
         setSpecies(sortedSpecies);
       } catch (err) {
-        setError(err instanceof Error ? err.message : t('species.networkError'));
+        // Handle different types of errors appropriately
+        if (err instanceof Error) {
+          // Check if it's a network error or API error
+          if (
+            err.message.includes('Network error occurred') ||
+            err.message === 'Network error'
+          ) {
+            setError(t('species.networkError'));
+          } else {
+            // API error with specific message
+            setError(err.message);
+          }
+        } else {
+          setError(t('species.networkError'));
+        }
       } finally {
         setLoading(false);
       }

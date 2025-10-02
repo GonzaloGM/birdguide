@@ -9,6 +9,7 @@ import i18n from '../../app/i18n';
 import { LoginPage } from '../../app/components/login-page';
 import { useAuth } from '../../app/contexts/auth-context';
 import { loginService } from '../../app/services/login.service';
+import { LanguageProvider } from '../../app/contexts/language-context';
 
 // Mock Auth0
 const mockLoginWithRedirect = vi.fn();
@@ -20,10 +21,22 @@ vi.mock('@auth0/auth0-react', () => ({
   }),
 }));
 
+// Mock localStorage
+const mockLocalStorage = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+
+Object.defineProperty(window, 'localStorage', {
+  value: mockLocalStorage,
+});
+
 // Mock the navigation
 const mockNavigate = vi.fn();
 vi.mock('react-router', async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -51,7 +64,9 @@ vi.mock('../../app/services/login.service', () => ({
 const renderWithI18n = (component: React.ReactElement) => {
   return render(
     <MemoryRouter>
-      <I18nextProvider i18n={i18n}>{component}</I18nextProvider>
+      <I18nextProvider i18n={i18n}>
+        <LanguageProvider>{component}</LanguageProvider>
+      </I18nextProvider>
     </MemoryRouter>
   );
 };
@@ -63,6 +78,7 @@ describe('LoginPage', () => {
     mockLoginWithPopup.mockClear();
     mockLogin.mockClear();
     vi.mocked(loginService.login).mockClear();
+    mockLocalStorage.getItem.mockReturnValue('es-AR');
   });
 
   it('should render the login form with email and password fields', () => {
@@ -167,7 +183,7 @@ describe('LoginPage', () => {
   });
 
   it('should display form in English when language is switched', () => {
-    i18n.changeLanguage('en');
+    i18n.changeLanguage('en-US');
     renderWithI18n(<LoginPage />);
 
     expect(

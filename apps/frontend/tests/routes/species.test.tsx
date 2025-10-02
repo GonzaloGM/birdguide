@@ -3,16 +3,43 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import SpeciesPage from '../../app/routes/species';
 import { renderWithI18n } from '../../app/test-utils';
-import type { SpeciesWithCommonName } from '@birdguide/shared-types';
+// Define the type locally for testing
+type SpeciesWithCommonName = {
+  id: number;
+  scientificName: string;
+  eBirdId: string;
+  commonName: string | null;
+  genus?: string;
+  family?: string;
+  orderName?: string;
+  iucnStatus?: string;
+  sizeMm?: number;
+  summary?: string;
+  rangeMapUrl?: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 // Mock ProtectedRoute to render children directly
 vi.mock('../../app/components/protected-route', () => ({
-  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  default: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 // Mock fetch globally
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
+
+// Mock localStorage
+const mockLocalStorage = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+
+Object.defineProperty(window, 'localStorage', {
+  value: mockLocalStorage,
+});
 
 // Mock environment variable
 vi.mock('import.meta', () => ({
@@ -57,10 +84,16 @@ const mockSpecies: SpeciesWithCommonName[] = [
 describe('SpeciesPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockLocalStorage.getItem.mockReturnValue('es-AR');
   });
 
   it('should display loading state initially', () => {
-    mockFetch.mockImplementation(() => new Promise(() => {})); // Never resolves
+    mockFetch.mockImplementation(
+      () =>
+        new Promise(() => {
+          // Never resolves to keep loading state
+        })
+    );
 
     renderWithI18n(<SpeciesPage />);
 
@@ -69,6 +102,7 @@ describe('SpeciesPage', () => {
 
   it('should display species list when data loads successfully', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: mockSpecies,
@@ -96,6 +130,7 @@ describe('SpeciesPage', () => {
     ];
 
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: speciesWithoutCommonName,
@@ -111,6 +146,7 @@ describe('SpeciesPage', () => {
 
   it('should display error message when API call fails', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: false,
         message: 'Failed to fetch species',
@@ -138,8 +174,9 @@ describe('SpeciesPage', () => {
     });
   });
 
-  it('should make correct API call to fetch species', async () => {
+  it('should make correct API call to fetch species with language parameter', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: mockSpecies,
@@ -150,13 +187,14 @@ describe('SpeciesPage', () => {
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(
-        `${import.meta.env.VITE_API_BASE_URL}/species`
+        'http://localhost:3000/api/species?lang=es-AR'
       );
     });
   });
 
   it('should render species as clickable links', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: mockSpecies,
@@ -175,6 +213,7 @@ describe('SpeciesPage', () => {
 
   it('should display family information for each species', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: mockSpecies,
@@ -239,6 +278,7 @@ describe('SpeciesPage', () => {
     ];
 
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: async () => ({
         success: true,
         data: unsortedSpecies,

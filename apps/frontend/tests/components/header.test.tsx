@@ -3,18 +3,38 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
+import { vi } from 'vitest';
 import i18n from '../../app/i18n';
 import { Header } from '../../app/components/header';
+import { LanguageProvider } from '../../app/contexts/language-context';
+
+// Mock localStorage
+const mockLocalStorage = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+
+Object.defineProperty(window, 'localStorage', {
+  value: mockLocalStorage,
+});
 
 const renderWithI18n = (component: React.ReactElement) => {
   return render(
     <MemoryRouter>
-      <I18nextProvider i18n={i18n}>{component}</I18nextProvider>
+      <I18nextProvider i18n={i18n}>
+        <LanguageProvider>{component}</LanguageProvider>
+      </I18nextProvider>
     </MemoryRouter>
   );
 };
 
 describe('Header', () => {
+  beforeEach(() => {
+    mockLocalStorage.getItem.mockReturnValue('es-AR');
+  });
+
   it('should render the BirdGuide logo as a link', () => {
     renderWithI18n(<Header />);
 

@@ -8,15 +8,28 @@ import { vi } from 'vitest';
 import i18n from '../../app/i18n';
 import { LandingPage } from '../../app/components/landing-page';
 import { AuthProvider } from '../../app/contexts/auth-context';
+import { LanguageProvider } from '../../app/contexts/language-context';
 
 // Mock the navigation
 const mockNavigate = vi.fn();
 vi.mock('react-router', async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
     useNavigate: () => mockNavigate,
   };
+});
+
+// Mock localStorage
+const mockLocalStorage = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+
+Object.defineProperty(window, 'localStorage', {
+  value: mockLocalStorage,
 });
 
 // Mock auth context
@@ -34,7 +47,9 @@ const renderWithI18n = (component: React.ReactElement) => {
   return render(
     <MemoryRouter>
       <I18nextProvider i18n={i18n}>
-        <AuthProvider>{component}</AuthProvider>
+        <LanguageProvider>
+          <AuthProvider>{component}</AuthProvider>
+        </LanguageProvider>
       </I18nextProvider>
     </MemoryRouter>
   );
@@ -43,6 +58,7 @@ const renderWithI18n = (component: React.ReactElement) => {
 describe('LandingPage', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
+    mockLocalStorage.getItem.mockReturnValue('es-AR');
   });
   it('should render the BirdGuide logo in the header', () => {
     renderWithI18n(<LandingPage />);
@@ -94,14 +110,14 @@ describe('LandingPage', () => {
   });
 
   it('should display tagline in English when language is switched', () => {
-    i18n.changeLanguage('en');
+    i18n.changeLanguage('en-US');
     renderWithI18n(<LandingPage />);
 
     expect(screen.getByText(i18n.t('tagline'))).toBeInTheDocument();
   });
 
   it('should display buttons in English when language is switched', () => {
-    i18n.changeLanguage('en');
+    i18n.changeLanguage('en-US');
     renderWithI18n(<LandingPage />);
 
     expect(
