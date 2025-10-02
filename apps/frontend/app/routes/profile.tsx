@@ -2,13 +2,16 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/auth-context';
+import { useLanguage } from '../contexts/language-context';
 import { Button } from '../components/ui/button';
+import LanguageSelector from '../components/language-selector';
 import ProtectedRoute from '../components/protected-route';
 
 export default function ProfilePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { language } = useLanguage();
 
   const handleLogout = () => {
     logout();
@@ -29,6 +32,17 @@ export default function ProfilePage() {
               </h2>
               <p className="text-gray-600">{user?.email}</p>
             </div>
+
+            <div className="mb-6">
+              <label
+                htmlFor="language-selector"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                {t('profile.language')}
+              </label>
+              <LanguageSelector />
+            </div>
+
             <Button
               onClick={handleLogout}
               variant="outline"

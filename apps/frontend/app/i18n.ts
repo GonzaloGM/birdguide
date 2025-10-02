@@ -20,6 +20,7 @@ const resources = {
       profile: {
         title: 'Perfil',
         logout: 'Salir',
+        language: 'Idioma',
       },
 
       // Species pages
@@ -142,6 +143,7 @@ const resources = {
       profile: {
         title: 'Profile',
         logout: 'Logout',
+        language: 'Language',
       },
 
       // Species pages

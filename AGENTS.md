@@ -1526,3 +1526,6 @@ To enable proper password authentication in production, follow these steps in yo
 - **Test Organization**: Separate test files for component, context, service, and integration testing
 - **Mock Strategy**: Proper mocking of localStorage and fetch for reliable test execution
 - **User Experience**: Seamless language switching that updates both UI translations and API calls
+- **Profile Page Integration**: Added language selector to profile page so users can change language while logged in
+- **Translation Keys**: Added profile-specific translation keys for language label in both Spanish and English
+- **UI Layout**: Integrated language selector with proper labeling and spacing in profile page layout
