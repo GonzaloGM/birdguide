@@ -1,5 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
+type ReviewData = {
+  speciesId: number;
+  result: 'correct' | 'incorrect';
+};
+
+type SessionData = {
+  speciesIds: number[];
+};
+
 @Injectable()
 export class FlashcardService {
   async getSpeciesForSession() {
@@ -9,5 +18,17 @@ export class FlashcardService {
       { id: 2, scientificName: 'Turdus migratorius', eBirdId: 'amerob' },
       { id: 3, scientificName: 'Cardinalis cardinalis', eBirdId: 'norcar' },
     ];
+  }
+
+  async submitReview(reviewData: ReviewData) {
+    // Mock implementation for now
+    console.log('Review submitted:', reviewData);
+    return { success: true };
+  }
+
+  async startSession(sessionData: SessionData) {
+    // Mock implementation for now
+    console.log('Session started:', sessionData);
+    return { sessionId: 'session_' + Date.now() };
   }
 }

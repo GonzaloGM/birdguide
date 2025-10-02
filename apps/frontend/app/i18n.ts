@@ -43,6 +43,8 @@ const resources = {
         iKnewIt: 'Lo sabía',
         iDidntKnow: 'No lo sabía',
         networkError: 'Error de red al cargar las especies',
+        sessionProgress: '{{current}} de {{total}}',
+        sessionCompleted: '¡Sesión completada!',
       },
 
       // Profile page
@@ -195,6 +197,8 @@ const resources = {
         iKnewIt: 'I knew it',
         iDidntKnow: "I didn't know",
         networkError: 'Network error loading species',
+        sessionProgress: '{{current}} of {{total}}',
+        sessionCompleted: 'Session completed!',
       },
 
       // Profile page

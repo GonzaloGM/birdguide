@@ -35,4 +35,53 @@ describe('flashcardService', () => {
       'Network error'
     );
   });
+
+  it('should submit a review', async () => {
+    const reviewData = {
+      speciesId: 1,
+      result: 'correct' as const,
+    };
+
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true }),
+    } as Response);
+
+    const result = await flashcardService.submitReview(reviewData);
+    expect(result).toEqual({ success: true });
+    expect(fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/flashcards/review',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reviewData),
+      }
+    );
+  });
+
+  it('should start a session', async () => {
+    const sessionData = {
+      speciesIds: [1, 2, 3],
+    };
+
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ sessionId: 'session_123' }),
+    } as Response);
+
+    const result = await flashcardService.startSession(sessionData);
+    expect(result).toEqual({ sessionId: 'session_123' });
+    expect(fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/flashcards/session',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sessionData),
+      }
+    );
+  });
 });
