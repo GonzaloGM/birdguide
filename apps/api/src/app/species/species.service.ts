@@ -14,16 +14,17 @@ export class SpeciesService {
     private readonly logger: PinoLoggerService
   ) {}
 
-  async findAll(): Promise<SpeciesWithCommonName[]> {
+  async findAll(langCode: string = 'es-AR'): Promise<SpeciesWithCommonName[]> {
     this.logger.infoWithContext('Fetching all species', {
       operation: 'findAll',
+      langCode,
     });
 
     try {
       const species = await this.speciesRepository.findAll();
 
       if (species.length === 0) {
-        this.logger.infoWithContext('No species found', {
+        this.logger.infoWithContext('No species found in database', {
           count: 0,
         });
         return [];
@@ -34,17 +35,16 @@ export class SpeciesService {
       const allCommonNames =
         await this.speciesRepository.findCommonNamesBySpeciesIds(speciesIds);
 
-      // Group common names by species ID
-      const commonNamesBySpeciesId = allCommonNames.reduce(
-        (acc, commonName) => {
+      // Filter common names by language and group by species ID
+      const commonNamesBySpeciesId = allCommonNames
+        .filter((commonName) => commonName.langCode === langCode)
+        .reduce((acc, commonName) => {
           if (!acc[commonName.speciesId]) {
             acc[commonName.speciesId] = [];
           }
           acc[commonName.speciesId].push(commonName);
           return acc;
-        },
-        {} as Record<string, SpeciesCommonName[]>
-      );
+        }, {} as Record<string, SpeciesCommonName[]>);
 
       const speciesWithCommonNames = species.map((specie) => {
         const commonNames = commonNamesBySpeciesId[specie.id] || [];

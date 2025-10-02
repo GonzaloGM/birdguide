@@ -73,7 +73,7 @@ describe('SpeciesService', () => {
         .spyOn(repository, 'findCommonNamesBySpeciesIds')
         .mockResolvedValue([mockCommonName]);
 
-      const result = await service.findAll();
+      const result = await service.findAll('es-AR');
 
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
@@ -90,7 +90,7 @@ describe('SpeciesService', () => {
         .spyOn(repository, 'findCommonNamesBySpeciesIds')
         .mockResolvedValue([]);
 
-      const result = await service.findAll();
+      const result = await service.findAll('es-AR');
 
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
@@ -102,7 +102,7 @@ describe('SpeciesService', () => {
     it('should return empty array when no species exist', async () => {
       jest.spyOn(repository, 'findAll').mockResolvedValue([]);
 
-      const result = await service.findAll();
+      const result = await service.findAll('es-AR');
 
       expect(result).toEqual([]);
       expect(repository.findCommonNamesBySpeciesIds).not.toHaveBeenCalled();
