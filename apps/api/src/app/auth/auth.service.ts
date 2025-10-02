@@ -6,7 +6,7 @@ import { PinoLoggerService } from '../services/logger.service';
 import {
   User,
   AuthResponse,
-  RegisterRequest,
+  CreateUserRequest,
   LoginRequest,
 } from '@birdguide/shared-types';
 
@@ -65,7 +65,7 @@ export class AuthService {
     return this.userRepository.findUserByAuth0Id(auth0Id);
   }
 
-  async register(registerRequest: RegisterRequest): Promise<AuthResponse> {
+  async register(registerRequest: CreateUserRequest): Promise<AuthResponse> {
     this.logger.infoWithContext('Starting user registration', {
       email: registerRequest.email,
       username: registerRequest.username,

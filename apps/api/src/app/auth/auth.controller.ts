@@ -1,11 +1,11 @@
 import { Controller, Post, Get, Req, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PinoLoggerService } from '../services/logger.service';
-import {
+import type {
   AuthResponse,
   User,
   ApiResponse,
-  RegisterRequest,
+  CreateUserRequest,
   LoginRequest,
 } from '@birdguide/shared-types';
 
@@ -31,7 +31,7 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() registerRequest: RegisterRequest
+    @Body() registerRequest: CreateUserRequest
   ): Promise<ApiResponse<AuthResponse>> {
     this.logger.infoWithContext('Registration request received', {
       email: registerRequest.email,
