@@ -16,6 +16,8 @@ import { UserRepository } from './repositories/user.repository';
 import { SpeciesRepository } from './repositories/species.repository';
 import { SpeciesService } from './species/species.service';
 import { SpeciesController } from './species/species.controller';
+import { FlashcardController } from './flashcards/flashcard.controller';
+import { FlashcardService } from './flashcards/flashcard.service';
 import { PinoLoggerService } from './services/logger.service';
 import { createLogger } from './services/logger.factory';
 
@@ -43,13 +45,19 @@ import { createLogger } from './services/logger.factory';
       },
     }),
   ],
-  controllers: [AppController, AuthController, SpeciesController],
+  controllers: [
+    AppController,
+    AuthController,
+    SpeciesController,
+    FlashcardController,
+  ],
   providers: [
     AppService,
     AuthService,
     UserRepository,
     SpeciesRepository,
     SpeciesService,
+    FlashcardService,
     PinoLoggerService,
     {
       provide: 'LOGGER',

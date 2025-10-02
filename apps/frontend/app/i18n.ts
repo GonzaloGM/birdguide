@@ -33,6 +33,18 @@ const resources = {
         },
       },
 
+      // Flashcards page
+      flashcards: {
+        title: 'Flashcards',
+        loading: 'Cargando...',
+        error: 'Error',
+        noSpecies: 'No hay especies disponibles',
+        revealAnswer: 'Revelar Respuesta',
+        iKnewIt: 'Lo sabía',
+        iDidntKnow: 'No lo sabía',
+        networkError: 'Error de red al cargar las especies',
+      },
+
       // Profile page
       profile: {
         title: 'Perfil',
@@ -173,6 +185,18 @@ const resources = {
         },
       },
 
+      // Flashcards page
+      flashcards: {
+        title: 'Flashcards',
+        loading: 'Loading...',
+        error: 'Error',
+        noSpecies: 'No species available',
+        revealAnswer: 'Reveal Answer',
+        iKnewIt: 'I knew it',
+        iDidntKnow: "I didn't know",
+        networkError: 'Network error loading species',
+      },
+
       // Profile page
       profile: {
         title: 'Profile',
@@ -293,3 +317,4 @@ i18n.use(initReactI18next).init({
 });
 
 export default i18n;
+export { resources };

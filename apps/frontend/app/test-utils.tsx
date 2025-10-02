@@ -1,6 +1,6 @@
 import { render, RenderOptions } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import i18n from './i18n';
+import i18n from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import { LanguageProvider } from './contexts/language-context';
 

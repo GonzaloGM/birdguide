@@ -1,20 +1,52 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ProtectedRoute from '../components/protected-route';
+import { FlashcardSession } from '../components/flashcard-session';
+import { flashcardService } from '../services/flashcard.service';
+
+type Species = {
+  id: number;
+  scientificName: string;
+  eBirdId: string;
+};
 
 export default function FlashcardsPage() {
   const { t } = useTranslation();
+  const [species, setSpecies] = useState<Species[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 pt-16 pb-20">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
-            {t('practice.flashcards.title')}
-          </h1>
-          <p className="text-gray-600">Flashcards content will go here.</p>
-        </div>
+  useEffect(() => {
+    const loadSpecies = async () => {
+      try {
+        const data = await flashcardService.getSpeciesForSession();
+        setSpecies(data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : t('flashcards.networkError')
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSpecies();
+  }, []);
+
+  if (loading) {
+    return <div>{t('flashcards.loading')}</div>;
+  }
+
+  if (error) {
+    return (
+      <div>
+        {t('flashcards.error')}: {error}
       </div>
-    </ProtectedRoute>
-  );
+    );
+  }
+
+  if (species.length === 0) {
+    return <div>{t('flashcards.noSpecies')}</div>;
+  }
+
+  return <FlashcardSession species={species} />;
 }
