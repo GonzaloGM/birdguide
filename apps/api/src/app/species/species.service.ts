@@ -48,11 +48,12 @@ export class SpeciesService {
 
       const speciesWithCommonNames = species.map((specie) => {
         const commonNames = commonNamesBySpeciesId[specie.id] || [];
-        const preferredCommonName = commonNames.find((cn) => cn.isPreferred);
+        // Just take the first common name if available
+        const firstCommonName = commonNames[0];
 
         return {
           ...specie,
-          commonName: preferredCommonName?.commonName || null,
+          commonName: firstCommonName?.commonName || null,
         };
       });
 
@@ -63,7 +64,7 @@ export class SpeciesService {
       return speciesWithCommonNames;
     } catch (error) {
       this.logger.errorWithContext('Failed to fetch species', {
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
       throw error;
     }
@@ -86,11 +87,12 @@ export class SpeciesService {
 
       const commonNames =
         await this.speciesRepository.findCommonNamesBySpeciesId(id);
-      const preferredCommonName = commonNames.find((cn) => cn.isPreferred);
+      // Just take the first common name if available
+      const firstCommonName = commonNames[0];
 
       const speciesWithCommonName = {
         ...specie,
-        commonName: preferredCommonName?.commonName || null,
+        commonName: firstCommonName?.commonName || null,
       };
 
       this.logger.infoWithContext('Successfully fetched species', {
@@ -102,7 +104,7 @@ export class SpeciesService {
     } catch (error) {
       this.logger.errorWithContext('Failed to fetch species', {
         speciesId: id,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
       throw error;
     }

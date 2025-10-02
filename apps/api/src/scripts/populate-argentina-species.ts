@@ -132,7 +132,6 @@ async function populateArgentinaSpecies(filePath: string) {
         speciesId: speciesId,
         langCode: langCode,
         commonName: speciesData.commonName,
-        isPreferred: true, // This is the primary common name for this language
       });
 
       await commonNameRepository.save(commonName);

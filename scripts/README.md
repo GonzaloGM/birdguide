@@ -46,7 +46,6 @@ This script populates the database with Argentina bird species data.
 - Creates common name entries in the `species_common_name` table with:
   - Language code detected from filename
   - Common name from the JSON file
-  - Marked as preferred for this language
   - Linked to the corresponding species
 
 ### Data Source

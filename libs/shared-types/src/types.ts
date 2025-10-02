@@ -141,7 +141,6 @@ export type SpeciesCommonName = {
   speciesId: number;
   langCode: string; // e.g. 'es-AR', 'es-ES', 'en-US'
   commonName: string;
-  isPreferred: boolean;
   notes?: string;
 };
 

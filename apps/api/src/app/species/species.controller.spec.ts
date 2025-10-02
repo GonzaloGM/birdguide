@@ -32,7 +32,6 @@ describe('SpeciesController', () => {
     speciesId: 1,
     langCode: 'en-US',
     commonName: 'American Robin',
-    isPreferred: true,
   };
 
   beforeEach(async () => {

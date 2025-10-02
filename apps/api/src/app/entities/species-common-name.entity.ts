@@ -2,7 +2,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
@@ -21,9 +20,6 @@ export class SpeciesCommonNameEntity {
 
   @Column({ type: 'varchar', length: 255 })
   commonName!: string;
-
-  @Column({ type: 'boolean', default: false })
-  isPreferred!: boolean;
 
   @Column({ type: 'text', nullable: true })
   notes?: string;

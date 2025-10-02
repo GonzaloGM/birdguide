@@ -43,7 +43,7 @@ export class SpeciesRepository {
 
     const entities = await this.commonNameRepository.find({
       where: { speciesId },
-      order: { isPreferred: 'DESC', commonName: 'ASC' },
+      order: { commonName: 'ASC' },
     });
 
     return entities.map(this.mapCommonNameEntityToCommonName);
@@ -64,8 +64,7 @@ export class SpeciesRepository {
     const entities = await this.commonNameRepository
       .createQueryBuilder('commonName')
       .where('commonName.speciesId IN (:...speciesIds)', { speciesIds })
-      .orderBy('commonName.isPreferred', 'DESC')
-      .addOrderBy('commonName.commonName', 'ASC')
+      .orderBy('commonName.commonName', 'ASC')
       .getMany();
 
     return entities.map(this.mapCommonNameEntityToCommonName);
@@ -96,7 +95,6 @@ export class SpeciesRepository {
       speciesId: entity.speciesId,
       langCode: entity.langCode,
       commonName: entity.commonName,
-      isPreferred: entity.isPreferred,
       notes: entity.notes,
     };
   }
