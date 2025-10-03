@@ -58,7 +58,8 @@ const resources = {
         logout: 'Salir',
         language: 'Idioma',
         badges: 'Insignias',
-        noBadgesEarned: 'No badges earned yet',
+        noBadgesEarned: 'Aún no has ganado insignias',
+        earned: 'Ganada',
       },
 
       // Species pages
@@ -220,6 +221,7 @@ const resources = {
         language: 'Language',
         badges: 'Badges',
         noBadgesEarned: 'No badges earned yet',
+        earned: 'Earned',
       },
 
       // Species pages

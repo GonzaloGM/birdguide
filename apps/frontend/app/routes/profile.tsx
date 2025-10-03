@@ -93,7 +93,7 @@ export default function ProfilePage() {
                         </div>
                         {badge.earnedAt && (
                           <div className="text-xs text-yellow-600 mt-1">
-                            Earned:{' '}
+                            {t('profile.earned')}:{' '}
                             {new Date(badge.earnedAt).toLocaleDateString()}
                           </div>
                         )}
