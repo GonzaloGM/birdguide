@@ -8,7 +8,8 @@
     "test:frontend": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx test frontend",
     "serve:api": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx serve api",
     "serve:frontend": "NODE_OPTIONS=\"--max-old-space-size=4096\" nx serve frontend",
-    "populate:argentina": "NODE_OPTIONS=\"--max-old-space-size=4096\" npx ts-node --transpile-only --experimental-specifier-resolution=node apps/api/src/scripts/populate-argentina-species.ts"
+    "populate:argentina": "NODE_OPTIONS=\"--max-old-space-size=4096\" npx ts-node --transpile-only --experimental-specifier-resolution=node apps/api/src/scripts/populate-argentina-species.ts",
+    "populate:media": "NODE_OPTIONS=\"--max-old-space-size=4096\" npx ts-node --transpile-only --experimental-specifier-resolution=node apps/api/src/scripts/populate-species-media.ts"
   },
   "private": true,
   "engines": {

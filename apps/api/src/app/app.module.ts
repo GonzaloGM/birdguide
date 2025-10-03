@@ -18,6 +18,7 @@ import { BadgeEntity } from './entities/badge.entity';
 import { UserBadgeEntity } from './entities/user-badge.entity';
 import { EventEntity } from './entities/event.entity';
 import { FlashcardSessionEntity } from './entities/flashcard-session.entity';
+import { SpeciesMediaEntity } from './entities/species-media.entity';
 import { UserRepository } from './repositories/user.repository';
 import { SpeciesRepository } from './repositories/species.repository';
 import { SpeciesService } from './species/species.service';
@@ -45,6 +46,7 @@ import { createLogger } from './services/logger.factory';
         UserBadgeEntity,
         EventEntity,
         FlashcardSessionEntity,
+        SpeciesMediaEntity,
       ],
       synchronize: process.env.NODE_ENV !== 'production', // Only for development
     }),
@@ -58,6 +60,7 @@ import { createLogger } from './services/logger.factory';
       UserBadgeEntity,
       EventEntity,
       FlashcardSessionEntity,
+      SpeciesMediaEntity,
     ]),
     JwtModule.register({
       ...getJwtConfig(),
