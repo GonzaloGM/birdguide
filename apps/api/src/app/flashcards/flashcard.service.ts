@@ -1,4 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { FlashcardReviewEntity } from '../entities/flashcard-review.entity';
+import { UserSpeciesProgressEntity } from '../entities/user-species-progress.entity';
+import { BadgeEntity } from '../entities/badge.entity';
+import { UserBadgeEntity } from '../entities/user-badge.entity';
+import { EventEntity } from '../entities/event.entity';
+import { FlashcardSessionEntity } from '../entities/flashcard-session.entity';
+import { SpeciesEntity } from '../entities/species.entity';
 
 type ReviewData = {
   speciesId: number;
@@ -11,32 +20,83 @@ type SessionData = {
 
 @Injectable()
 export class FlashcardService {
+  constructor(
+    @InjectRepository(FlashcardReviewEntity)
+    private reviewRepository: Repository<FlashcardReviewEntity>,
+    @InjectRepository(UserSpeciesProgressEntity)
+    private progressRepository: Repository<UserSpeciesProgressEntity>,
+    @InjectRepository(BadgeEntity)
+    private badgeRepository: Repository<BadgeEntity>,
+    @InjectRepository(UserBadgeEntity)
+    private userBadgeRepository: Repository<UserBadgeEntity>,
+    @InjectRepository(EventEntity)
+    private eventRepository: Repository<EventEntity>,
+    @InjectRepository(FlashcardSessionEntity)
+    private sessionRepository: Repository<FlashcardSessionEntity>,
+    @InjectRepository(SpeciesEntity)
+    private speciesRepository: Repository<SpeciesEntity>
+  ) {}
   async getSpeciesForSession() {
-    // For now, return mock data
-    return [
-      { id: 1, scientificName: 'Passer domesticus', eBirdId: 'houspa' },
-      { id: 2, scientificName: 'Turdus migratorius', eBirdId: 'amerob' },
-      { id: 3, scientificName: 'Cardinalis cardinalis', eBirdId: 'norcar' },
-    ];
+    return this.speciesRepository.find({
+      select: ['id', 'scientificName', 'eBirdId'],
+      take: 10, // Limit to 10 species for a session
+    });
   }
 
-  async submitReview(reviewData: ReviewData) {
-    // Mock implementation for now
-    console.log('Review submitted:', reviewData);
+  async submitReview(reviewData: ReviewData, userId: string) {
+    // Create review record
+    const review = this.reviewRepository.create({
+      userId,
+      speciesId: reviewData.speciesId,
+      result: reviewData.result,
+      reviewedAt: new Date(),
+    });
+    await this.reviewRepository.save(review);
 
-    // Mock badge awarding logic - in real implementation, this would check user's progress
-    const badgesAwarded = [];
+    // Update or create user species progress
+    let progress = await this.progressRepository.findOne({
+      where: { userId, speciesId: reviewData.speciesId },
+    });
 
-    // Award first review badge if this is the user's first review
-    if (reviewData.speciesId === 1) {
-      // Mock condition
-      badgesAwarded.push({
-        id: 1,
-        name: 'first_review',
-        title: 'First Review',
-        description: 'Complete your first flashcard review',
+    if (!progress) {
+      progress = this.progressRepository.create({
+        userId,
+        speciesId: reviewData.speciesId,
+        timesSeen: 1,
+        timesCorrect: reviewData.result === 'correct' ? 1 : 0,
+        accuracy: reviewData.result === 'correct' ? 1.0 : 0.0,
+        masteryLevel: 1,
+        isMastered: false,
+        lastSeen: new Date(),
       });
+    } else {
+      progress.timesSeen += 1;
+      if (reviewData.result === 'correct') {
+        progress.timesCorrect += 1;
+      }
+      progress.accuracy = progress.timesCorrect / progress.timesSeen;
+      progress.lastSeen = new Date();
+
+      // Update mastery level based on accuracy
+      if (progress.accuracy >= 0.8 && progress.timesSeen >= 5) {
+        progress.masteryLevel = Math.min(5, progress.masteryLevel + 1);
+        progress.isMastered = progress.masteryLevel >= 5;
+      }
     }
+
+    await this.progressRepository.save(progress);
+
+    // Log event
+    const event = this.eventRepository.create({
+      userId,
+      eventType: 'flashcard_review',
+      data: { speciesId: reviewData.speciesId, result: reviewData.result },
+      timestamp: new Date(),
+    });
+    await this.eventRepository.save(event);
+
+    // Check for badge awards
+    const badgesAwarded = await this.checkAndAwardBadges(userId);
 
     return {
       success: true,
@@ -44,48 +104,119 @@ export class FlashcardService {
     };
   }
 
-  async startSession(sessionData: SessionData) {
-    // Mock implementation for now
-    console.log('Session started:', sessionData);
-    return { sessionId: 'session_' + Date.now() };
+  async startSession(sessionData: SessionData, userId: string) {
+    const session = this.sessionRepository.create({
+      userId,
+      speciesIds: sessionData.speciesIds,
+      startedAt: new Date(),
+    });
+    const savedSession = await this.sessionRepository.save(session);
+
+    // Log session start event
+    const event = this.eventRepository.create({
+      userId,
+      eventType: 'session_started',
+      data: { sessionId: savedSession.id, speciesIds: sessionData.speciesIds },
+      timestamp: new Date(),
+    });
+    await this.eventRepository.save(event);
+
+    return { sessionId: savedSession.id.toString() };
   }
 
-  async getProgress() {
-    // Mock implementation for now
+  async getProgress(userId: string) {
+    const progressRecords = await this.progressRepository.find({
+      where: { userId },
+    });
+
+    const totalSpecies = progressRecords.length;
+    const masteredSpecies = progressRecords.filter((p) => p.isMastered).length;
+    const totalCorrect = progressRecords.reduce(
+      (sum, p) => sum + p.timesCorrect,
+      0
+    );
+    const totalSeen = progressRecords.reduce((sum, p) => sum + p.timesSeen, 0);
+    const accuracy =
+      totalSeen > 0 ? Math.round((totalCorrect / totalSeen) * 100) : 0;
+
     return {
-      totalSpecies: 10,
-      masteredSpecies: 3,
-      accuracy: 75,
+      totalSpecies,
+      masteredSpecies,
+      accuracy,
     };
   }
 
-  async getBadges() {
-    // Mock implementation for now - in real implementation, this would check user's earned badges
-    return [
-      {
-        id: 1,
-        name: 'first_review',
-        title: 'First Review',
-        description: 'Complete your first flashcard review',
-        earned: true,
-        earnedAt: '2024-01-15T10:30:00Z',
-      },
-      {
-        id: 2,
-        name: 'ten_correct',
-        title: 'Quick Learner',
-        description: 'Get 10 correct answers in a row',
-        earned: false,
-        earnedAt: null,
-      },
-      {
-        id: 3,
-        name: 'three_day_streak',
-        title: 'Consistent',
-        description: 'Practice for 3 days in a row',
-        earned: false,
-        earnedAt: null,
-      },
-    ];
+  async getBadges(userId: string) {
+    const badges = await this.badgeRepository.find();
+    const userBadges = await this.userBadgeRepository.find({
+      where: { userId },
+      relations: ['badge'],
+    });
+
+    const userBadgeMap = new Map(
+      userBadges.map((ub) => [ub.badgeId, ub.earnedAt])
+    );
+
+    return badges.map((badge) => ({
+      id: badge.id,
+      name: badge.name,
+      title: badge.title,
+      description: badge.description,
+      earned: userBadgeMap.has(badge.id),
+      earnedAt: userBadgeMap.get(badge.id)?.toISOString() || null,
+    }));
+  }
+
+  private async checkAndAwardBadges(userId: string) {
+    const badgesAwarded = [];
+
+    // Check for first review badge
+    const reviewCount = await this.reviewRepository.count({
+      where: { userId },
+    });
+    if (reviewCount === 1) {
+      const firstReviewBadge = await this.badgeRepository.findOne({
+        where: { name: 'first_review' },
+      });
+
+      if (firstReviewBadge) {
+        const existingUserBadge = await this.userBadgeRepository.findOne({
+          where: { userId, badgeId: firstReviewBadge.id },
+        });
+
+        if (!existingUserBadge) {
+          const userBadge = this.userBadgeRepository.create({
+            userId,
+            badgeId: firstReviewBadge.id,
+            earnedAt: new Date(),
+          });
+          await this.userBadgeRepository.save(userBadge);
+
+          badgesAwarded.push({
+            id: firstReviewBadge.id,
+            name: firstReviewBadge.name,
+            title: firstReviewBadge.title,
+            description: firstReviewBadge.description,
+          });
+
+          // Log badge earned event
+          const event = this.eventRepository.create({
+            userId,
+            eventType: 'badge_earned',
+            data: {
+              badgeId: firstReviewBadge.id,
+              badgeName: firstReviewBadge.name,
+            },
+            timestamp: new Date(),
+          });
+          await this.eventRepository.save(event);
+        }
+      }
+    }
+
+    // Check for other badges (ten_correct, three_day_streak, etc.)
+    // This would be implemented based on specific badge criteria
+
+    return badgesAwarded;
   }
 }

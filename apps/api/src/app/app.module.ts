@@ -12,6 +12,12 @@ import { getJwtConfig } from './config/jwt.config';
 import { UserEntity } from './entities/user.entity';
 import { SpeciesEntity } from './entities/species.entity';
 import { SpeciesCommonNameEntity } from './entities/species-common-name.entity';
+import { FlashcardReviewEntity } from './entities/flashcard-review.entity';
+import { UserSpeciesProgressEntity } from './entities/user-species-progress.entity';
+import { BadgeEntity } from './entities/badge.entity';
+import { UserBadgeEntity } from './entities/user-badge.entity';
+import { EventEntity } from './entities/event.entity';
+import { FlashcardSessionEntity } from './entities/flashcard-session.entity';
 import { UserRepository } from './repositories/user.repository';
 import { SpeciesRepository } from './repositories/species.repository';
 import { SpeciesService } from './species/species.service';
@@ -29,13 +35,29 @@ import { createLogger } from './services/logger.factory';
     TypeOrmModule.forRoot({
       type: 'postgres',
       ...getDatabaseConfig(),
-      entities: [UserEntity, SpeciesEntity, SpeciesCommonNameEntity],
+      entities: [
+        UserEntity,
+        SpeciesEntity,
+        SpeciesCommonNameEntity,
+        FlashcardReviewEntity,
+        UserSpeciesProgressEntity,
+        BadgeEntity,
+        UserBadgeEntity,
+        EventEntity,
+        FlashcardSessionEntity,
+      ],
       synchronize: process.env.NODE_ENV !== 'production', // Only for development
     }),
     TypeOrmModule.forFeature([
       UserEntity,
       SpeciesEntity,
       SpeciesCommonNameEntity,
+      FlashcardReviewEntity,
+      UserSpeciesProgressEntity,
+      BadgeEntity,
+      UserBadgeEntity,
+      EventEntity,
+      FlashcardSessionEntity,
     ]),
     JwtModule.register({
       ...getJwtConfig(),

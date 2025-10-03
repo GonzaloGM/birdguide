@@ -4,9 +4,8 @@ This workspace is configured to work with Wallaby.js for fast, real-time testing
 
 ## Configuration Files
 
-- `wallaby.js` - Main configuration for the entire workspace
-- `wallaby.frontend.js` - Frontend-specific configuration (Vitest + React)
-- `wallaby.backend.js` - Backend-specific configuration (Jest + NestJS)
+- `wallaby.js` - Main configuration for the entire workspace (Jest + NestJS backend)
+- `package.json` - Contains Wallaby configuration for auto-detection
 
 ## Setup Instructions
 
@@ -19,14 +18,10 @@ Install the Wallaby extension for your IDE:
 
 ### 2. Configure Wallaby
 
-#### Option A: Use Main Configuration (Recommended)
-- Open Wallaby settings in your IDE
-- Set the configuration file to `wallaby.js`
-- This will handle both frontend and backend tests automatically
-
-#### Option B: Use Specific Configurations
-- For frontend-only testing: Use `wallaby.frontend.js`
-- For backend-only testing: Use `wallaby.backend.js`
+Wallaby is configured to auto-detect Jest for backend tests:
+- The main configuration is in `wallaby.js`
+- Auto-detection is enabled via `package.json` configuration
+- Wallaby automatically runs Jest tests in the `apps/api/src/` directory
 
 ### 3. Start Wallaby
 
@@ -58,23 +53,12 @@ Install the Wallaby extension for your IDE:
 
 ## Test Frameworks Supported
 
-### Frontend (Vitest + React Testing Library)
-- **Location**: `apps/frontend/tests/`
-- **Configuration**: `wallaby.frontend.js`
-- **Environment**: jsdom (simulates browser environment)
-- **Features**: React component testing, user interactions, async operations
-
 ### Backend (Jest + NestJS)
 - **Location**: `apps/api/src/`
-- **Configuration**: `wallaby.backend.js`
-- **Environment**: Node.js
-- **Features**: Unit tests, integration tests, service testing
-
-### Shared Types (Jest)
-- **Location**: `libs/shared-types/src/`
 - **Configuration**: `wallaby.js`
 - **Environment**: Node.js
-- **Features**: Type validation, utility function testing
+- **Features**: Unit tests, integration tests, service testing
+- **Test Files**: `*.spec.ts` and `*.test.ts`
 
 ## Troubleshooting
 
@@ -127,13 +111,13 @@ While Wallaby handles most testing automatically, you can still use these comman
 
 ```bash
 # Run all tests
-npm run test
-
-# Run frontend tests only
-npm run test:frontend
+nx run-many --target=test --all
 
 # Run backend tests only
-npm run test:api
+nx test api
+
+# Run frontend tests only
+nx test frontend
 ```
 
 ## Support

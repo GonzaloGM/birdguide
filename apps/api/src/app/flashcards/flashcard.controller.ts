@@ -21,21 +21,29 @@ export class FlashcardController {
 
   @Post('review')
   async submitReview(@Body() reviewData: ReviewData) {
-    return this.flashcardService.submitReview(reviewData);
+    // TODO: Get userId from JWT token in real implementation
+    const userId = 'user-123'; // Mock userId for now
+    return this.flashcardService.submitReview(reviewData, userId);
   }
 
   @Post('session')
   async startSession(@Body() sessionData: SessionData) {
-    return this.flashcardService.startSession(sessionData);
+    // TODO: Get userId from JWT token in real implementation
+    const userId = 'user-123'; // Mock userId for now
+    return this.flashcardService.startSession(sessionData, userId);
   }
 
   @Get('progress')
   async getProgress() {
-    return this.flashcardService.getProgress();
+    // TODO: Get userId from JWT token in real implementation
+    const userId = 'user-123'; // Mock userId for now
+    return this.flashcardService.getProgress(userId);
   }
 
   @Get('badges')
   async getBadges() {
-    return this.flashcardService.getBadges();
+    // TODO: Get userId from JWT token in real implementation
+    const userId = 'user-123'; // Mock userId for now
+    return this.flashcardService.getBadges(userId);
   }
 }

@@ -124,7 +124,7 @@ describe('SpeciesController', () => {
 
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockSpeciesWithCommonName);
-      expect(service.findOne).toHaveBeenCalledWith(1);
+      expect(service.findOne).toHaveBeenCalledWith(1, 'es-AR');
     });
 
     it('should return 404 when species not found', async () => {
