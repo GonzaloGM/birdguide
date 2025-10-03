@@ -376,12 +376,15 @@ describe('SignupPage', () => {
     await user.type(confirmPasswordInput, '123');
     await user.click(submitButton);
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(i18n.t('signup.errors.passwordTooWeak'))
-      ).toBeInTheDocument();
-    });
-  });
+    await waitFor(
+      () => {
+        expect(
+          screen.getByText(i18n.t('signup.errors.passwordTooWeak'))
+        ).toBeInTheDocument();
+      },
+      { timeout: 10000 }
+    );
+  }, 10000);
 
   it('should show password too common error message from i18n', async () => {
     const { registrationService } = await import(

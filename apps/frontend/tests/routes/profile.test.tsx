@@ -4,7 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import ProfilePage from '../../app/routes/profile';
 import { renderWithI18n } from '../../app/test-utils';
-import i18n from '../../app/i18n';
+import i18n from 'i18next';
 
 // Mock auth context
 vi.mock('../../app/contexts/auth-context', () => ({
