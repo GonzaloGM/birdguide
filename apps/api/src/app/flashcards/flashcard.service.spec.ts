@@ -132,7 +132,7 @@ describe('FlashcardService', () => {
         speciesId: 1,
         result: 'correct' as const,
       };
-      const userId = 'user-123';
+      const userId = 123;
 
       const mockReview = {
         id: 1,
@@ -163,7 +163,7 @@ describe('FlashcardService', () => {
         speciesId: 1,
         result: 'correct' as const,
       };
-      const userId = 'user-123';
+      const userId = 123;
 
       const existingProgress = {
         id: 1,
@@ -198,7 +198,7 @@ describe('FlashcardService', () => {
         speciesId: 1,
         result: 'correct' as const,
       };
-      const userId = 'user-123';
+      const userId = 123;
 
       mockProgressRepository.findOne.mockResolvedValue(null);
       mockProgressRepository.create.mockReturnValue({
@@ -232,7 +232,7 @@ describe('FlashcardService', () => {
         speciesId: 1,
         result: 'correct' as const,
       };
-      const userId = 'user-123';
+      const userId = 123;
 
       mockEventRepository.create.mockReturnValue({
         userId,
@@ -273,7 +273,7 @@ describe('FlashcardService', () => {
 
   describe('getProgress', () => {
     it('should calculate progress from database records', async () => {
-      const userId = 'user-123';
+      const userId = 123;
       const mockProgressRecords = [
         { speciesId: 1, timesSeen: 5, timesCorrect: 4, isMastered: true },
         { speciesId: 2, timesSeen: 3, timesCorrect: 2, isMastered: false },
@@ -295,7 +295,7 @@ describe('FlashcardService', () => {
 
   describe('getBadges', () => {
     it('should return user badges with earned status', async () => {
-      const userId = 'user-123';
+      const userId = 123;
       const mockBadges = [
         {
           id: 1,

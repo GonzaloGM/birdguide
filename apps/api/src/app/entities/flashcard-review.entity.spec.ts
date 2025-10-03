@@ -5,7 +5,7 @@ describe('FlashcardReviewEntity', () => {
   it('should create a flashcard review entity with required fields', () => {
     const review = new FlashcardReviewEntity();
     review.id = 1;
-    review.userId = 'user-123';
+    review.userId = 123;
     review.speciesId = 1;
     review.result = 'correct';
     review.reviewedAt = new Date('2024-01-15T10:30:00Z');
@@ -17,7 +17,7 @@ describe('FlashcardReviewEntity', () => {
     review.nextReviewDate = new Date('2024-01-16T10:30:00Z');
 
     expect(review.id).toBe(1);
-    expect(review.userId).toBe('user-123');
+    expect(review.userId).toBe(123);
     expect(review.speciesId).toBe(1);
     expect(review.result).toBe('correct');
     expect(review.reviewedAt).toEqual(new Date('2024-01-15T10:30:00Z'));
@@ -42,7 +42,7 @@ describe('FlashcardReviewEntity', () => {
 
   it('should have proper default values for optional fields', () => {
     const review = new FlashcardReviewEntity();
-    review.userId = 'user-123';
+    review.userId = 123;
     review.speciesId = 1;
     review.result = 'correct';
     review.reviewedAt = new Date();

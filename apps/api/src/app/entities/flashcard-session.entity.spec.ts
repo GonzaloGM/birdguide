@@ -5,7 +5,7 @@ describe('FlashcardSessionEntity', () => {
   it('should create a flashcard session entity with required fields', () => {
     const session = new FlashcardSessionEntity();
     session.id = 1;
-    session.userId = 'user-123';
+    session.userId = 123;
     session.speciesIds = [1, 2, 3];
     session.startedAt = new Date('2024-01-15T10:30:00Z');
     session.completedAt = new Date('2024-01-15T10:45:00Z');
@@ -18,7 +18,7 @@ describe('FlashcardSessionEntity', () => {
     session.updatedAt = new Date('2024-01-15T10:45:00Z');
 
     expect(session.id).toBe(1);
-    expect(session.userId).toBe('user-123');
+    expect(session.userId).toBe(123);
     expect(session.speciesIds).toEqual([1, 2, 3]);
     expect(session.startedAt).toEqual(new Date('2024-01-15T10:30:00Z'));
     expect(session.completedAt).toEqual(new Date('2024-01-15T10:45:00Z'));
@@ -33,7 +33,7 @@ describe('FlashcardSessionEntity', () => {
 
   it('should handle optional fields correctly', () => {
     const session = new FlashcardSessionEntity();
-    session.userId = 'user-123';
+    session.userId = 123;
     session.speciesIds = [1, 2];
 
     // Optional fields should be undefined initially

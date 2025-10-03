@@ -5,14 +5,14 @@ describe('EventEntity', () => {
   it('should create an event entity with required fields', () => {
     const event = new EventEntity();
     event.id = 1;
-    event.userId = 'user-123';
+    event.userId = 123;
     event.eventType = 'flashcard_review';
     event.data = { speciesId: 1, result: 'correct' };
     event.timestamp = new Date('2024-01-15T10:30:00Z');
     event.createdAt = new Date('2024-01-15T10:30:00Z');
 
     expect(event.id).toBe(1);
-    expect(event.userId).toBe('user-123');
+    expect(event.userId).toBe(123);
     expect(event.eventType).toBe('flashcard_review');
     expect(event.data).toEqual({ speciesId: 1, result: 'correct' });
     expect(event.timestamp).toEqual(new Date('2024-01-15T10:30:00Z'));
@@ -54,7 +54,7 @@ describe('EventEntity', () => {
 
   it('should handle optional fields', () => {
     const event = new EventEntity();
-    event.userId = 'user-123';
+    event.userId = 123;
     event.eventType = 'test_event';
 
     // Optional fields should be undefined initially

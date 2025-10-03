@@ -5,14 +5,14 @@ describe('UserBadgeEntity', () => {
   it('should create a user badge entity with required fields', () => {
     const userBadge = new UserBadgeEntity();
     userBadge.id = 1;
-    userBadge.userId = 'user-123';
+    userBadge.userId = 123;
     userBadge.badgeId = 1;
     userBadge.earnedAt = new Date('2024-01-15T10:30:00Z');
     userBadge.createdAt = new Date('2024-01-15T10:30:00Z');
     userBadge.updatedAt = new Date('2024-01-15T10:30:00Z');
 
     expect(userBadge.id).toBe(1);
-    expect(userBadge.userId).toBe('user-123');
+    expect(userBadge.userId).toBe(123);
     expect(userBadge.badgeId).toBe(1);
     expect(userBadge.earnedAt).toEqual(new Date('2024-01-15T10:30:00Z'));
     expect(userBadge.createdAt).toEqual(new Date('2024-01-15T10:30:00Z'));

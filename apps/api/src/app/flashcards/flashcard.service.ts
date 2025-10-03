@@ -43,7 +43,7 @@ export class FlashcardService {
     });
   }
 
-  async submitReview(reviewData: ReviewData, userId: string) {
+  async submitReview(reviewData: ReviewData, userId: number) {
     // Create review record
     const review = this.reviewRepository.create({
       userId,
@@ -104,7 +104,7 @@ export class FlashcardService {
     };
   }
 
-  async startSession(sessionData: SessionData, userId: string) {
+  async startSession(sessionData: SessionData, userId: number) {
     const session = this.sessionRepository.create({
       userId,
       speciesIds: sessionData.speciesIds,
@@ -124,7 +124,7 @@ export class FlashcardService {
     return { sessionId: savedSession.id.toString() };
   }
 
-  async getProgress(userId: string) {
+  async getProgress(userId: number) {
     const progressRecords = await this.progressRepository.find({
       where: { userId },
     });
@@ -146,7 +146,7 @@ export class FlashcardService {
     };
   }
 
-  async getBadges(userId: string) {
+  async getBadges(userId: number) {
     const badges = await this.badgeRepository.find();
     const userBadges = await this.userBadgeRepository.find({
       where: { userId },
@@ -167,7 +167,7 @@ export class FlashcardService {
     }));
   }
 
-  private async checkAndAwardBadges(userId: string) {
+  private async checkAndAwardBadges(userId: number) {
     const badgesAwarded = [];
 
     // Check for first review badge

@@ -18,7 +18,7 @@ export class UserSpeciesProgressEntity {
   id: number;
 
   @Column()
-  userId: string;
+  userId: number;
 
   @Column()
   speciesId: number;

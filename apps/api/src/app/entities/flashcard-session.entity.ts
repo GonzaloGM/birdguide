@@ -15,7 +15,7 @@ export class FlashcardSessionEntity {
   id: number;
 
   @Column()
-  userId: string;
+  userId: number;
 
   @Column({ type: 'int', array: true })
   speciesIds: number[]; // Array of species IDs in this session

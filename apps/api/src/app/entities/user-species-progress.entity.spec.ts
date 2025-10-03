@@ -5,7 +5,7 @@ describe('UserSpeciesProgressEntity', () => {
   it('should create a user species progress entity with required fields', () => {
     const progress = new UserSpeciesProgressEntity();
     progress.id = 1;
-    progress.userId = 'user-123';
+    progress.userId = 123;
     progress.speciesId = 1;
     progress.timesSeen = 5;
     progress.timesCorrect = 3;
@@ -17,7 +17,7 @@ describe('UserSpeciesProgressEntity', () => {
     progress.updatedAt = new Date('2024-01-15T10:30:00Z');
 
     expect(progress.id).toBe(1);
-    expect(progress.userId).toBe('user-123');
+    expect(progress.userId).toBe(123);
     expect(progress.speciesId).toBe(1);
     expect(progress.timesSeen).toBe(5);
     expect(progress.timesCorrect).toBe(3);
@@ -40,7 +40,7 @@ describe('UserSpeciesProgressEntity', () => {
 
   it('should have proper default values', () => {
     const progress = new UserSpeciesProgressEntity();
-    progress.userId = 'user-123';
+    progress.userId = 123;
     progress.speciesId = 1;
 
     // Default values for new progress

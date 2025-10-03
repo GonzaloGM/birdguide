@@ -26,7 +26,7 @@ export class EventEntity {
   id: number;
 
   @Column()
-  userId: string;
+  userId: number;
 
   @Column({
     type: 'enum',
