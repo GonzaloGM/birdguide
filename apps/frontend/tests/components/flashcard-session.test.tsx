@@ -87,7 +87,7 @@ describe('FlashcardSession', () => {
     });
   });
 
-  it('should show session progress', () => {
+  it('should show session progress', async () => {
     const mockSpecies = [
       { id: 1, scientificName: 'Passer domesticus', eBirdId: 'houspa' },
       { id: 2, scientificName: 'Turdus migratorius', eBirdId: 'amerob' },
@@ -95,12 +95,14 @@ describe('FlashcardSession', () => {
 
     renderWithI18n(<FlashcardSession species={mockSpecies} />);
 
-    // Should show progress like "1 of 2"
-    expect(
-      screen.getByText(
-        i18n.t('flashcards.sessionProgress', { current: 1, total: 2 })
-      )
-    ).toBeInTheDocument();
+    // Should show progress like "1 de 2" (Spanish) or "1 of 2" (English)
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          i18n.t('flashcards.sessionProgress', { current: 1, total: 2 })
+        )
+      ).toBeInTheDocument();
+    });
   });
 
   it('should show session completion when all cards are answered', async () => {
@@ -141,6 +143,42 @@ describe('FlashcardSession', () => {
     renderWithI18n(<FlashcardSession species={mockSpecies} />);
 
     // Answer the card
+    const revealButton = screen.getByRole('button', {
+      name: i18n.t('flashcards.revealAnswer'),
+    });
+    await revealButton.click();
+
+    const answerButton = screen.getByText(i18n.t('flashcards.iKnewIt'));
+    await answerButton.click();
+
+    // Should have submitted the review
+    expect(mockSubmitReview).toHaveBeenCalledWith({
+      speciesId: 1,
+      result: 'correct',
+    });
+  });
+
+  it('should award first review badge when user completes first review', async () => {
+    const mockSpecies = [
+      { id: 1, scientificName: 'Passer domesticus', eBirdId: 'houspa' },
+    ];
+
+    // Mock that this is the user's first review
+    mockSubmitReview.mockResolvedValue({
+      success: true,
+      badgesAwarded: [
+        {
+          id: 1,
+          name: 'first_review',
+          title: 'First Review',
+          description: 'Complete your first flashcard review',
+        },
+      ],
+    });
+
+    renderWithI18n(<FlashcardSession species={mockSpecies} />);
+
+    // Complete a review
     const revealButton = screen.getByRole('button', {
       name: i18n.t('flashcards.revealAnswer'),
     });

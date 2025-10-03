@@ -15,6 +15,7 @@ type SessionData = {
 
 type ReviewResponse = {
   success: boolean;
+  badgesAwarded?: Badge[];
 };
 
 type SessionResponse = {
@@ -32,6 +33,8 @@ type Badge = {
   name: string;
   title: string;
   description: string;
+  earned?: boolean;
+  earnedAt?: string | null;
 };
 
 const API_BASE_URL = 'http://localhost:3000/api';

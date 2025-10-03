@@ -23,7 +23,25 @@ export class FlashcardService {
   async submitReview(reviewData: ReviewData) {
     // Mock implementation for now
     console.log('Review submitted:', reviewData);
-    return { success: true };
+
+    // Mock badge awarding logic - in real implementation, this would check user's progress
+    const badgesAwarded = [];
+
+    // Award first review badge if this is the user's first review
+    if (reviewData.speciesId === 1) {
+      // Mock condition
+      badgesAwarded.push({
+        id: 1,
+        name: 'first_review',
+        title: 'First Review',
+        description: 'Complete your first flashcard review',
+      });
+    }
+
+    return {
+      success: true,
+      badgesAwarded,
+    };
   }
 
   async startSession(sessionData: SessionData) {
@@ -42,25 +60,31 @@ export class FlashcardService {
   }
 
   async getBadges() {
-    // Mock implementation for now
+    // Mock implementation for now - in real implementation, this would check user's earned badges
     return [
       {
         id: 1,
         name: 'first_review',
         title: 'First Review',
         description: 'Complete your first flashcard review',
+        earned: true,
+        earnedAt: '2024-01-15T10:30:00Z',
       },
       {
         id: 2,
         name: 'ten_correct',
         title: 'Quick Learner',
         description: 'Get 10 correct answers in a row',
+        earned: false,
+        earnedAt: null,
       },
       {
         id: 3,
         name: 'three_day_streak',
         title: 'Consistent',
         description: 'Practice for 3 days in a row',
+        earned: false,
+        earnedAt: null,
       },
     ];
   }

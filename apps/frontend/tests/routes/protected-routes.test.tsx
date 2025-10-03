@@ -6,6 +6,7 @@ import PracticePage from '../../app/routes/practice';
 // import PathPage from '../../app/routes/path'; // Temporarily disabled
 import SpeciesPage from '../../app/routes/species';
 import ProfilePage from '../../app/routes/profile';
+import i18n from 'i18next';
 
 // Mock useAuth
 const mockLogin = vi.fn();
@@ -109,7 +110,7 @@ describe('Protected Routes', () => {
         renderWithI18n(<PracticePage />);
 
         expect(mockNavigate).not.toHaveBeenCalled();
-        expect(screen.getByText('Practicar')).toBeInTheDocument();
+        expect(screen.getByText(i18n.t('practice.title'))).toBeInTheDocument();
       });
     });
 
@@ -129,7 +130,7 @@ describe('Protected Routes', () => {
 
         // Wait for loading to complete and check for the title
         await waitFor(() => {
-          expect(screen.getByText('Especies de Aves')).toBeInTheDocument();
+          expect(screen.getByText(i18n.t('species.title'))).toBeInTheDocument();
         });
       });
     });
@@ -139,7 +140,7 @@ describe('Protected Routes', () => {
         renderWithI18n(<ProfilePage />);
 
         expect(mockNavigate).not.toHaveBeenCalled();
-        expect(screen.getByText('Perfil')).toBeInTheDocument();
+        expect(screen.getByText(i18n.t('profile.title'))).toBeInTheDocument();
         expect(screen.getByText('testuser')).toBeInTheDocument();
         expect(screen.getByText('test@example.com')).toBeInTheDocument();
       });

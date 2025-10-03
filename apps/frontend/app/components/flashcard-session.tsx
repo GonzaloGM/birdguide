@@ -32,10 +32,17 @@ export function FlashcardSession({ species }: FlashcardSessionProps) {
   const handleAnswer = async (result: 'correct' | 'incorrect') => {
     // Submit review to backend
     try {
-      await flashcardService.submitReview({
+      const response = await flashcardService.submitReview({
         speciesId: currentSpecies.id,
         result,
       });
+
+      // Handle badge awarding
+      if (response.badgesAwarded && response.badgesAwarded.length > 0) {
+        console.log('Badges awarded:', response.badgesAwarded);
+        // In a real app, you might show a notification or update the UI
+        // For now, we'll just log it
+      }
     } catch (error) {
       console.error('Failed to submit review:', error);
     }

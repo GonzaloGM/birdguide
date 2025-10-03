@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import SpeciesPage from '../../app/routes/species';
 import { renderWithI18n } from '../../app/test-utils';
+import i18n from 'i18next';
 // Define the type locally for testing
 type SpeciesWithCommonName = {
   id: number;
@@ -97,7 +98,7 @@ describe('SpeciesPage', () => {
 
     renderWithI18n(<SpeciesPage />);
 
-    expect(screen.getByText('Cargando especies...')).toBeInTheDocument();
+    expect(screen.getByText(i18n.t('species.loading'))).toBeInTheDocument();
   });
 
   it('should display species list when data loads successfully', async () => {
@@ -112,7 +113,7 @@ describe('SpeciesPage', () => {
     renderWithI18n(<SpeciesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Especies de Aves')).toBeInTheDocument();
+      expect(screen.getByText(i18n.t('species.title'))).toBeInTheDocument();
     });
 
     expect(screen.getByText('American Robin')).toBeInTheDocument();
@@ -140,7 +141,9 @@ describe('SpeciesPage', () => {
     renderWithI18n(<SpeciesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Sin nombre común')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t('species.noCommonName'))
+      ).toBeInTheDocument();
     });
   });
 

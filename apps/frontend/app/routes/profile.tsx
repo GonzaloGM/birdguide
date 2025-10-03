@@ -13,6 +13,8 @@ type Badge = {
   name: string;
   title: string;
   description: string;
+  earned?: boolean;
+  earnedAt?: string | null;
 };
 
 export default function ProfilePage() {
@@ -74,24 +76,32 @@ export default function ProfilePage() {
               </h3>
               {loading ? (
                 <p className="text-gray-500">{t('loading')}</p>
-              ) : badges.length > 0 ? (
+              ) : badges.filter((badge) => badge.earned).length > 0 ? (
                 <div className="grid grid-cols-1 gap-3">
-                  {badges.map((badge) => (
-                    <div
-                      key={badge.id}
-                      className="p-3 bg-yellow-50 rounded-lg border border-yellow-200"
-                    >
-                      <div className="font-medium text-yellow-800">
-                        {badge.title}
+                  {badges
+                    .filter((badge) => badge.earned)
+                    .map((badge) => (
+                      <div
+                        key={badge.id}
+                        className="p-3 bg-yellow-50 rounded-lg border border-yellow-200"
+                      >
+                        <div className="font-medium text-yellow-800">
+                          {badge.title}
+                        </div>
+                        <div className="text-sm text-yellow-700">
+                          {badge.description}
+                        </div>
+                        {badge.earnedAt && (
+                          <div className="text-xs text-yellow-600 mt-1">
+                            Earned:{' '}
+                            {new Date(badge.earnedAt).toLocaleDateString()}
+                          </div>
+                        )}
                       </div>
-                      <div className="text-sm text-yellow-700">
-                        {badge.description}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               ) : (
-                <p className="text-gray-500">No badges earned yet</p>
+                <p className="text-gray-500">{t('profile.noBadgesEarned')}</p>
               )}
             </div>
 

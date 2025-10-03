@@ -114,12 +114,16 @@ describe('ProfilePage', () => {
         name: 'first_review',
         title: 'First Review',
         description: 'Complete your first flashcard review',
+        earned: true,
+        earnedAt: '2024-01-15T10:30:00Z',
       },
       {
         id: 2,
         name: 'ten_correct',
         title: 'Quick Learner',
         description: 'Get 10 correct answers in a row',
+        earned: true,
+        earnedAt: '2024-01-16T14:20:00Z',
       },
     ];
 
@@ -131,6 +135,83 @@ describe('ProfilePage', () => {
       expect(screen.getByText(i18n.t('profile.badges'))).toBeInTheDocument();
       expect(screen.getByText('First Review')).toBeInTheDocument();
       expect(screen.getByText('Quick Learner')).toBeInTheDocument();
+    });
+  });
+
+  it('should show earned badges only', async () => {
+    const { flashcardService } = await import(
+      '../../app/services/flashcard.service'
+    );
+
+    // Mock that user has only earned the first review badge
+    const mockBadges = [
+      {
+        id: 1,
+        name: 'first_review',
+        title: 'First Review',
+        description: 'Complete your first flashcard review',
+        earned: true,
+        earnedAt: '2024-01-15T10:30:00Z',
+      },
+      {
+        id: 2,
+        name: 'ten_correct',
+        title: 'Quick Learner',
+        description: 'Get 10 correct answers in a row',
+        earned: false,
+        earnedAt: null,
+      },
+    ];
+
+    vi.mocked(flashcardService.getBadges).mockResolvedValue(mockBadges);
+
+    renderWithI18n(<ProfilePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText(i18n.t('profile.badges'))).toBeInTheDocument();
+      expect(screen.getByText('First Review')).toBeInTheDocument();
+      // Should not show unearned badges
+      expect(screen.queryByText('Quick Learner')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should show "No badges earned yet" when no badges are earned', async () => {
+    const { flashcardService } = await import(
+      '../../app/services/flashcard.service'
+    );
+
+    // Mock that user has no earned badges
+    const mockBadges = [
+      {
+        id: 1,
+        name: 'first_review',
+        title: 'First Review',
+        description: 'Complete your first flashcard review',
+        earned: false,
+        earnedAt: null,
+      },
+      {
+        id: 2,
+        name: 'ten_correct',
+        title: 'Quick Learner',
+        description: 'Get 10 correct answers in a row',
+        earned: false,
+        earnedAt: null,
+      },
+    ];
+
+    vi.mocked(flashcardService.getBadges).mockResolvedValue(mockBadges);
+
+    renderWithI18n(<ProfilePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText(i18n.t('profile.badges'))).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t('profile.noBadgesEarned'))
+      ).toBeInTheDocument();
+      // Should not show any badge titles
+      expect(screen.queryByText('First Review')).not.toBeInTheDocument();
+      expect(screen.queryByText('Quick Learner')).not.toBeInTheDocument();
     });
   });
 });

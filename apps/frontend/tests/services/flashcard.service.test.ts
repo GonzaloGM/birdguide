@@ -61,6 +61,43 @@ describe('flashcardService', () => {
     );
   });
 
+  it('should submit a review and receive badges awarded', async () => {
+    const reviewData = {
+      speciesId: 1,
+      result: 'correct' as const,
+    };
+
+    const mockResponse = {
+      success: true,
+      badgesAwarded: [
+        {
+          id: 1,
+          name: 'first_review',
+          title: 'First Review',
+          description: 'Complete your first flashcard review',
+        },
+      ],
+    };
+
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockResponse,
+    } as Response);
+
+    const result = await flashcardService.submitReview(reviewData);
+    expect(result).toEqual(mockResponse);
+    expect(fetch).toHaveBeenCalledWith(
+      'http://localhost:3000/api/flashcards/review',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reviewData),
+      }
+    );
+  });
+
   it('should start a session', async () => {
     const sessionData = {
       speciesIds: [1, 2, 3],
